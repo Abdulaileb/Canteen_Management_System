@@ -5,3 +5,6 @@ from django.http import HttpResponse
 
 def HomePage(request):
     return render(request, 'home.html')
+
+def dashboardPage(request):
+    return render(request, 'admin_dashboard.html')

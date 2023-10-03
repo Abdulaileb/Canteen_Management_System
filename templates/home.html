@@ -1,0 +1,19 @@
+{% extends 'base.html'%}
+
+{% block content %}
+
+<h1> we're happy to be here </h1>
+
+<h1>Canteen Management System</h1>
+    {% if user.is_authenticated %}
+        <p>Hi {{ user.username }}!</p>
+    {% else %}
+        <p>You are not logged in.</p>
+        <a href="{% url 'accounts:studentSignUp'%}">SignUp</a>
+    {% endif %}
+
+    <div class="navbar">
+        <p>This is where the navbar goes</p>
+    </div>
+
+{% endblock content %}
