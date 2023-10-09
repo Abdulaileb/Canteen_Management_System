@@ -72,10 +72,10 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto p-4 p-lg-0">
-                    <a href="index.html" class="nav-item nav-link active">Home</a>
+                    <a href="{% url 'canteen:home' %}" class="nav-item nav-link active">Home</a>
                     <a href="about.html" class="nav-item nav-link">About Us</a>
-                    <a href="product.html" class="nav-item nav-link">Products</a>
-                    <div class="nav-item dropdown">
+                    <a href="{% url 'canteen:product' %}" class="nav-item nav-link">Products</a>
+                    <!-- <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                         <div class="dropdown-menu m-0">
                             <a href="blog.html" class="dropdown-item">Blog Grid</a>
@@ -83,7 +83,7 @@
                             <a href="testimonial.html" class="dropdown-item">Testimonial</a>
                             <a href="404.html" class="dropdown-item">404 Page</a>
                         </div>
-                    </div>
+                    </div> -->
                     <a href="contact.html" class="nav-item nav-link">Contact Us</a>
                 </div>
 
@@ -125,9 +125,9 @@
                         <div class="container">
                             <div class="row justify-content-start">
                                 <div class="col-lg-7">
-                                    <h1 class="display-2 mb-5 animated slideInDown">Organic Food Is Good For Health</h1>
-                                    <a href="" class="btn btn-primary rounded-pill py-sm-3 px-sm-5">Products</a>
-                                    <a href="" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3">Services</a>
+                                    <h1 class="display-2 mb-5 animated slideInDown">Canteen Food Is Good For Health</h1>
+                                    <a href="{% url 'canteen:product' %}" class="btn btn-primary rounded-pill py-sm-3 px-sm-5">Slides <</a>
+                                    <a href="{% url 'canteen:product' %}" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3">Slides > </a>
                                 </div>
                             </div>
                         </div>
@@ -139,9 +139,9 @@
                         <div class="container">
                             <div class="row justify-content-start">
                                 <div class="col-lg-7">
-                                    <h1 class="display-2 mb-5 animated slideInDown">Natural Food Is Always Healthy</h1>
-                                    <a href="" class="btn btn-primary rounded-pill py-sm-3 px-sm-5">Products</a>
-                                    <a href="" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3">Services</a>
+                                    <h1 class="display-2 mb-5 animated slideInDown">Canteen Food Is Always Healthy</h1>
+                                    <a href="{% url 'canteen:product' %}" class="btn btn-primary rounded-pill py-sm-3 px-sm-5">Slides <</a>
+                                    <a href="" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3">Slides ></a>
                                 </div>
                             </div>
                         </div>
@@ -225,6 +225,28 @@
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i class="bi bi-arrow-up"></i></a>
 
+    <script>
+        function toggleDescription(link) {
+            const card = link.closest('.product-item');
+            const descriptionSection = card.querySelector('.description-section');
+            const descriptionContent = card.querySelector('.description-content');
+    
+            // Check if the description is already visible
+            if (descriptionSection.style.display === 'none' || descriptionSection.style.display === '') {
+                // Get the description text and populate the content
+                const descriptionText = "{{ food_item.description }}"; // Replace with the actual Django template tag
+                descriptionContent.textContent = descriptionText;
+    
+                // Show the description section
+                descriptionSection.style.display = 'block';
+            } else {
+                // Hide the description section
+                descriptionSection.style.display = 'none';
+            }
+        }
+    </script>
+    
+    
 
     <script src="https://kit.fontawesome.com/b9c3836094.js" crossorigin="anonymous"></script>
 

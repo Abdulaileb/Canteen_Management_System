@@ -56,10 +56,18 @@ class Payment(models.Model):
     def __str__(self):
         return self.order
 
+# class Receipt(models.Model):
+#     order = models.OneToOneField(Order, on_delete=models.CASCADE)
+#     receipt_date = models.DateTimeField(auto_now_add=True)
+
+
+#     def __str__(self):
+#         return self.order
+
+
 class Receipt(models.Model):
-    order = models.OneToOneField(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)  # Use ForeignKey instead of OneToOneField
     receipt_date = models.DateTimeField(auto_now_add=True)
 
-
     def __str__(self):
-        return self.order
+        return str(self.order.id)  # Return the order ID as a string

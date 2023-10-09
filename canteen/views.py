@@ -22,7 +22,16 @@ def HomePage(request):
     to_render = {
         'food_items': food_items
     }    
-    return render(request, 'testHome.html', to_render)
+    return render(request, 'home.html', to_render)
+
+def Product(request):
+
+    food_items = FoodItem.objects.all()
+
+    to_render = {
+        'food_items': food_items
+    }    
+    return render(request, 'product.html', to_render)
 
 def dashboardPage(request):
     return render(request, 'admin_dashboard.html', )
@@ -87,6 +96,7 @@ def dashboardPage(request):
 #     # Handle cases where the user is not authenticated or it's not a POST request
 #     return redirect('canteen:home')
 
+@login_required
 def add_to_cart(request, food_item_id):
     if request.method == 'POST' and request.user.is_authenticated:
         form = AddToCartForm(request.POST)
@@ -119,7 +129,7 @@ def add_to_cart(request, food_item_id):
     return redirect('canteen:home')
 
 
-
+@login_required
 def update_cart_item(request, item_id):
     item = get_object_or_404(OrderItem, pk=item_id)
 
@@ -131,11 +141,13 @@ def update_cart_item(request, item_id):
 
     return redirect('canteen:view_cart')
 
+@login_required
 def delete_cart_item(request, item_id):
     item = get_object_or_404(OrderItem, pk=item_id)
     item.delete()
     return redirect('canteen:view_cart')
 
+@login_required
 def view_cart(request):
     if request.user.is_authenticated:
         # Retrieve the user's cart items
@@ -156,6 +168,7 @@ def view_cart(request):
         messages.error(request, 'You need to be logged in to view your cart.')
         return redirect('canteen:home')
 
+@login_required
 def checkout(request):
     # Retrieve the user's cart items
     cart_items = OrderItem.objects.filter(order__user=request.user)
@@ -202,6 +215,7 @@ def checkout(request):
 
 #     return render(request, 'receipt.html', context)
 
+@login_required
 def receipt(request):
     user = request.user
     order = Order.objects.filter(user=user, is_paid=True).latest('id')
@@ -346,6 +360,7 @@ def receipt(request):
 
 from django.core.exceptions import ObjectDoesNotExist  # Import ObjectDoesNotExist
 
+@login_required
 def payment(request):
     if request.method == 'POST':
         payment_type = request.POST.get('payment_type')
@@ -544,14 +559,14 @@ def payment(request):
 
 #     return response
 
+@login_required
 def user_account_view(request):
     user = request.user
     orders = Order.objects.filter(user=user)
     payments = Payment.objects.filter(order__user=user)
     receipts = Receipt.objects.filter(order__user=user)
-    
-    return render(request, 'user_account.html', {'user': user, 'orders': orders, 'payments': payments, 'receipts': receipts})
 
+    return render(request, 'user_account.html', {'user': user, 'orders': orders, 'payments': payments, 'receipts': receipts})
 
 # @login_required
 # def generate_pdf_receipt(request, order_id):
@@ -667,6 +682,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, Tabl
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 
+@login_required
 def receipt_pdf(request):
     user = request.user
     order = Order.objects.filter(user=user, is_paid=True).latest('id')
