@@ -196,8 +196,8 @@ def login_view(request):
 
         if user is not None:
             login(request, user)
-            if user.is_admin:
-                return redirect('admin_dashboard')  # Redirect to the admin dashboard
+            if user.is_admin or user.is_superuser:
+                return redirect('admin:index')  # Redirect to the admin dashboard
             elif user.is_student:
                 return redirect('canteen:home')  # Redirect to the student dashboard
         else:
@@ -207,7 +207,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('login')  # Redirect to the login page after logout
+    return redirect('accounts:login')  # Redirect to the login page after logout
 
 
 from django.http import FileResponse
