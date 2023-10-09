@@ -27,6 +27,66 @@ def HomePage(request):
 def dashboardPage(request):
     return render(request, 'admin_dashboard.html', )
 
+# def add_to_cart(request, food_item_id):
+#     if request.method == 'POST' and request.user.is_authenticated:
+#         form = AddToCartForm(request.POST)
+#         if form.is_valid():
+#             quantity = form.cleaned_data['quantity']
+#             food_item = get_object_or_404(FoodItem, pk=food_item_id)
+#             user = request.user
+
+#             # Get or create an order for the user
+#             order, created = Order.objects.get_or_create(user=user, is_paid=False)
+
+#             # Create or update the OrderItem
+#             try:
+#                 order_item = OrderItem.objects.get(order=order, food_item=food_item)
+#                 order_item.quantity += quantity
+#             except OrderItem.DoesNotExist:
+#                 order_item = OrderItem(order=order, food_item=food_item, quantity=quantity)
+
+#             order_item.save()
+
+#             messages.success(request, 'Item added to your cart.')
+
+#             return redirect('canteen:home')
+#         else:
+#             # If form is not valid, show an error message
+#             messages.error(request, 'Invalid quantity.')
+    
+#     # Handle cases where the user is not authenticated or it's not a POST request
+#     return redirect('canteen:home')
+
+# def add_to_cart(request, food_item_id):
+#     if request.method == 'POST' and request.user.is_authenticated:
+#         form = AddToCartForm(request.POST)
+#         if form.is_valid():
+#             quantity = form.cleaned_data['quantity']
+#             food_item = get_object_or_404(FoodItem, pk=food_item_id)
+#             user = request.user
+
+#             # Get or create an order for the user
+#             order, created = Order.objects.get_or_create(user=user, is_paid=False)
+
+#             # Create or update the OrderItem
+#             try:
+#                 order_item = OrderItem.objects.get(order=order, food_item=food_item)
+#                 order_item.quantity += quantity
+#             except OrderItem.DoesNotExist:
+#                 order_item = OrderItem(order=order, food_item=food_item, quantity=quantity)
+
+#             order_item.save()
+
+#             messages.success(request, 'Item added to your cart.')
+
+#             return redirect('canteen:home')
+#         else:
+#             # If form is not valid, show an error message
+#             messages.error(request, 'Invalid quantity.')
+    
+#     # Handle cases where the user is not authenticated or it's not a POST request
+#     return redirect('canteen:home')
+
 def add_to_cart(request, food_item_id):
     if request.method == 'POST' and request.user.is_authenticated:
         form = AddToCartForm(request.POST)
@@ -35,8 +95,9 @@ def add_to_cart(request, food_item_id):
             food_item = get_object_or_404(FoodItem, pk=food_item_id)
             user = request.user
 
-            # Get or create an order for the user
-            order, created = Order.objects.get_or_create(user=user, is_paid=False)
+            # Create a new order for each request
+            order = Order(user=user, is_paid=False)
+            order.save()
 
             # Create or update the OrderItem
             try:
@@ -56,6 +117,8 @@ def add_to_cart(request, food_item_id):
     
     # Handle cases where the user is not authenticated or it's not a POST request
     return redirect('canteen:home')
+
+
 
 def update_cart_item(request, item_id):
     item = get_object_or_404(OrderItem, pk=item_id)
@@ -280,3 +343,64 @@ def payment(request):
             messages.error(request, 'Payment failed. Please try again.')
 
     return redirect('canteen:checkout')
+
+
+
+
+from django.http import HttpResponse
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, Table, TableStyle
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+
+def receipt_pdf(request):
+    user = request.user
+    order = Order.objects.filter(user=user, is_paid=True).latest('id')
+
+    # Calculate the total quantity and total cost for this order
+    total_quantity = order.orderitem_set.aggregate(Sum('quantity'))['quantity__sum'] or 0
+    total_cost = order.orderitem_set.aggregate(Sum('food_item__price'))['food_item__price__sum'] or 0
+
+    # Create a response object with PDF content type
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="receipt.pdf"'
+
+    # Create a PDF document
+    doc = SimpleDocTemplate(response, pagesize=letter)
+
+    # Create a list of elements to include in the PDF
+    elements = []
+
+    # Add a business logo to the PDF (replace 'logo.png' with the path to your logo)
+    elements.append(Image('logo.png', width=200, height=100))
+
+    # Add business email, telephone, date, and address
+    elements.append(Spacer(1, 10))
+    elements.append(Paragraph('Email: your@example.com', getSampleStyleSheet()['Normal']))
+    elements.append(Paragraph('Telephone: +1 123-456-7890', getSampleStyleSheet()['Normal']))
+    elements.append(Paragraph('Date: ' + str(order.order_date), getSampleStyleSheet()['Normal']))
+    elements.append(Paragraph('Address: Your Business Address', getSampleStyleSheet()['Normal']))
+
+    # Add the receipt table
+    receipt_data = [
+        ['Order ID', 'Order Date', 'Item', 'Quantity', 'Total', 'Payment Type', 'Amount Paid'],
+        [order.id, str(order.order_date), '\n'.join([item.food_item.name for item in order.orderitem_set.all()]),
+         '\n'.join([str(item.quantity) for item in order.orderitem_set.all()]),
+         '${:.2f}'.format(total_cost), order.payment.payment_type, '${:.2f}'.format(order.payment.amount_paid)]
+    ]
+    receipt_table = Table(receipt_data, colWidths=[70, 70, 120, 50, 50, 70, 70])
+    receipt_table.setStyle(TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+                                        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                                        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                                        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                                        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                                        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+                                        ('GRID', (0, 0), (-1, -1), 1, colors.black)]))
+
+    elements.append(Spacer(1, 12))
+    elements.append(receipt_table)
+
+    # Build the PDF document
+    doc.build(elements)
+
+    return response

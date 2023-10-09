@@ -20,5 +20,7 @@ urlpatterns = [
     path('payment/', views.payment, name='payment'),
     path('receipt/', views.receipt, name='receipt'),
 
+    path('receipt_pdf/', views.receipt_pdf, name='receipt_pdf'),
+
     
 ]

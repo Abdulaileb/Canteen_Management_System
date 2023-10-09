@@ -53,6 +53,21 @@ class StudentRegistrationForm(forms.ModelForm):
         model = CustomUser
         fields = ['username', 'password', 'student_ID', 'department', 'levels', 'email', 'full_name']
 
+    email = forms.EmailField(
+        error_messages={
+            'invalid': 'Invalid email. Enter your student email ending with @cusl.com.',
+        }
+    )
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+
+        # Check if the email ends with "cusl.com"
+        if not email.endswith('@cusl.com'):
+            raise forms.ValidationError("Email must end with @cusl.com")
+
+        return email
+
     def save(self, commit=True):
         # Get the user instance from the form
         user = super().save(commit=False)

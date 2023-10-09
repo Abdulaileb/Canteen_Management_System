@@ -38,6 +38,10 @@
             <td>{{ order.payment.payment_type }}</td>
             <td>${{ order.payment.amount_paid }}</td>
         </tr>
+
     </table>
+
+    <!-- Include this button in your template -->
+<a href="{% url 'canteen:receipt_pdf' %}" class="btn btn-primary">Download Receipt (PDF)</a>
 </body>
 </html>

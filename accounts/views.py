@@ -146,11 +146,16 @@ def register_student(request):
         if form.is_valid():
             user = form.save()
             login(request, user)  # Automatically log in the student after registration
-            return redirect('home')  # Redirect to the student dashboard or desired page
+            messages.success(request, 'You have successfully created an account.')
+            return redirect('canteen:home')  # Redirect to the student dashboard or desired page
+        else:
+            messages.error(request, 'Please enter your student email address')
     else:
+        messages.error(request, 'Please enter your student email address')
         form = StudentRegistrationForm()
+        
     
-    return render(request, 'registration/register_student.html', {'form': form})
+    return render(request, 'registration/register.html', {'form': form})
 
 def register_admin(request):
     # Check if the current user is a superuser before allowing admin registration
