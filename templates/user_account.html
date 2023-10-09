@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Account</title>
+</head>
+<body>
+    <h1>Welcome, {{ user.username }}</h1>
+    <h2>Your Orders</h2>
+    <ul>
+        {% for order in orders %}
+            <li>{{ order.order_date }} - Order ID: {{ order.id }}</li>
+        {% empty %}
+            <li>No orders found.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Your Payments</h2>
+    <ul>
+        {% for payment in payments %}
+            <li>{{ payment.payment_date }} - Amount Paid: {{ payment.amount_paid }}</li>
+        {% empty %}
+            <li>No payments found.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Your Receipts</h2>
+    <ul>
+        {% for receipt in receipts %}
+            <li>{{ receipt.receipt_date }} - Receipt ID: {{ receipt.id }}</li>
+        {% empty %}
+            <li>No receipts found.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

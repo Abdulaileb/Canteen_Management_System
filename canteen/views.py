@@ -305,46 +305,360 @@ def receipt(request):
 #     return redirect('canteen:checkout')
 
 
+# def payment(request):
+#     if request.method == 'POST':
+#         payment_type = request.POST.get('payment_type')
+#         user = request.user
+
+#         # Get the user's active order
+#         order = Order.objects.get(user=user, is_paid=False)
+
+#         # Calculate the total cost of the order by summing the costs of its associated OrderItem objects
+#         total_cost = order.orderitem_set.aggregate(Sum('food_item__price'))['food_item__price__sum']
+
+#         if total_cost is not None:
+#             # Create a payment record
+#             payment = Payment(order=order, payment_type=payment_type, amount_paid=total_cost)
+
+#             if payment_type == 'MobileMoney':
+#                 payment.phone_number = request.POST.get('phone_number')
+#             elif payment_type == 'VisaCard':
+#                 payment.account_number = request.POST.get('account_number')
+#                 payment.expiring_date = request.POST.get('expiring_date')
+#                 payment.pattern = request.POST.get('pattern')
+
+#             payment.save()
+
+#             # Mark the order as paid
+#             order.is_paid = True
+#             order.save()
+
+#             # Add a success message for the user
+#             messages.success(request, 'Payment successful!')
+
+#             # Redirect to the receipt page or any other appropriate page
+#             return redirect('canteen:receipt')
+#         else:
+#             # Add an error message for the user
+#             messages.error(request, 'Payment failed. Please try again.')
+
+#     return redirect('canteen:checkout')
+
+from django.core.exceptions import ObjectDoesNotExist  # Import ObjectDoesNotExist
+
 def payment(request):
     if request.method == 'POST':
         payment_type = request.POST.get('payment_type')
         user = request.user
 
-        # Get the user's active order
-        order = Order.objects.get(user=user, is_paid=False)
+        try:
+            # Get the user's active order
+            order = Order.objects.get(user=user, is_paid=False)
 
-        # Calculate the total cost of the order by summing the costs of its associated OrderItem objects
-        total_cost = order.orderitem_set.aggregate(Sum('food_item__price'))['food_item__price__sum']
+            # Calculate the total cost of the order by summing the costs of its associated OrderItem objects
+            total_cost = order.orderitem_set.aggregate(Sum('food_item__price'))['food_item__price__sum']
 
-        if total_cost is not None:
-            # Create a payment record
-            payment = Payment(order=order, payment_type=payment_type, amount_paid=total_cost)
+            if total_cost is not None:
+                # Create a payment record
+                payment = Payment(order=order, payment_type=payment_type, amount_paid=total_cost)
 
-            if payment_type == 'MobileMoney':
-                payment.phone_number = request.POST.get('phone_number')
-            elif payment_type == 'VisaCard':
-                payment.account_number = request.POST.get('account_number')
-                payment.expiring_date = request.POST.get('expiring_date')
-                payment.pattern = request.POST.get('pattern')
+                if payment_type == 'MobileMoney':
+                    payment.phone_number = request.POST.get('phone_number')
+                elif payment_type == 'VisaCard':
+                    payment.account_number = request.POST.get('account_number')
+                    payment.expiring_date = request.POST.get('expiring_date')
+                    payment.pattern = request.POST.get('pattern')
 
-            payment.save()
+                payment.save()
 
-            # Mark the order as paid
-            order.is_paid = True
-            order.save()
+                # Mark the order as paid
+                order.is_paid = True
+                order.save()
 
-            # Add a success message for the user
-            messages.success(request, 'Payment successful!')
+                # Add a success message for the user
+                messages.success(request, 'Payment successful!')
 
-            # Redirect to the receipt page or any other appropriate page
-            return redirect('canteen:receipt')
-        else:
-            # Add an error message for the user
-            messages.error(request, 'Payment failed. Please try again.')
+                # Redirect to the receipt page or any other appropriate page
+                return redirect('canteen:receipt')
+            else:
+                # Add an error message for the user
+                messages.error(request, 'Payment failed. Please try again.')
+                return redirect('canteen:checkout')
+        except Order.DoesNotExist:
+            # Handle the case where there is no active order
+            messages.error(request, 'No active order found. Please add items to your cart.')
+            return redirect('canteen:home')
 
     return redirect('canteen:checkout')
 
 
+
+# from django.http import HttpResponse
+# from reportlab.lib.pagesizes import letter, landscape
+# from reportlab.lib import colors
+# from reportlab.platypus import SimpleDocTemplate, PageTemplate, Frame, Paragraph, Spacer, Image
+# from reportlab.lib.styles import getSampleStyleSheet
+
+# def generate_pdf_receipt(response):
+#     # Create a PDF response object
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = 'attachment; filename="receipt.pdf"'
+
+#     # Define the page template with fixed content
+#     def page_template(canvas, doc, width, height):
+#         styles = getSampleStyleSheet()
+#         logo = Image('static/Canteen.png', width=200, height=100)
+#         email = Paragraph('Email: your@example.com', styles['Normal'])
+#         telephone = Paragraph('Telephone: +1 123-456-7890', styles['Normal'])
+#         date = Paragraph('Date: ' + str(order.order_date), styles['Normal'])
+#         address = Paragraph('Address: Your Business Address', styles['Normal'])
+
+#         # Position fixed content on the page
+#         logo.wrapOn(canvas, width, height)
+#         logo.drawOn(canvas, 50, height - 150)
+#         email.wrapOn(canvas, width, height)
+#         email.drawOn(canvas, 50, height - 250)
+#         telephone.wrapOn(canvas, width, height)
+#         telephone.drawOn(canvas, 50, height - 280)
+#         date.wrapOn(canvas, width, height)
+#         date.drawOn(canvas, 50, height - 310)
+#         address.wrapOn(canvas, width, height)
+#         address.drawOn(canvas, 50, height - 340)
+
+#     # # Create the PDF document
+#     # doc.addPageTemplates([PageTemplate(id='receipt', onPage=page_template)])
+#     # elements = []  # Add your receipt content here
+#     doc = SimpleDocTemplate(response, pagesize=landscape(letter))
+
+#     # Build the PDF document
+#     doc.build(elements)
+
+#     return response
+
+
+# def generate_pdf_receipt(request):
+#     # Create a PDF response object
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = 'attachment; filename="receipt.pdf"'
+    
+#         # Print the file path for debugging
+#     print(response.get('Content-Disposition'))
+
+#     # Define the page template with fixed content
+#     def page_template(canvas, doc, width, height):
+#         styles = getSampleStyleSheet()
+#         logo = Image('static/Canteen.png', width=200, height=100)
+#         email = Paragraph('Email: your@example.com', styles['Normal'])
+#         telephone = Paragraph('Telephone: +1 123-456-7890', styles['Normal'])
+#         date = Paragraph('Date: ' + str(order.order_date), styles['Normal'])
+#         address = Paragraph('Address: Your Business Address', styles['Normal'])
+
+#         # Position fixed content on the page
+#         logo.wrapOn(canvas, width, height)
+#         logo.drawOn(canvas, 50, height - 150)
+#         email.wrapOn(canvas, width, height)
+#         email.drawOn(canvas, 50, height - 250)
+#         telephone.wrapOn(canvas, width, height)
+#         telephone.drawOn(canvas, 50, height - 280)
+#         date.wrapOn(canvas, width, height)
+#         date.drawOn(canvas, 50, height - 310)
+#         address.wrapOn(canvas, width, height)
+#         address.drawOn(canvas, 50, height - 340)
+
+#     # Create the PDF document
+#     doc = SimpleDocTemplate(response, pagesize=landscape(letter))
+
+#     # Create a list to hold your receipt content (elements)
+#     elements = []  # Add your receipt content here
+
+#     # Build the PDF document
+#     doc.build(elements)
+
+#     return response
+
+# from reportlab.platypus import SimpleDocTemplate, PageTemplate, Frame, Paragraph, Spacer, Image
+# from reportlab.lib.styles import getSampleStyleSheet
+# from reportlab.lib.pagesizes import letter, landscape
+
+# def generate_pdf_receipt(request):
+#     # Create a PDF response object
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = 'attachment; filename="receipt.pdf"'
+
+#     # Get the order for which you want to generate the receipt
+#     user = request.user
+#     order = Order.objects.filter(user=user, is_paid=True).latest('id')
+
+#     # Define the page template with fixed content
+#     def page_template(canvas, doc, width, height):
+#         styles = getSampleStyleSheet()
+#         logo = Image('static/Canteen.png', width=200, height=100)
+#         email = Paragraph('Email: your@example.com', styles['Normal'])
+#         telephone = Paragraph('Telephone: +1 123-456-7890', styles['Normal'])
+#         date = Paragraph('Date: ' + str(order.order_date), styles['Normal'])
+#         address = Paragraph('Address: Your Business Address', styles['Normal'])
+
+#         # Position fixed content on the page
+#         logo.wrapOn(canvas, width, height)
+#         logo.drawOn(canvas, 50, height - 150)
+#         email.wrapOn(canvas, width, height)
+#         email.drawOn(canvas, 50, height - 250)
+#         telephone.wrapOn(canvas, width, height)
+#         telephone.drawOn(canvas, 50, height - 280)
+#         date.wrapOn(canvas, width, height)
+#         date.drawOn(canvas, 50, height - 310)
+#         address.wrapOn(canvas, width, height)
+#         address.drawOn(canvas, 50, height - 340)
+
+#     # Create the PDF document
+#     doc = SimpleDocTemplate(response, pagesize=landscape(letter))
+
+#     # Create a list to hold your receipt content (elements)
+#     elements = []  # Add your receipt content here
+
+#     # Build the PDF document
+#     doc.build(elements)
+
+#     return response
+
+# def generate_pdf_receipt(request):
+#     # Create a PDF response object
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = 'attachment; filename="receipt.pdf"'
+
+#     # Get the order for which you want to generate the receipt
+#     user = request.user
+#     order = Order.objects.filter(user=user, is_paid=True).latest('id')
+
+#     # Create a list to hold your receipt content (elements)
+#     elements = []
+
+#     # Add some sample content (you can customize this)
+#     elements.append(Paragraph('Receipt for Order ID: {}'.format(order.id)))
+#     elements.append(Paragraph('Order Date: {}'.format(order.order_date)))
+#     elements.append(Spacer(1, 12))  # Add some space between paragraphs
+
+#     # Build the PDF document
+#     doc = SimpleDocTemplate(response, pagesize=letter)
+#     doc.build(elements)
+
+#     return response
+
+def user_account_view(request):
+    user = request.user
+    orders = Order.objects.filter(user=user)
+    payments = Payment.objects.filter(order__user=user)
+    receipts = Receipt.objects.filter(order__user=user)
+    
+    return render(request, 'user_account.html', {'user': user, 'orders': orders, 'payments': payments, 'receipts': receipts})
+
+
+# @login_required
+# def generate_pdf_receipt(request, order_id):
+#     # Get the order for which you want to generate the receipt
+#     order = get_object_or_404(Order, id=order_id)
+
+#     # Create a PDF response object
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = f'attachment; filename="receipt_{order.id}.pdf"'
+
+#     # Define the page template with fixed content
+#     def page_template(canvas, doc, width, height):
+#         styles = getSampleStyleSheet()
+#         logo = Image('static/Canteen.png', width=200, height=100)
+#         email = Paragraph('Email: your@example.com', styles['Normal'])
+#         telephone = Paragraph('Telephone: +1 123-456-7890', styles['Normal'])
+#         date = Paragraph('Date: ' + str(order.order_date), styles['Normal'])
+#         address = Paragraph('Address: Your Business Address', styles['Normal'])
+
+#         # Position fixed content on the page
+#         logo.wrapOn(canvas, width, height)
+#         logo.drawOn(canvas, 50, height - 150)
+#         email.wrapOn(canvas, width, height)
+#         email.drawOn(canvas, 50, height - 250)
+#         telephone.wrapOn(canvas, width, height)
+#         telephone.drawOn(canvas, 50, height - 280)
+#         date.wrapOn(canvas, width, height)
+#         date.drawOn(canvas, 50, height - 310)
+#         address.wrapOn(canvas, width, height)
+#         address.drawOn(canvas, 50, height - 340)
+
+#     # Create the PDF document
+#     doc = SimpleDocTemplate(response, pagesize=landscape(letter))
+
+#     # Define the table data for the receipt
+#     table_data = [['Item', 'Date', 'Amount']]
+    
+#     # Populate the table_data with order items
+#     for order_item in order.orderitem_set.all():
+#         item_name = order_item.food_item.name
+#         order_date = order_item.order.order_date.strftime('%Y-%m-%d %H:%M:%S')
+#         amount = order_item.food_item.price * order_item.quantity
+#         table_data.append([item_name, order_date, f'${amount:.2f}'])
+
+#     # Create a table to display order details
+#     table = Table(table_data, colWidths=[200, 100, 100])
+#     table.setStyle(TableStyle([
+#         ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+#         ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+#         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+#         ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+#         ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+#         ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+#         ('GRID', (0, 0), (-1, -1), 1, colors.black)
+#     ]))
+
+#     elements = []
+#     elements.append(table)
+
+#     # Build the PDF document
+#     doc.addPageTemplates([PageTemplate(id='receipt', onPage=page_template)])
+#     doc.build(elements)
+
+#     return response
+
+
+# from django.shortcuts import get_object_or_404
+
+# def generate_pdf_receipt(request, order_id):
+#     # Get the order object using the order_id
+#     order = get_object_or_404(Order, pk=order_id)
+
+#     # Create a PDF response object
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = f'attachment; filename="receipt_{order.id}.pdf"'
+
+#     # Define the page template with fixed content
+#     def page_template(canvas, doc, width, height):
+#         styles = getSampleStyleSheet()
+#         logo = Image('static/Canteen.png', width=200, height=100)
+#         email = Paragraph('Email: your@example.com', styles['Normal'])
+#         telephone = Paragraph('Telephone: +1 123-456-7890', styles['Normal'])
+#         date = Paragraph('Date: ' + str(order.order_date), styles['Normal'])
+#         address = Paragraph('Address: Your Business Address', styles['Normal'])
+
+#         # Position fixed content on the page
+#         logo.wrapOn(canvas, width, height)
+#         logo.drawOn(canvas, 50, height - 150)
+#         email.wrapOn(canvas, width, height)
+#         email.drawOn(canvas, 50, height - 250)
+#         telephone.wrapOn(canvas, width, height)
+#         telephone.drawOn(canvas, 50, height - 280)
+#         date.wrapOn(canvas, width, height)
+#         date.drawOn(canvas, 50, height - 310)
+#         address.wrapOn(canvas, width, height)
+#         address.drawOn(canvas, 50, height - 340)
+
+#     # Create the PDF document
+#     doc = SimpleDocTemplate(response, pagesize=landscape(letter))
+
+#     # Create a list to hold your receipt content (elements)
+#     elements = []  # Add your receipt content here
+
+#     # Build the PDF document
+#     doc.build(elements)
+
+#     return response
 
 
 from django.http import HttpResponse
@@ -372,7 +686,7 @@ def receipt_pdf(request):
     elements = []
 
     # Add a business logo to the PDF (replace 'logo.png' with the path to your logo)
-    elements.append(Image('logo.png', width=200, height=100))
+    elements.append(Image('static/Canteen.png', width=200, height=100))
 
     # Add business email, telephone, date, and address
     elements.append(Spacer(1, 10))

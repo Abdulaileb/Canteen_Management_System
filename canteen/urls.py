@@ -22,5 +22,9 @@ urlpatterns = [
 
     path('receipt_pdf/', views.receipt_pdf, name='receipt_pdf'),
 
+    path('user_account_view/', views.user_account_view, name='user_account_view'),
+
+    
+
     
 ]
