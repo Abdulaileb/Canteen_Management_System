@@ -291,3 +291,166 @@
 </body>
 
 </html>
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Your Cart</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for cart_item in cart_items %}
+            <tr>
+            <td>{{ cart_item.food_item.name }}</td>
+            <td>{{ cart_item.quantity }}</td>
+            <td>${{ cart_item.food_item.price }}</td>
+            <td>${{ cart_item.item_cost }}</td>
+            <td>
+                <form method="post" action="{% url 'update_cart' cart_item.food_item.id %}">
+                {% csrf_token %}
+                <input type="number" name="quantity" value="{{ cart_item.quantity }}" min="1" required>
+                <button type="submit">Update</button>
+                </form>
+                <a href="{% url 'delete_cart_item' cart_item.food_item.id %}">Delete</a>
+            </td>
+            </tr>
+        {% empty %}
+            <tr>
+            <td colspan="5">Your cart is empty.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <p>Total Items: {{ total_items }}</p>
+    <p>Total Cost: ${{ total_cost }}</p>
+
+    <a href="#" class="btn btn-primary">Checkout</a>
+
+</body>
+</html> -->
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart</title>
+</head>
+<body>
+    {% if messages %}
+    <div class="alert alert-success messages">
+        {% for message in messages %}
+        <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <h2>Your Cart</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Item Name</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cart_item in cart_items %}
+            <tr>
+                <td>{{ cart_item.food_item.name }}</td>
+                <td>{{ cart_item.quantity }}</td>
+                <td>${{ cart_item.item_cost }}</td>
+                <td>
+                    <form method="post" action="{% url 'update_cart' cart_item.food_item.id %}">
+                        {% csrf_token %}
+                        <input type="number" name="quantity" value="{{ cart_item.quantity }}" min="1" required>
+                        <button type="submit">Update</button>
+                    </form>
+                    <a href="{% url 'delete_cart_item' cart_item.food_item.id %}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <p>Total Items: {{ total_items }}</p>
+    <p>Total Cost: ${{ total_cost }}</p>
+
+    <a href="{% url 'checkout' %}" class="btn btn-primary">Checkout</a>
+</body>
+</html> -->
+
+
+<!-- view_cart.html -->
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <-- Include necessary CSS and scripts here --
+    <title>Your Cart</title>
+</head>
+<body>
+    <h2>Your Cart</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Item Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+                <tr>
+                    <td>{{ item.food_item.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>${{ item.food_item.price }}</td>
+                    <td>
+                        <form method="post" action="{% url 'update_cart_item' item.id %}">
+                            {% csrf_token %}
+                            <input type="number" name="quantity" value="{{ item.quantity }}" min="1" required>
+                            <button type="submit">Update</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" action="{% url 'delete_cart_item' item.id %}">
+                            {% csrf_token %}
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <p>Total Items: {{ cart_items.count }}</p>
+    <p>Total Quantity: {{ cart_items.aggregate(Sum('quantity')).quantity__sum }}</p>
+    <p>Total Price: ${{ cart_items.aggregate(Sum('food_item__price')).food_item__price__sum }}</p>
+
+    <a href="{% url 'checkout' %}">Checkout</a>
+</body>
+</html> -->
+
+

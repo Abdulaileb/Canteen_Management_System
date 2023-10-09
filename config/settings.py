@@ -32,6 +32,18 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+     # Any apps which will override adminlte's templates (i.e. your apps)
+
+    # # The general purpose templates
+    # 'django_adminlte',
+
+    # # Optional: Skin for the admin interface
+    # 'django_adminlte_theme',
+  
+    # # General use templates & template tags (should appear first)
+    # 'adminlte3',
+    #  # Optional: Django admin theme (must be before django.contrib.admin)
+    # 'adminlte3_theme',
     'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -119,7 +131,8 @@ DATE_INPUT_FORMATS = ['%Y-%m-%d']
 DATETIME_INPUT_FORMATS = ['%Y-%m-%d %H:%M:%S']
 
 
-AUTH_USER_MODEL = 'accounts.AdminUser' # new
+AUTH_USER_MODEL = 'accounts.CustomUser' # new
+
 
 # AUTH_USER_MODEL = 'accounts.StudentUser' # new
 
@@ -136,8 +149,8 @@ STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = 'home'
-LOGOUT_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'canteen:home'
+LOGOUT_REDIRECT_URL = 'canteen:home'
 
 MEDIA_URL = '/staticfiles/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static')
@@ -148,3 +161,64 @@ SESSION_EXPIRE_SECONDS = 7200  # 2 hrs in seconds
 SESSION_COOKIE_AGE = 32,400  # 9 hours in seconds
 
 SESSION_COOKIE_AGE = SESSION_EXPIRE_SECONDS
+
+
+
+# JAZZMIN_UI_TWEAKS = {
+
+#     "theme": "flatly",
+#     "dark_mode_theme": "solar",
+# }
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": True,
+    "brand_small_text": False,
+    "brand_colour": False,
+    "accent": "accent-orange",
+    "navbar": "navbar-lightblue navbar-dark",
+    "no_navbar_border": False,
+    "navbar_fixed": False,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-dark-purple",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": False,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme": "minty",
+    "dark_mode_theme": "darkly",
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success"
+    },
+    "actions_sticky_top": True
+}
+
+JAZZMIN_SETTINGS = {
+    # title of the window (Will default to current_admin_site.site_title if absent or None)
+    "site_title": "CANTEEN SYSTEM",
+
+    # Title on the login screen (19 chars max) (defaults to current_admin_site.site_header if absent or None)
+    "site_header": "Canteen Management System",
+
+    # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
+    "site_brand": "Canteen",
+
+    # "site_logo": "{% static 'Canteen.png' %}",
+
+    # Logo to use for your site, must be present in static files, used for brand on top left
+    "site_logo": "logoIco.ico",
+
+    # Logo to use for your site, must be present in static files, used for login form logo (defaults to site_logo)
+    "login_logo": "used_logo.ico",
+
+}

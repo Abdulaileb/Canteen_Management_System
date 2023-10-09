@@ -1,16 +1,86 @@
+
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Student User Registration</title>
-    <!-- Add your CSS styles and assets here -->
-</head>
-<body>
-    <h1>Student User Registration</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Register</button>
-    </form>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <title>Login & Signup Form</title>
+    <link rel="stylesheet" href="{% static 'login/style.css' %}" />
+  </head>
+  <body>
+    <section class="wrapper">
+      <div class="form signup">
+        <header>Signup</header>
+
+        <form method="post">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Username" required />
+            <input type="text" name="student_ID" placeholder="Student ID" required />
+            <input type="text" name="department" placeholder="Department" required />
+            <input type="text" name="levels" placeholder="Levels" required />
+            <input type="text" name="student_email" placeholder="Student Email address" required />
+            <input type="password" name="password" placeholder="Password" required />
+            <div class="checkbox">
+                <input type="checkbox" id="signupCheck" />
+                <label for="signupCheck">I accept all terms & conditions</label>
+            </div>
+            <input type="submit" value="Register" />
+        </form>
+        
+
+            <!-- <form method="POST">
+                {% csrf_token %}
+                <input type="text" name="email" placeholder="Username" required />
+                <input type="text" name="student_id" placeholder="Student_Id" required />
+                <input type="text" name="department" placeholder="Department" required />
+                <input type="text" name="levels" placeholder="Levels" required />
+                <input type="text" name="username" placeholder="Student Email address" required />
+                <input type="password" name="password" placeholder="Password" required />
+                <div class="checkbox">
+                    <input type="checkbox" id="signupCheck" />
+                    <label for="signupCheck">I accept all terms & conditions</label>
+                </div>
+                <input type="submit" value="Register" />
+            </form> -->
+        
+      </div>
+
+      <div class="form login">
+        <header>Login</header>
+
+       
+
+            <form method="POST">
+                {% csrf_token %}
+                <input type="text" name="username" placeholder="Email address" required />
+                <input type="password" name="password" placeholder="Password" required />
+                <a href="#">Forgot password?</a>
+                <input type="submit" value="Login" />
+            </form>
+
+            <div> 
+                {% for message in messages %}
+					<p id="messages">{{message}}</p>
+				{% endfor %}
+            </div class="mt-4">
+
+      </div>
+
+      <script>
+        const wrapper = document.querySelector(".wrapper"),
+          signupHeader = document.querySelector(".signup header"),
+          loginHeader = document.querySelector(".login header");
+
+        loginHeader.addEventListener("click", () => {
+          wrapper.classList.add("active");
+        });
+        signupHeader.addEventListener("click", () => {
+          wrapper.classList.remove("active");
+        });
+      </script>
+    </section>
+  </body>
 </html>

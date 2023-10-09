@@ -1,0 +1,85 @@
+<!-- checkout.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <-- Include necessary CSS and scripts --
+    <title>Checkout</title>
+</head>
+<body>
+    <h2>Checkout</h2>
+    <form method="post" action="{% url 'canteen:payment' %}">
+        {% csrf_token %}
+        <label for="payment_type">Payment Type:</label>
+        <select name="payment_type" id="payment_type">
+            <option value="Afri-Money">Afri-Money</option>
+            <option value="Orange_Money">Orange_Money</option>
+            <option value="Visa Card">Visa Card</option>
+        </select>
+        <button type="submit">Proceed to Payment</button>
+    </form>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- checkout.html -->
+    <form method="post" action="{% url 'canteen:payment' %}">
+        {% csrf_token %}
+        <!-- ... Your existing cart items table ... -->
+        
+        <div>
+            <label for="payment_type">Payment Type:</label>
+            <select id="payment_type" name="payment_type">
+                <option value="Cash">Cash</option>
+                <option value="Credit">Credit</option>
+                <option value="MobileMoney">Mobile Money</option>
+                <option value="VisaCard">Visa Card</option>
+            </select>
+        </div>
+
+        <!-- Afri-Money or Orange Money Phone Number -->
+        <div id="phone_number_field" style="display: none;">
+            <label for="phone_number">Phone Number:</label>
+            <input type="text" id="phone_number" name="phone_number">
+        </div>
+
+        <!-- Visa Card Fields -->
+        <div id="visa_card_fields" style="display: none;">
+            <label for="account_number">Account Number:</label>
+            <input type="text" id="account_number" name="account_number">
+            
+            <label for="expiring_date">Expiring Date:</label>
+            <input type="text" id="expiring_date" name="expiring_date">
+            
+            <label for="pattern">Pattern:</label>
+            <input type="text" id="pattern" name="pattern">
+        </div>
+
+        <button type="submit">Pay Now</button>
+    </form>
+
+    <script>
+        // Show/hide additional fields based on the selected payment type
+        document.getElementById('payment_type').addEventListener('change', function () {
+            var selectedPaymentType = this.value;
+
+            if (selectedPaymentType === 'MobileMoney') {
+                document.getElementById('phone_number_field').style.display = 'block';
+                document.getElementById('visa_card_fields').style.display = 'none';
+            } else if (selectedPaymentType === 'VisaCard') {
+                document.getElementById('phone_number_field').style.display = 'none';
+                document.getElementById('visa_card_fields').style.display = 'block';
+            } else {
+                document.getElementById('phone_number_field').style.display = 'none';
+                document.getElementById('visa_card_fields').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Include necessary CSS and scripts here -->
+    <title>Your Cart</title>
+</head>
+<body>
+    <h2>Your Cart</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Item Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+                <tr>
+                    <td>{{ item.food_item.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>${{ item.food_item.price }}</td>
+                    <td>
+                        <form method="post" action="{% url 'canteen:update_cart_item' item.id %}">
+                            {% csrf_token %}
+                            <input type="number" name="quantity" value="{{ item.quantity }}" min="1" required>
+                            <button type="submit">Update</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" action="{% url 'canteen:delete_cart_item' item.id %}">
+                            {% csrf_token %}
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <p>Total Items: {{ cart_items.count }}</p>
+    <p>Total Quantity: {{ total_quantity }}</p>
+    <p>Total Price: ${{ total_price }}</p>
+
+    <form method="get" action="{% url 'canteen:checkout' %}">
+        <button type="submit" {% if cart_items.count == 0 %}disabled{% endif %}>Checkout</button>
+    </form>
+</body>
+</html>

@@ -25,7 +25,7 @@ urlpatterns = [
 
     path('accounts/', include('accounts.urls', namespace='accounts')),
 
-    path('', include('canteen.urls')),
+    path('', include('canteen.urls', namespace='canteen')),
 
 ]
 
