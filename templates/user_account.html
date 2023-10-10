@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Account</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <h1>Welcome, {{ user.username }}</h1>
+
+    <!-- Button to trigger the modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#accountModal">
+        View Account
+    </button>
+
+    <!-- Bootstrap Modal -->
+    <div class="modal fade" id="accountModal" tabindex="-1" role="dialog" aria-labelledby="accountModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="accountModalLabel">Your Account</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <h2>Your Orders</h2>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Order Date</th>
+                                <th>Order ID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                                <tr>
+                                    <td>{{ order.order_date }}</td>
+                                    <td>{{ order.id }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="2">No orders found.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <h2>Your Payments</h2>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Payment Date</th>
+                                <th>Amount Paid</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment in payments %}
+                                <tr>
+                                    <td>{{ payment.payment_date }}</td>
+                                    <td>{{ payment.amount_paid }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="2">No payments found.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <h2>Your Receipts</h2>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Receipt Date</th>
+                                <th>Receipt ID</th>
+                                <th>Download Receipt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for receipt in receipts %}
+                                <tr>
+                                    <td>{{ receipt.receipt_date }}</td>
+                                    <td>{{ receipt.id }}</td>
+                                    <td><a href="{% url 'download_receipt' receipt.id %}" class="btn btn-primary">Download</a></td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="3">No receipts found.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!-- receipt.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Include necessary CSS and scripts -->
+    <title>Receipt</title>
+</head>
+<body>
+    <h2>Receipt</h2>
+    <table border="1">
+        <tr>
+            <th>Order ID</th>
+            <th>Order Date</th>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Total</th>
+            <th>Payment Type</th>
+            <th>Amount Paid</th>
+        </tr>
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.order_date }}</td>
+            <td>
+                <ul>
+                    {% for item in order.orderitem_set.all %}
+                        <li>{{ item.food_item.name }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    {% for item in order.orderitem_set.all %}
+                        <li>{{ item.quantity }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>${{ total_cost }}</td>
+            <td>{{ order.payment.payment_type }}</td>
+            <td>${{ order.payment.amount_paid }}</td>
+        </tr>
+
+    </table>
+
+    <!-- Include this button in your template -->
+<a href="{% url 'canteen:receipt_pdf' %}" class="btn btn-primary">Download Receipt (PDF)</a>
+</body>
+</html>

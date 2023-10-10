@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food</title>
+</head>
+<body>
+    {% if messages %}
+      <div class="alert alert-success messages">
+          {% for message in messages %}
+              <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
+          {% endfor %}
+      </div>
+   {% endif %}
+
+    <h2>Food Items</h2>
+    <ul>
+      {% for food_item in food_items %}
+        <li>
+          <strong>{{ food_item.name }}</strong><br>
+          <div class="image-container">
+            <img src="{{ food_item.image.url }}" alt="{{ food_item.name }}" width="200" />
+        </div>
+          Category: {{ food_item.category.name }}<br>
+          Price: ${{ food_item.price }}<br>
+          Description: {{ food_item.description }}<br>
+          <form method="post" action="{% url 'canteen:add_to_cart' food_item.id %}">
+            {% csrf_token %}
+            <input type="number" name="quantity" class="form-control" value="1" min="1" required>
+           
+            <button type="submit" class="btn btn-dark">Add to Cart</button>
+            <!-- <button type="submit">Add to Cart</button> -->
+          </form>
+        </li>
+      {% empty %}
+        <p>No food items available.</p>
+      {% endfor %}
+    </ul>
+
+
+    <div>
+        <a href="{% url 'canteen:view_cart' %}"> View your cart here</a>
+    </div>
+
+    <div>
+        <a href="{% url 'accounts:logout' %}"> Logout </a>
+    </div>
+
+    <div>
+      <a href="{% url 'canteen:user_account_view' %}"> User Account </a>
+  </div>
+</body>
+</html>
