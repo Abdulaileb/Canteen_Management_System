@@ -27,8 +27,10 @@
           Description: {{ food_item.description }}<br>
           <form method="post" action="{% url 'canteen:add_to_cart' food_item.id %}">
             {% csrf_token %}
-            <input type="number" name="quantity" value="1" min="1" required>
-            <button type="submit">Add to Cart</button>
+            <input type="number" name="quantity" class="form-control" value="1" min="1" required>
+           
+            <button type="submit" class="btn btn-dark">Add to Cart</button>
+            <!-- <button type="submit">Add to Cart</button> -->
           </form>
         </li>
       {% empty %}
