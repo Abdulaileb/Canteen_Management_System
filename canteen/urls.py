@@ -9,6 +9,9 @@ app_name = 'canteen'
 urlpatterns = [
     path('', views.HomePage, name='home'),
     path('product/', views.Product, name='product'),
+
+    path('contact/', views.Contact, name='contact'),
+
     path('add_to_cart/<int:food_item_id>/', views.add_to_cart, name='add_to_cart'),
     path('view_cart/', views.view_cart, name='view_cart'),
 
@@ -24,8 +27,5 @@ urlpatterns = [
     path('receipt_pdf/', views.receipt_pdf, name='receipt_pdf'),
 
     path('user_account_view/', views.user_account_view, name='user_account_view'),
-
-    
-
     
 ]

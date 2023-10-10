@@ -19,8 +19,14 @@ def HomePage(request):
 
     food_items = FoodItem.objects.all()
 
+    # # user = request.user
+    # orders = Order.objects.filter(user=user)
+    # payments = Payment.objects.filter(order__user=user)
+    # receipts = Receipt.objects.filter(order__user=user)
+
     to_render = {
-        'food_items': food_items
+        'food_items': food_items,
+        # 'user': user, 'orders': orders, 'payments': payments, 'receipts': receipts
     }    
     return render(request, 'home.html', to_render)
 
@@ -33,68 +39,11 @@ def Product(request):
     }    
     return render(request, 'product.html', to_render)
 
+def Contact(request):
+    return render(request, 'contact.html',)
+
 def dashboardPage(request):
     return render(request, 'admin_dashboard.html', )
-
-# def add_to_cart(request, food_item_id):
-#     if request.method == 'POST' and request.user.is_authenticated:
-#         form = AddToCartForm(request.POST)
-#         if form.is_valid():
-#             quantity = form.cleaned_data['quantity']
-#             food_item = get_object_or_404(FoodItem, pk=food_item_id)
-#             user = request.user
-
-#             # Get or create an order for the user
-#             order, created = Order.objects.get_or_create(user=user, is_paid=False)
-
-#             # Create or update the OrderItem
-#             try:
-#                 order_item = OrderItem.objects.get(order=order, food_item=food_item)
-#                 order_item.quantity += quantity
-#             except OrderItem.DoesNotExist:
-#                 order_item = OrderItem(order=order, food_item=food_item, quantity=quantity)
-
-#             order_item.save()
-
-#             messages.success(request, 'Item added to your cart.')
-
-#             return redirect('canteen:home')
-#         else:
-#             # If form is not valid, show an error message
-#             messages.error(request, 'Invalid quantity.')
-    
-#     # Handle cases where the user is not authenticated or it's not a POST request
-#     return redirect('canteen:home')
-
-# def add_to_cart(request, food_item_id):
-#     if request.method == 'POST' and request.user.is_authenticated:
-#         form = AddToCartForm(request.POST)
-#         if form.is_valid():
-#             quantity = form.cleaned_data['quantity']
-#             food_item = get_object_or_404(FoodItem, pk=food_item_id)
-#             user = request.user
-
-#             # Get or create an order for the user
-#             order, created = Order.objects.get_or_create(user=user, is_paid=False)
-
-#             # Create or update the OrderItem
-#             try:
-#                 order_item = OrderItem.objects.get(order=order, food_item=food_item)
-#                 order_item.quantity += quantity
-#             except OrderItem.DoesNotExist:
-#                 order_item = OrderItem(order=order, food_item=food_item, quantity=quantity)
-
-#             order_item.save()
-
-#             messages.success(request, 'Item added to your cart.')
-
-#             return redirect('canteen:home')
-#         else:
-#             # If form is not valid, show an error message
-#             messages.error(request, 'Invalid quantity.')
-    
-#     # Handle cases where the user is not authenticated or it's not a POST request
-#     return redirect('canteen:home')
 
 @login_required
 def add_to_cart(request, food_item_id):
@@ -179,42 +128,6 @@ def checkout(request):
 
     return render(request, 'checkout.html', context)
 
-# def payment(request):
-#     if request.method == 'POST':
-#         payment_type = request.POST.get('payment_type')
-#         user = request.user
-
-#         # Get the user's active order
-#         order = Order.objects.get(user=user, is_paid=False)
-
-#         # Calculate the total cost of the order by summing the costs of its associated OrderItem objects
-#         total_cost = order.orderitem_set.aggregate(Sum('item_cost'))['item_cost__sum']
-
-#         if total_cost is not None:
-#             # Create a payment record
-#             payment = Payment(order=order, payment_type=payment_type, amount_paid=total_cost)
-#             payment.save()
-
-#             # Mark the order as paid
-#             order.is_paid = True
-#             order.save()
-
-#             return redirect('canteen:receipt')
-
-#     return redirect('canteen:checkout')
-
-# def receipt(request):
-#     user = request.user
-#     order = Order.objects.filter(user=user, is_paid=True).latest('id')
-#     payment = Payment.objects.get(order=order)
-
-#     context = {
-#         'order': order,
-#         'payment': payment,
-#     }
-
-#     return render(request, 'receipt.html', context)
-
 @login_required
 def receipt(request):
     user = request.user
@@ -232,131 +145,6 @@ def receipt(request):
 
     return render(request, 'receipt.html', context)
 
-# def payment(request):
-#     if request.method == 'POST':
-#         payment_type = request.POST.get('payment_type')
-#         user = request.user
-
-#         # Get the user's active order
-#         order = Order.objects.get(user=user, is_paid=False)
-
-#         # Initialize form variables
-#         phone_number = None
-#         account_number = None
-#         expiring_date = None
-#         pattern = None
-
-#         if payment_type in ('Afri_Money', 'Orange_Money'):
-#             phone_number = request.POST.get('phone_number')
-#         elif payment_type == 'VISA Card':
-#             account_number = request.POST.get('account_number')
-#             expiring_date = request.POST.get('expiring_date')
-#             pattern = request.POST.get('pattern')
-
-#         # Calculate the total cost of the order by summing the costs of its associated OrderItem objects
-#         total_cost = order.orderitem_set.annotate(
-#             item_cost=ExpressionWrapper(F('food_item__price') * F('quantity'), output_field=DecimalField())
-#         ).aggregate(Sum('item_cost'))['item_cost__sum']
-
-#         if total_cost is not None:
-#             # Create a payment record
-#             payment = Payment(
-#                 order=order,
-#                 payment_type=payment_type,
-#                 amount_paid=total_cost,
-#                 phone_number=phone_number,
-#                 account_number=account_number,
-#                 expiring_date=expiring_date,
-#                 pattern=pattern,
-#             )
-#             payment.save()
-
-#             # Mark the order as paid
-#             order.is_paid = True
-#             order.save()
-
-#             # Display a success message
-#             messages.success(request, 'Payment successful!')
-
-#             return redirect('canteen:receipt')
-#         else:
-#             # Display a failed message
-#             messages.error(request, 'Payment failed. Please try again.')
-
-#     return redirect('canteen:checkout')
-
-
-# def payment(request):
-#     if request.method == 'POST':
-#         payment_type = request.POST.get('payment_type')
-#         user = request.user
-
-#         # Get the user's active order
-#         order = Order.objects.get(user=user, is_paid=False)
-
-#         # Calculate the total cost of the order by summing the costs of its associated OrderItem objects
-#         total_cost = order.orderitem_set.aggregate(Sum('food_item__price'))['food_item__price__sum']
-
-#         if total_cost is not None:
-#             # Create a payment record
-#             payment = Payment(order=order, payment_type=payment_type, amount_paid=total_cost)
-
-#             if payment_type == 'MobileMoney':
-#                 payment.phone_number = request.POST.get('phone_number')
-#             elif payment_type == 'VisaCard':
-#                 payment.account_number = request.POST.get('account_number')
-#                 payment.expiring_date = request.POST.get('expiring_date')
-#                 payment.pattern = request.POST.get('pattern')
-
-#             payment.save()
-
-#             # Mark the order as paid
-#             order.is_paid = True
-#             order.save()
-
-#             return redirect('canteen:receipt')
-
-#     return redirect('canteen:checkout')
-
-
-# def payment(request):
-#     if request.method == 'POST':
-#         payment_type = request.POST.get('payment_type')
-#         user = request.user
-
-#         # Get the user's active order
-#         order = Order.objects.get(user=user, is_paid=False)
-
-#         # Calculate the total cost of the order by summing the costs of its associated OrderItem objects
-#         total_cost = order.orderitem_set.aggregate(Sum('food_item__price'))['food_item__price__sum']
-
-#         if total_cost is not None:
-#             # Create a payment record
-#             payment = Payment(order=order, payment_type=payment_type, amount_paid=total_cost)
-
-#             if payment_type == 'MobileMoney':
-#                 payment.phone_number = request.POST.get('phone_number')
-#             elif payment_type == 'VisaCard':
-#                 payment.account_number = request.POST.get('account_number')
-#                 payment.expiring_date = request.POST.get('expiring_date')
-#                 payment.pattern = request.POST.get('pattern')
-
-#             payment.save()
-
-#             # Mark the order as paid
-#             order.is_paid = True
-#             order.save()
-
-#             # Add a success message for the user
-#             messages.success(request, 'Payment successful!')
-
-#             # Redirect to the receipt page or any other appropriate page
-#             return redirect('canteen:receipt')
-#         else:
-#             # Add an error message for the user
-#             messages.error(request, 'Payment failed. Please try again.')
-
-#     return redirect('canteen:checkout')
 
 from django.core.exceptions import ObjectDoesNotExist  # Import ObjectDoesNotExist
 
@@ -407,158 +195,6 @@ def payment(request):
     return redirect('canteen:checkout')
 
 
-
-# from django.http import HttpResponse
-# from reportlab.lib.pagesizes import letter, landscape
-# from reportlab.lib import colors
-# from reportlab.platypus import SimpleDocTemplate, PageTemplate, Frame, Paragraph, Spacer, Image
-# from reportlab.lib.styles import getSampleStyleSheet
-
-# def generate_pdf_receipt(response):
-#     # Create a PDF response object
-#     response = HttpResponse(content_type='application/pdf')
-#     response['Content-Disposition'] = 'attachment; filename="receipt.pdf"'
-
-#     # Define the page template with fixed content
-#     def page_template(canvas, doc, width, height):
-#         styles = getSampleStyleSheet()
-#         logo = Image('static/Canteen.png', width=200, height=100)
-#         email = Paragraph('Email: your@example.com', styles['Normal'])
-#         telephone = Paragraph('Telephone: +1 123-456-7890', styles['Normal'])
-#         date = Paragraph('Date: ' + str(order.order_date), styles['Normal'])
-#         address = Paragraph('Address: Your Business Address', styles['Normal'])
-
-#         # Position fixed content on the page
-#         logo.wrapOn(canvas, width, height)
-#         logo.drawOn(canvas, 50, height - 150)
-#         email.wrapOn(canvas, width, height)
-#         email.drawOn(canvas, 50, height - 250)
-#         telephone.wrapOn(canvas, width, height)
-#         telephone.drawOn(canvas, 50, height - 280)
-#         date.wrapOn(canvas, width, height)
-#         date.drawOn(canvas, 50, height - 310)
-#         address.wrapOn(canvas, width, height)
-#         address.drawOn(canvas, 50, height - 340)
-
-#     # # Create the PDF document
-#     # doc.addPageTemplates([PageTemplate(id='receipt', onPage=page_template)])
-#     # elements = []  # Add your receipt content here
-#     doc = SimpleDocTemplate(response, pagesize=landscape(letter))
-
-#     # Build the PDF document
-#     doc.build(elements)
-
-#     return response
-
-
-# def generate_pdf_receipt(request):
-#     # Create a PDF response object
-#     response = HttpResponse(content_type='application/pdf')
-#     response['Content-Disposition'] = 'attachment; filename="receipt.pdf"'
-    
-#         # Print the file path for debugging
-#     print(response.get('Content-Disposition'))
-
-#     # Define the page template with fixed content
-#     def page_template(canvas, doc, width, height):
-#         styles = getSampleStyleSheet()
-#         logo = Image('static/Canteen.png', width=200, height=100)
-#         email = Paragraph('Email: your@example.com', styles['Normal'])
-#         telephone = Paragraph('Telephone: +1 123-456-7890', styles['Normal'])
-#         date = Paragraph('Date: ' + str(order.order_date), styles['Normal'])
-#         address = Paragraph('Address: Your Business Address', styles['Normal'])
-
-#         # Position fixed content on the page
-#         logo.wrapOn(canvas, width, height)
-#         logo.drawOn(canvas, 50, height - 150)
-#         email.wrapOn(canvas, width, height)
-#         email.drawOn(canvas, 50, height - 250)
-#         telephone.wrapOn(canvas, width, height)
-#         telephone.drawOn(canvas, 50, height - 280)
-#         date.wrapOn(canvas, width, height)
-#         date.drawOn(canvas, 50, height - 310)
-#         address.wrapOn(canvas, width, height)
-#         address.drawOn(canvas, 50, height - 340)
-
-#     # Create the PDF document
-#     doc = SimpleDocTemplate(response, pagesize=landscape(letter))
-
-#     # Create a list to hold your receipt content (elements)
-#     elements = []  # Add your receipt content here
-
-#     # Build the PDF document
-#     doc.build(elements)
-
-#     return response
-
-# from reportlab.platypus import SimpleDocTemplate, PageTemplate, Frame, Paragraph, Spacer, Image
-# from reportlab.lib.styles import getSampleStyleSheet
-# from reportlab.lib.pagesizes import letter, landscape
-
-# def generate_pdf_receipt(request):
-#     # Create a PDF response object
-#     response = HttpResponse(content_type='application/pdf')
-#     response['Content-Disposition'] = 'attachment; filename="receipt.pdf"'
-
-#     # Get the order for which you want to generate the receipt
-#     user = request.user
-#     order = Order.objects.filter(user=user, is_paid=True).latest('id')
-
-#     # Define the page template with fixed content
-#     def page_template(canvas, doc, width, height):
-#         styles = getSampleStyleSheet()
-#         logo = Image('static/Canteen.png', width=200, height=100)
-#         email = Paragraph('Email: your@example.com', styles['Normal'])
-#         telephone = Paragraph('Telephone: +1 123-456-7890', styles['Normal'])
-#         date = Paragraph('Date: ' + str(order.order_date), styles['Normal'])
-#         address = Paragraph('Address: Your Business Address', styles['Normal'])
-
-#         # Position fixed content on the page
-#         logo.wrapOn(canvas, width, height)
-#         logo.drawOn(canvas, 50, height - 150)
-#         email.wrapOn(canvas, width, height)
-#         email.drawOn(canvas, 50, height - 250)
-#         telephone.wrapOn(canvas, width, height)
-#         telephone.drawOn(canvas, 50, height - 280)
-#         date.wrapOn(canvas, width, height)
-#         date.drawOn(canvas, 50, height - 310)
-#         address.wrapOn(canvas, width, height)
-#         address.drawOn(canvas, 50, height - 340)
-
-#     # Create the PDF document
-#     doc = SimpleDocTemplate(response, pagesize=landscape(letter))
-
-#     # Create a list to hold your receipt content (elements)
-#     elements = []  # Add your receipt content here
-
-#     # Build the PDF document
-#     doc.build(elements)
-
-#     return response
-
-# def generate_pdf_receipt(request):
-#     # Create a PDF response object
-#     response = HttpResponse(content_type='application/pdf')
-#     response['Content-Disposition'] = 'attachment; filename="receipt.pdf"'
-
-#     # Get the order for which you want to generate the receipt
-#     user = request.user
-#     order = Order.objects.filter(user=user, is_paid=True).latest('id')
-
-#     # Create a list to hold your receipt content (elements)
-#     elements = []
-
-#     # Add some sample content (you can customize this)
-#     elements.append(Paragraph('Receipt for Order ID: {}'.format(order.id)))
-#     elements.append(Paragraph('Order Date: {}'.format(order.order_date)))
-#     elements.append(Spacer(1, 12))  # Add some space between paragraphs
-
-#     # Build the PDF document
-#     doc = SimpleDocTemplate(response, pagesize=letter)
-#     doc.build(elements)
-
-#     return response
-
 @login_required
 def user_account_view(request):
     user = request.user
@@ -566,7 +202,7 @@ def user_account_view(request):
     payments = Payment.objects.filter(order__user=user)
     receipts = Receipt.objects.filter(order__user=user)
 
-    return render(request, 'user_account.html', {'user': user, 'orders': orders, 'payments': payments, 'receipts': receipts})
+    return render(request, 'home.html', {'user': user, 'orders': orders, 'payments': payments, 'receipts': receipts})
 
 # @login_required
 # def generate_pdf_receipt(request, order_id):

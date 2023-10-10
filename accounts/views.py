@@ -151,7 +151,6 @@ def register_student(request):
         else:
             messages.error(request, 'Please enter your student email address')
     else:
-        messages.error(request, 'Please enter your student email address')
         form = StudentRegistrationForm()
         
     

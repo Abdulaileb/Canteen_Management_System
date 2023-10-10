@@ -40,16 +40,6 @@
         <div class="card">
             <div class="card-body">
                 <h2 class="card-title">Sign Up</h2>
-
-                {% if messages %}
-                    <div class="alert alert-danger">
-                        <ul>
-                            {% for message in messages %}
-                                <li>{{ message }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
                 
                 <form method="post">
                     {% csrf_token %}
