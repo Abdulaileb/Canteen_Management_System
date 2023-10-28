@@ -26,4 +26,9 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     # Add other app URLs here
     path('orders/income-chart/', views.create_income_chart, name='income_chart'),
+
+
+     ############### Admin Adding some data
+
+     path('manage-food-category/', views.manage_food_category, name='manage_foodCategory'),
 ]

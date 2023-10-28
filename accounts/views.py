@@ -5,6 +5,8 @@ from .forms import StudentRegistrationForm, AdminRegistrationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 
+from accounts .forms import *
+
 
 def admin_Dashboard(request):
     return render(request, 'admin/index.html')
@@ -73,3 +75,49 @@ def create_income_chart(request):
     # This view is used to serve the income chart
     with open('income_chart.png', 'rb') as chart:
         return FileResponse(chart)
+
+
+
+
+
+####### USER FOOD ITEMS ########
+
+def manage_food_category(request):
+
+    foodCategory = FoodCategory.objects.all()
+
+    form = FoodCategoryForm()
+    if request.method == 'POST':
+        form = FoodCategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Food Category has been successfully added')
+            return redirect('accounts:manage_foodCategory')
+    else:
+            # messages.error(request, 'Check the fields again')
+        form = FoodCategoryForm()
+    context = {'form':form,
+               'foodCategory':foodCategory,
+               }
+
+    return render(request, 'admin/manage-food/food-category.html', context)
+
+def manage_food_items(request):
+
+    foodItems = FoodItem.objects.all()
+
+    form = FoodItemsForm()
+    if request.method == 'POST':
+        form = FoodItemsForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Food Items has been successfully added')
+            return redirect('accounts:manage_foodItems')
+    else:
+            # messages.error(request, 'Check the fields again')
+        form = FoodCategoryForm()
+    context = {'form':form,
+               'foodItems':foodItems,
+               }
+
+    return render(request, 'admin/manage-food/food-items.html', context)

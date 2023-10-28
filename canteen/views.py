@@ -13,6 +13,13 @@ from django.contrib.auth.decorators import login_required
 
 from django.db.models import Sum
 
+from django.http import HttpResponse
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, Table, TableStyle
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+
+
 
 def HomePage(request):
 
@@ -309,13 +316,6 @@ def user_account_view(request):
 #     doc.build(elements)
 
 #     return response
-
-
-from django.http import HttpResponse
-from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, Table, TableStyle
-from reportlab.lib import colors
-from reportlab.lib.styles import getSampleStyleSheet
 
 @login_required
 def receipt_pdf(request):
