@@ -70,26 +70,36 @@
         <div class="top-bar row gx-0 align-items-center d-none d-lg-flex">
 
             <div class="col-lg-6 px-5 text-start">
+
                 {% if user.is_authenticated %}
                 <h4><i class="fa-solid fa-user"></i>  Welcome, {{ user.username }}</h4>
                 {% else %}
                     <header>
                         <div class="h3 fw-bold text-center mt-2">Welcome, Please sign in   </div>
-                  </header>
-                    
-                    
+                  </header>  
                 {% endif %}
         
             </div>
 
+
             <div class="col-lg-6 px-5 text-end">
-                
                 {% if user.is_authenticated %}
-                    <a class="text-body ms-3" href="{% url 'accounts:logout'%}"><i class="fa-sharp fa-solid fa-power-off"></i></a>
+                    <a class="text-body ms-3" href="#" onclick="confirmLogout()"><i class="fa-sharp fa-solid fa-power-off"></i></a>
                 {% else %}
-                    <a class="text-body ms-3" href="{% url 'accounts:login'%}"><i class="fa-solid fa-arrow-right-to-bracket"></i></a>
+                    <a class="text-body ms-3" href="{% url 'accounts:login' %}"><i class="fa-solid fa-arrow-right-to-bracket"></i></a>
                 {% endif %}
             </div>
+
+        </div>
+
+        <div class="modal-body">                        
+            {% if messages %}
+                <div class="alert alert-success messages">
+                    {% for message in messages %}
+                        <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
 
         <nav class="navbar navbar-expand-lg navbar-light py-lg-0 px-lg-5 wow fadeIn" data-wow-delay="0.1s">
@@ -108,43 +118,28 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto p-4 p-lg-0">
                     <a href="{% url 'canteen:home' %}" class="nav-item nav-link active">Home</a>
-                    <!-- <a href="about.html" class="nav-item nav-link">About Us</a> -->
+                    
                     <a href="{% url 'canteen:product' %}" class="nav-item nav-link">Products</a>
-                    <!-- <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                        <div class="dropdown-menu m-0">
-                            <a href="blog.html" class="dropdown-item">Blog Grid</a>
-                            <a href="feature.html" class="dropdown-item">Our Features</a>
-                            <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                            <a href="404.html" class="dropdown-item">404 Page</a>
-                        </div>
-                    </div> -->
+                   
                     <a href="{% url 'canteen:contact' %}" class="nav-item nav-link">Contact Us</a>
                 </div>
 
                 {% if user.is_authenticated %}
                     <div class="d-none d-lg-flex ms-2">
-                        <!-- <a class="btn-sm-square bg-white rounded-circle ms-3" href="">
-                            <small class="fa fa-search text-body"></small>
-                        </a> -->
-                        <!-- <a class="btn-sm-square bg-white rounded-circle ms-3" href="{% url 'canteen:user_account_view' %}">
-                            <small class="fa fa-user text-body"></small>
-                        </a> -->
+                       
 
                         <a class="btn-sm-square bg-white rounded-circle ms-3" data-toggle="modal" data-target="#accountModal">
                             <small class="fa fa-user text-body"></small>
                         </a>
 
-                        <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#accountModal">Save</button> -->
+                        
                         <a class="btn-sm-square bg-white rounded-circle ms-3" href="{% url 'canteen:view_cart' %}">
                             <small class="fa fa-shopping-bag text-body"></small>
                         </a>
                     </div>
                 {% else %}
                     <div class="d-none d-lg-flex ms-2">
-                        <!-- <a class="btn-sm-square bg-white rounded-circle ms-3" href="">
-                            <small class="fa fa-search text-body"></small>
-                        </a> -->
+                       
                     </div>
                 {% endif %}
             </div>
@@ -159,7 +154,7 @@
             <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <!-- <img class="w-100" src="{% static 'again/carousel-12.jpg '%}" alt="Image"> -->
+                       
 
                         <img class="w-100" src="../static/carousel-12.jpg" alt="Image">
                         <div class="carousel-caption">
@@ -201,15 +196,8 @@
                 </button>
             </div>
         </div>
-        <!-- Carousel End -->
 
-        {% if messages %}
-        <div class="alert alert-success messages">
-            {% for message in messages %}
-                <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
-            {% endfor %}
-        </div>
-     {% endif %}
+
   
 
 
@@ -239,14 +227,7 @@
                     <a class="btn btn-link" href="">Terms & Condition</a>
                     <a class="btn btn-link" href="">Support</a>
                 </div>
-                <!-- <div class="col-lg-3 col-md-6">
-                    <h4 class="text-light mb-4">Newsletter</h4>
-                    <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
-                    <div class="position-relative mx-auto" style="max-width: 400px;">
-                        <input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
-                        <button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
-                    </div>
-                </div> -->
+               
             </div>
         </div>
         <div class="container-fluid copyright">
@@ -285,7 +266,16 @@
             }
         }
     </script>
-    
+
+    <script>
+        function confirmLogout() {
+            if (confirm("Are you sure you want to log out?")) {
+                // If the user confirms, redirect to the logout URL
+                window.location.href = "{% url 'accounts:logout' %}";
+            }
+        }
+    </script>
+
     
     <!-- Include Bootstrap JS and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

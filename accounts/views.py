@@ -18,7 +18,9 @@ def register_student(request):
         if form.is_valid():
             user = form.save()
             login(request, user)  # Automatically log in the student after registration
-            messages.success(request, 'You have successfully created an account.')
+            #messages.success(request, 'You have successfully created an account.')
+
+            messages.success(request, 'Success message', extra_tags='success')
             return redirect('canteen:home')  # Redirect to the student dashboard or desired page
         else:
             messages.error(request, 'Please enter your student email address')
@@ -123,6 +125,23 @@ def manage_food_items(request):
     return render(request, 'admin/manage-food/food-items.html', context)
 
 def OrderListView(request):
-    items = CartItemAdded
+    items = CartItemAdded.objects.all()
     context = {'items':items}
     return render(request, 'admin/orders/manage_orders.html', context)
+
+
+
+def user_list(request):
+    student_users = CustomUser.objects.filter(role=CustomUser.STUDENT)
+
+    context = {'student_users':student_users}
+    
+    return render(request, 'admin/users/manage_students.html.html', context)
+
+def admin_list(request):
+    
+    admin_users = CustomUser.objects.filter(role=CustomUser.ADMIN)
+
+    context = {'admin_users':admin_users}
+    
+    return render(request, 'admin/users/manage_employees.html', context)

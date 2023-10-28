@@ -1,18 +1,18 @@
 {% extends "admin/base.html" %}
-{% block title %}ADMIN DASHBOARD{% endblock title %}
+{% block title %}View Employee {% endblock title %}
 
 {% load static %}
 {% block body %}
 <main>
     <div class="container-fluid px-4">
 
-        <div class="modal fade" id="foodModal" tabindex="-1" aria-labelledby="registrationModalLabel" aria-hidden="true">
+        <div class="modal fade" id="registrationModal" tabindex="-1" aria-labelledby="registrationModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="col-sm-12">
                   <div class="bg-light rounded h-100 p-4">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title" id="registrationModalLabel">Register Food Items</h5>
+                        <h5 class="modal-title" id="registrationModalLabel">Register Registration Officer</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                         <div class="modal-body">
@@ -27,7 +27,7 @@
                                 </ul>
                             {% endif %}
 
-                          <form method="post" enctype="multipart/form-data">
+                          <form method="post">
                             {% csrf_token %}
                             
                             {{ form }}
@@ -50,20 +50,23 @@
                   </div>
                 </div>
             </div>
-        </div>
-
-       
+          </div>
 
 
-        <div class="card mt-5">
+          <div class="card mt-5">
             <blockquote class="blockquote text-center mt-5">
-                <p class="mb-3"> Food Ordered for by individuals.</p>
+                <p class="mb-3">List of all students in the system.</p>
                 <footer class="blockquote-footer">Central Canteen <cite title="Source Title">Mile  91</cite></footer>
             </blockquote>
 
+            <button type="button" class="btn btn-primary btn-sm mt-3 ms-auto" data-bs-toggle="modal" data-bs-target="#registrationModal">
+                Add Students
+            </button>
+            
+
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
-                Ordered Items
+                Manage Employee
             </div>
 
             
@@ -71,27 +74,44 @@
                 <table id="datatablesSimple">
                     <thead>
                         <tr>
-                            <th>User</th>
-                            <th>Food</th>
-                            <th>Date Ordered</th>
+                            <th>No</th>
+                            <th>Name</th>
+                            <th>Username</th>
+                            <th>Full Name</th>
+                            <th>Student_Email</th>
+                            <th>Student_ID</th>
+                            <th>Department</th>
+                            <th>Academic Year</th>
+                            
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>User</th>
-                            <th>Food</th>
-                            <th>Date Ordered</th>
+                            <th>No</th>
+                            <th>Name</th>
+                            <th>Username</th>
+                            <th>Full Name</th>
+                            <th>Student_Email</th>
+                            <th>Student_ID</th>
+                            <th>Department</th>
+                            <th>Academic Year</th>
                         </tr>
                     </tfoot>
                     <tbody>
 
-                            {% for item in items %}
-                                <tr>
-                                    <td>{{ item.user.username }}</td>
-                                    <td>{{ item.item.name }}</td>
-                                    <td>{{ item.added_at }}</td>
-                                </tr>
-                            {% endfor %}
+                        {% for student_user in student_users %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ student_user.name}}</td>
+                                <td>{{ student_user.username}}</td>
+                                <td>{{ student_user.full_name}}</td>
+                                <td>{{ student_user.email}}</td>
+                                <td>{{ student_user.student_ID}}</td>
+                                <td>{{ student_user.department}}</td>
+                                <td>{{ student_user.levels}}</td>
+                            </tr>
+                        {% endfor %}
+
                     </tbody>
                 </table>
             </div>

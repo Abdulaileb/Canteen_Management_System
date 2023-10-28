@@ -33,5 +33,8 @@ urlpatterns = [
     path('manage-food-category/', views.manage_food_category, name='manage_foodCategory'),
     path('manage-food-item/', views.manage_food_items, name='manage_foodItems'),
 
-    path('admin/orders/', views.OrderListView, name='admin_orders'),
+    path('orders/', views.OrderListView, name='view_orders'),
+
+    path('manage-employees/', views.admin_list, name='manage-employees'),
+    path('manage-students/', views.user_list, name='manage-students'),
 ]
