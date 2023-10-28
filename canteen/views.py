@@ -14,7 +14,6 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 
 
-
 def HomePage(request):
 
     food_items = FoodItem.objects.all()

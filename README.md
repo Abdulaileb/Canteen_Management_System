@@ -11,8 +11,18 @@ Steps in spinning up this project:
 2. Run requirement.txt file 
     pip -r install requirements.txt
 
-3. create super user 
+3. Run Migrations:
+    python manage.py makemigrations accounts
+    python manage.py makemigrations canteen
+
+    python manage.py makemigrations 
+    python manage.py migrate accounts
+    python manage.py migrate canteen
+
+    python manage.py migrate
+
+4. create super user 
     python manage.py createsuperuser
 
-4. Run server :
+5. Run server :
     python manage.py runserver

@@ -52,11 +52,6 @@
                 <!-- <small class="ms-4"><i class="fa fa-envelope me-2"></i>info@example.com</small> -->
             </div>
             <div class="col-lg-6 px-5 text-end">
-                <small>Follow us:</small>
-                <a class="text-body ms-3" href=""><i class="fab fa-facebook-f"></i></a>
-                <a class="text-body ms-3" href=""><i class="fab fa-twitter"></i></a>
-                <a class="text-body ms-3" href=""><i class="fab fa-linkedin-in"></i></a>
-                <a class="text-body ms-3" href=""><i class="fab fa-instagram"></i></a>
                 
                 {% if user.is_authenticated %}
                     <a class="text-body ms-3" href="{% url 'accounts:logout'%}"><i class="fa-sharp fa-solid fa-power-off"></i></a>
@@ -68,7 +63,13 @@
 
         <nav class="navbar navbar-expand-lg navbar-light py-lg-0 px-lg-5 wow fadeIn" data-wow-delay="0.1s">
             <a href="index.html" class="navbar-brand ms-4 ms-lg-0">
-                <h1 class="fw-bold text-primary m-0">Canteen <span class="text-secondary">Sys</span>tem</h1>
+                <img src="{% static 'central.png' %}" alt="Image" width="50" height="50">
+           <h1 class="fw-bold text-primary m-0">
+             <span style="color: skyblue;">CUSL</span>
+             <span class="text-secondary">Canteen</span>
+             <span  style="color: rgb(84, 84, 45);">Management</span>
+             <span class="text-secondary">Sys</span>tem</h1>
+
             </a>
             <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                 <span class="navbar-toggler-icon"></span>
@@ -191,14 +192,9 @@
         <div class="container py-5">
             <div class="row g-5">
                 <div class="col-lg-3 col-md-6">
-                    <h1 class="fw-bold text-primary mb-4">Canteen <span class="text-secondary"> S</span>ys</h1>
+                    <h1 class="fw-bold text-primary mb-4"> CUSL Canteen Management <span class="text-secondary"> S</span>ystem</h1>
                     <p>This is Central University Canteen System, and in here we provide the best food for our students</p>
-                    <div class="d-flex pt-2">
-                        <a class="btn btn-square btn-outline-light rounded-circle me-1" href=""><i class="fab fa-twitter"></i></a>
-                        <a class="btn btn-square btn-outline-light rounded-circle me-1" href=""><i class="fab fa-facebook-f"></i></a>
-                        <a class="btn btn-square btn-outline-light rounded-circle me-1" href=""><i class="fab fa-youtube"></i></a>
-                        <a class="btn btn-square btn-outline-light rounded-circle me-0" href=""><i class="fab fa-linkedin-in"></i></a>
-                    </div>
+                   
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <h4 class="text-light mb-4">Address</h4>
@@ -226,7 +222,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                        &copy; <a href="#">Canteen Management System</a>, All Right Reserved.
+                        &copy; <a href="#">Central University Canteen Management System</a>, All Right Reserved.
                     </div>
                 </div>
             </div>
