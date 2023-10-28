@@ -31,20 +31,30 @@ def register_student(request):
     return render(request, 'registration/register.html', {'form': form})
 
 def register_admin(request):
+
+    admin_users = CustomUser.objects.filter(role=CustomUser.ADMIN)
+
     # Check if the current user is a superuser before allowing admin registration
-    if not request.user.is_superuser:
-        return redirect('login')  # Redirect to login or an unauthorized page
+    # if not request.user.is_superuser:
+    #     return redirect('accounts:login')  # Redirect to login or an unauthorized page
 
     if request.method == 'POST':
         form = AdminRegistrationForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save(commit=False)  # Create user instance without saving to the database
+            user.role = CustomUser.ADMIN  # Set the role to "admin" (employee)
+            user.save()  # Now save the user to the database
+            # form.save()
             messages.success(request, 'Admin user created successfully')
-            return redirect('admin_dashboard')  # Redirect to the admin dashboard or desired page
+            return redirect('accounts:manage-employees')  # Redirect to the admin dashboard or desired page
     else:
         form = AdminRegistrationForm()
+
+    context = {'admin_users':admin_users,
+               'form': form,
+               }
     
-    return render(request, 'registration/register_admin.html', {'form': form})
+    return render(request, 'admin/users/manage_employees.html', context)
 
 def login_view(request):
     if request.method == 'POST':
@@ -136,12 +146,12 @@ def user_list(request):
 
     context = {'student_users':student_users}
     
-    return render(request, 'admin/users/manage_students.html.html', context)
+    return render(request, 'admin/users/manage_students.html', context)
 
-def admin_list(request):
+# def admin_list(request):
     
-    admin_users = CustomUser.objects.filter(role=CustomUser.ADMIN)
+#     admin_users = CustomUser.objects.filter(role=CustomUser.ADMIN)
 
-    context = {'admin_users':admin_users}
+#     context = {'admin_users':admin_users}
     
-    return render(request, 'admin/users/manage_employees.html', context)
+#     return render(request, 'admin/users/manage_employees.html', context)

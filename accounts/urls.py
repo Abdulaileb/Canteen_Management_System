@@ -35,6 +35,6 @@ urlpatterns = [
 
     path('orders/', views.OrderListView, name='view_orders'),
 
-    path('manage-employees/', views.admin_list, name='manage-employees'),
+    path('manage-employees/', views.register_admin, name='manage-employees'),
     path('manage-students/', views.user_list, name='manage-students'),
 ]

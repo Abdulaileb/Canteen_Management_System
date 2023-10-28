@@ -44,6 +44,13 @@ class AdminRegistrationForm(forms.ModelForm):
         model = CustomUser
         fields = ['username', 'password', 'email', 'full_name']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'class': 'form-control'})
+        self.fields['password'].widget.attrs.update({'class': 'form-control'})
+        self.fields['email'].widget.attrs.update({'class': 'form-control'})
+        self.fields['full_name'].widget.attrs.update({'class': 'form-control'})
+
 
 
 class FoodCategoryForm(forms.ModelForm):

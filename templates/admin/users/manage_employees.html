@@ -6,7 +6,7 @@
 <main>
     <div class="container-fluid px-4">
 
-        <div class="modal fade" id="registrationModal" tabindex="-1" aria-labelledby="registrationModalLabel" aria-hidden="true">
+        <div class="modal fade" id="addEmployee" tabindex="-1" aria-labelledby="registrationModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="col-sm-12">
                   <div class="bg-light rounded h-100 p-4">
@@ -52,6 +52,16 @@
             </div>
           </div>
 
+          <div class="modal-body">                        
+                {% if messages %}
+                    <div class="alert alert-success messages">
+                        {% for message in messages %}
+                            <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+         </div>
+
 
           <div class="card mt-5">
             <blockquote class="blockquote text-center mt-5">
@@ -59,14 +69,13 @@
                 <footer class="blockquote-footer">Central Canteen <cite title="Source Title">Mile  91</cite></footer>
             </blockquote>
 
-            <button type="button" class="btn btn-primary btn-sm mt-3 ms-auto" data-bs-toggle="modal" data-bs-target="#registrationModal">
+            <button type="button" class="btn btn-primary btn-sm mt-3 ms-auto" data-bs-toggle="modal" data-bs-target="#addEmployee">
                 Add Employee
             </button>
             
-
-            <div class="card-header">
-                <i class="fas fa-table me-1"></i>
-                Manage Employee
+            <div class="card-header" style="text-align: center;">
+                <i class="fas fa-table me-1" style="margin-right: 5px;"></i>
+                Manage Employee Records
             </div>
 
             
