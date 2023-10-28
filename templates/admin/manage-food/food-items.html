@@ -6,13 +6,13 @@
 <main>
     <div class="container-fluid px-4">
 
-        <div class="modal fade" id="registrationModal" tabindex="-1" aria-labelledby="registrationModalLabel" aria-hidden="true">
+        <div class="modal fade" id="foodModal" tabindex="-1" aria-labelledby="registrationModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="col-sm-12">
                   <div class="bg-light rounded h-100 p-4">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title" id="registrationModalLabel">Register Registration Officer</h5>
+                        <h5 class="modal-title" id="registrationModalLabel">Register Food Items</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                         <div class="modal-body">
@@ -27,7 +27,7 @@
                                 </ul>
                             {% endif %}
 
-                          <form method="post">
+                          <form method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             
                             {{ form }}
@@ -50,23 +50,25 @@
                   </div>
                 </div>
             </div>
-          </div>
+        </div>
+
+       
 
 
-          <div class="card mt-5">
+        <div class="card mt-5">
             <blockquote class="blockquote text-center mt-5">
-                <p class="mb-3">Total Food Categories in the Canteen.</p>
+                <p class="mb-3">Total Food Items in the Canteen.</p>
                 <footer class="blockquote-footer">Central Canteen <cite title="Source Title">Mile  91</cite></footer>
             </blockquote>
 
-            <button type="button" class="btn btn-primary btn-sm mt-3 ms-auto" data-bs-toggle="modal" data-bs-target="#registrationModal">
-                Add Food Categories
+            <button type="button" class="btn btn-primary btn-sm mt-3 ms-auto" data-bs-toggle="modal" data-bs-target="#foodModal">
+                Add Food Items
             </button>
             
 
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
-                Food Categories
+                Food Items
             </div>
 
             
@@ -76,29 +78,40 @@
                         <tr>
                             <th>No</th>
                             <th>Name</th>
-                            <!-- <th>Office</th>
-                            <th>Age</th>
-                            <th>Start date</th>
-                            <th>Salary</th> -->
+                            <th>Image</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Description</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             <th>No</th>
                             <th>Name</th>
-                            <!-- <th>Office</th>
-                            <th>Age</th>
-                            <th>Start date</th>
-                            <th>Salary</th> -->
+                            <th>Image</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Description</th>
                         </tr>
                     </tfoot>
                     <tbody>
 
-                        {% for foodCategorys in foodCategory %}
+                        {% for foodItem in foodItems %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ foodCategorys.name}}</td>
-                            
+                            <td>{{ foodItem.name}}</td>
+                            <td>
+                                {% if foodItem.image %}
+                                <div class="circular-image">
+                                    <img src="{{ foodItem.image.url }}" alt="{{ user.first_name }}'s Photo" class="rounded-circle" style="max-width: 50px;">
+                                </div>
+                                {% else %}
+                                    No Image is Available
+                                {% endif %}
+                            </td>
+                            <td>{{ foodItem.category}}</td>
+                            <td>{{ foodItem.price}}</td>
+                            <td>{{ foodItem.description}}</td>
                         </tr>
                         {% endfor %}
                     </tbody>

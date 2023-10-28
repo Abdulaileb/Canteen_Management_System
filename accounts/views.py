@@ -115,7 +115,7 @@ def manage_food_items(request):
             return redirect('accounts:manage_foodItems')
     else:
             # messages.error(request, 'Check the fields again')
-        form = FoodCategoryForm()
+        form = FoodItemsForm()
     context = {'form':form,
                'foodItems':foodItems,
                }

@@ -30,5 +30,6 @@ urlpatterns = [
 
      ############### Admin Adding some data
 
-     path('manage-food-category/', views.manage_food_category, name='manage_foodCategory'),
+    path('manage-food-category/', views.manage_food_category, name='manage_foodCategory'),
+    path('manage-food-item/', views.manage_food_items, name='manage_foodItems'),
 ]

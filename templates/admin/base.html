@@ -57,7 +57,7 @@
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="{% url 'accounts:manage_foodCategory' %}">Food Category</a>
-                                    <a class="nav-link" href="layout-sidenav-light.html">Food Item</a>
+                                    <a class="nav-link" href="{% url 'accounts:manage_foodItems' %}">Food Item</a>
                                     <a class="nav-link" href="layout-sidenav-light.html">Orders</a>
                                     <a class="nav-link" href="layout-sidenav-light.html">Payments</a>
                                 </nav>
@@ -114,71 +114,6 @@
         <script src="{% static "assets/demo/chart-area-demo.js" %}"></script>
         <script src="{% static "assets/demo/chart-bar-demo.js" %}"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-
-        <script>
-            $(document).ready(function () {
-              // Handle form submission
-              $('#addForm').submit(function (e) {
-                e.preventDefault();
-                $.ajax({
-                  type: 'POST',
-                  url: '{% url "accounts:manage_foodCategory" %}',  // Replace with your actual URL
-                  data: $(this).serialize()+ "&{% csrf_token %}",
-                  success: function (data) {
-                    console.log(data);
-                    // Handle success (e.g., close modal, update table, etc.)
-                    $('#addModal').modal('hide');
-                    // You can update the table here if needed
-                  },
-                  error: function () {
-                    // Handle errors if the form submission fails
-                  }
-                });
-              });
-          
-              // Show modal when the "Add" button is clicked
-              $('#add-button').click(function () {
-                $('#addModal').modal('show');
-              });
-            });
-          </script>
-
-          
-        <script>
-            $(document).ready(function () {
-
-              // Handle form submission
-              $('#addForm').submit(function (e) {
-
-                e.preventDefault();
-
-                $.ajax({
-                  type: 'POST',
-
-                  url: '{% url "accounts:manage_foodCategory" %}',  // Replace with your actual URL
-
-                  data:{
-                    name: $('#name').val(),
-
-                    csrfmiddlewaretoken : $('input[name=csrfmiddlewaretoken]').val()
-                  },
-                  success: function (data) {
-                    // Handle success (e.g., close modal, update table, etc.)
-                    $('#addModal').modal('hide');
-                    // You can update the table here if needed
-                  },
-                  error: function () {
-                    // Handle errors if the form submission fails
-                  }
-                });
-              });
-          
-              // Show modal when the "Add" button is clicked
-              $('#add-button').click(function () {
-                $('#addModal').modal('show');
-              });
-            });
-          </script>
           
         <script src="{% static "js/datatables-simple-demo.js" %}"></script>
     </body>
