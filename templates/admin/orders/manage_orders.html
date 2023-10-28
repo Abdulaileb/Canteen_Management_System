@@ -1,0 +1,108 @@
+{% extends "admin/base.html" %}
+{% block title %}ADMIN DASHBOARD{% endblock title %}
+
+{% load static %}
+{% block body %}
+<main>
+    <div class="container-fluid px-4">
+
+        <div class="modal fade" id="foodModal" tabindex="-1" aria-labelledby="registrationModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="col-sm-12">
+                  <div class="bg-light rounded h-100 p-4">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="registrationModalLabel">Register Food Items</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                        <div class="modal-body">
+
+                            {% if form.errors %}
+                                <ul class="errorlist">
+                                    {% for field_errors in form.errors.values %}
+                                    {% for error in field_errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+
+                          <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            
+                            {{ form }}
+          
+                            
+                            <!-- <div class="mb-3">
+                              <label for="exampleInputEmail1" class="form-label">Email address</label>
+                              <input type="email" class="form-control" name="email" id="exampleInputEmail1"
+                                  aria-describedby="emailHelp">
+                              <div id="emailHelp" class="form-text">We'll never share your email with anyone else.
+                              </div>
+                             </div> -->
+
+                        
+                            <button type="submit" class="btn btn-primary mt-3" >Add</button>
+      
+                          </form>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+
+       
+
+
+        <div class="card mt-5">
+            <blockquote class="blockquote text-center mt-5">
+                <p class="mb-3">Total Food Items in the Canteen.</p>
+                <footer class="blockquote-footer">Central Canteen <cite title="Source Title">Mile  91</cite></footer>
+            </blockquote>
+
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                Ordered Items
+            </div>
+
+            
+            <div class="card-body">
+                <table id="datatablesSimple">
+                    <thead>
+                        <tr>
+                            <th>Order Date</th>
+                            <th>User</th>
+                            <th>Items</th>
+                            <th>Is Paid</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Order Date</th>
+                            <th>User</th>
+                            <th>Items</th>
+                            <th>Is Paid</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+
+                            {% for order in orders %}
+                                <tr>
+                                    <td>{{ order.order_date }}</td>
+                                    <td>{{ order.user.username }}</td>
+                                    <td>
+                                        {% for item in order.items.all %}
+                                            {{ item.name }},
+                                        {% endfor %}
+                                    </td>
+                                    <td>{{ order.is_paid }}</td>
+                                </tr>
+                            {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock body %}

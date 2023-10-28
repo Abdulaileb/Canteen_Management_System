@@ -73,6 +73,9 @@ def add_to_cart(request, food_item_id):
 
             order_item.save()
 
+            # Create an instance of CartItemAdded to log the event
+            CartItemAdded.objects.create(user=request.user, item=food_item)
+
             messages.success(request, 'Item added to your cart.')
 
             return redirect('canteen:home')

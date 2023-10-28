@@ -33,8 +33,29 @@
     <link type="text/css" href="{% static 'css/style.css' %}" rel="stylesheet">
 
     <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> -->
-</head>
 
+
+    <style>
+        @keyframes slideInLeft {
+          0% {
+            transform: translateX(-100%);
+          }
+          100% {
+            transform: translateX(0);
+          }
+        }
+        header {
+          animation: 1s ease-out 0s 1 slideInLeft;
+      
+          padding: 10px;
+        }
+        body {
+          margin: 0;
+          font-family: "Segoe UI", Arial, Helvetica, Sans Serif;
+        }
+        
+      </style>
+</head>
 
 <body>
     <!-- Spinner Start -->
@@ -47,16 +68,26 @@
     <!-- Navbar Start -->
     <div class="container-fluid fixed-top px-0 wow fadeIn" data-wow-delay="0.1s">
         <div class="top-bar row gx-0 align-items-center d-none d-lg-flex">
+
             <div class="col-lg-6 px-5 text-start">
-                <h4><i class="fa-solid fa-user"></i>  Welcome, {{ user.username }}!</h4>
-                <!-- <small class="ms-4"><i class="fa fa-envelope me-2"></i>info@example.com</small> -->
+                {% if user.is_authenticated %}
+                <h4><i class="fa-solid fa-user"></i>  Welcome, {{ user.username }}</h4>
+                {% else %}
+                    <header>
+                        <div class="h3 fw-bold text-center mt-2">Welcome, Please sign in   </div>
+                  </header>
+                    
+                    
+                {% endif %}
+        
             </div>
+
             <div class="col-lg-6 px-5 text-end">
                 
                 {% if user.is_authenticated %}
                     <a class="text-body ms-3" href="{% url 'accounts:logout'%}"><i class="fa-sharp fa-solid fa-power-off"></i></a>
                 {% else %}
-                    <a class="text-body ms-3" href="{% url 'accounts:register'%}"><i class="fa-solid fa-arrow-right-to-bracket"></i></a>
+                    <a class="text-body ms-3" href="{% url 'accounts:login'%}"><i class="fa-solid fa-arrow-right-to-bracket"></i></a>
                 {% endif %}
             </div>
         </div>

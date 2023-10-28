@@ -71,3 +71,9 @@ class Receipt(models.Model):
 
     def __str__(self):
         return str(self.order.id)  # Return the order ID as a string
+    
+
+class CartItemAdded(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    item = models.ForeignKey(FoodItem, on_delete=models.CASCADE)  # Replace FoodItem with your item model
+    added_at = models.DateTimeField(auto_now_add=True)

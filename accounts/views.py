@@ -62,7 +62,7 @@ def login_view(request):
         else:
             messages.error(request, 'Invalid username or password')
 
-    return render(request, 'admin/login.html')
+    return render(request, 'registration/login.html')
 
 def logout_view(request):
     logout(request)
@@ -121,3 +121,8 @@ def manage_food_items(request):
                }
 
     return render(request, 'admin/manage-food/food-items.html', context)
+
+def OrderListView(request):
+    items = CartItemAdded
+    context = {'items':items}
+    return render(request, 'admin/orders/manage_orders.html', context)
