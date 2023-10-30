@@ -8,8 +8,13 @@ from django.contrib.auth import authenticate, login, logout
 from accounts .forms import *
 
 
-def admin_Dashboard(request):
-    return render(request, 'admin/index.html')
+def Dashboard(request):
+
+    items = CartItemAdded.objects.all()
+
+    context = {'items':items}
+
+    return render(request, 'dashboard/index.html', context)
 
 
 def register_student(request):
@@ -54,7 +59,7 @@ def register_admin(request):
                'form': form,
                }
     
-    return render(request, 'admin/users/manage_employees.html', context)
+    return render(request, 'dashboard/users/manage_employees.html', context)
 
 def login_view(request):
     if request.method == 'POST':
@@ -67,7 +72,10 @@ def login_view(request):
             login(request, user)
             if user.is_admin or user.is_superuser:
                 print('success')
-                return redirect('accounts:dashboard')  # Redirect to the admin dashboard
+                return redirect('admin:index')  # Redirect to the admin dashboard
+            
+            elif user.is_cashier:
+                return redirect('accounts:dashboard')
                 
             elif user.is_student:
                 return redirect('canteen:home')  # Redirect to the student dashboard
@@ -112,7 +120,7 @@ def manage_food_category(request):
                'foodCategory':foodCategory,
                }
 
-    return render(request, 'admin/manage-food/food-category.html', context)
+    return render(request, 'dashboard/manage-food/food-category.html', context)
 
 def manage_food_items(request):
 
@@ -132,12 +140,12 @@ def manage_food_items(request):
                'foodItems':foodItems,
                }
 
-    return render(request, 'admin/manage-food/food-items.html', context)
+    return render(request, 'dashboard/manage-food/food-items.html', context)
 
 def OrderListView(request):
     items = CartItemAdded.objects.all()
     context = {'items':items}
-    return render(request, 'admin/orders/manage_orders.html', context)
+    return render(request, 'dashboard/orders/manage_orders.html', context)
 
 
 
@@ -146,7 +154,7 @@ def user_list(request):
 
     context = {'student_users':student_users}
     
-    return render(request, 'admin/users/manage_students.html', context)
+    return render(request, 'dashboard/users/manage_students.html', context)
 
 # def admin_list(request):
     
@@ -155,3 +163,45 @@ def user_list(request):
 #     context = {'admin_users':admin_users}
     
 #     return render(request, 'admin/users/manage_employees.html', context)
+
+def summary_report(request):
+    # Get all order items to create the summary report
+    order_items = OrderItem.objects.all()
+
+    context = {
+        'order_items': order_items,
+    }
+
+    return render(request, 'admin/report/report.html', context)
+
+
+
+def management_report(request):
+    # Filter users who have placed orders
+    users_with_orders = CustomUser.objects.filter(order__isnull=False).distinct()
+
+    # Gather data for the report based on the filtered users
+    orders = Order.objects.filter(user__in=users_with_orders)
+    payments = Payment.objects.filter(order__in=orders)
+    receipts = Receipt.objects.filter(order__in=orders)
+
+    # Calculate relevant statistics or perform any data manipulation as needed
+
+    context = {
+        'orders': orders,
+        'payments': payments,
+        'receipts': receipts,
+    }
+
+    return render(request, 'dashboard/report/report.html', context)
+
+
+
+def view_receipts(request):
+    total_receipts = Receipt.objects.all()
+
+    context = {
+        'total_receipts':total_receipts
+    }
+
+    return render(request, 'dashboard/report/report.html', context)

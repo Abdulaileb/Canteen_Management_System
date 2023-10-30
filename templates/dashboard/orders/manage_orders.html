@@ -1,4 +1,4 @@
-{% extends "admin/base.html" %}
+{% extends "dashboard/base.html" %}
 {% block title %}ADMIN DASHBOARD{% endblock title %}
 
 {% load static %}
@@ -6,13 +6,13 @@
 <main>
     <div class="container-fluid px-4">
 
-        <div class="modal fade" id="registrationModal" tabindex="-1" aria-labelledby="registrationModalLabel" aria-hidden="true">
+        <div class="modal fade" id="foodModal" tabindex="-1" aria-labelledby="registrationModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="col-sm-12">
                   <div class="bg-light rounded h-100 p-4">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title" id="registrationModalLabel">Register Registration Officer</h5>
+                        <h5 class="modal-title" id="registrationModalLabel">Register Food Items</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                         <div class="modal-body">
@@ -27,7 +27,7 @@
                                 </ul>
                             {% endif %}
 
-                          <form method="post">
+                          <form method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             
                             {{ form }}
@@ -50,23 +50,30 @@
                   </div>
                 </div>
             </div>
-          </div>
+        </div>
+
+       
 
 
-          <div class="card mt-5">
+        <div class="card mt-5">
             <blockquote class="blockquote text-center mt-5">
-                <p class="mb-3">Total Food Categories in the Canteen.</p>
+                <p class="mb-3"> Food Ordered for by individuals.</p>
                 <footer class="blockquote-footer">Central Canteen <cite title="Source Title">Mile  91</cite></footer>
             </blockquote>
 
-            <button type="button" class="btn btn-primary btn-sm mt-3 ms-auto" data-bs-toggle="modal" data-bs-target="#registrationModal">
-                Add Food Categories
-            </button>
-            
+            <div class="modal-body">                        
+                {% if messages %}
+                    <div class="alert alert-success messages">
+                        {% for message in messages %}
+                            <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
 
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
-                Food Categories
+                Ordered Items
             </div>
 
             
@@ -74,37 +81,32 @@
                 <table id="datatablesSimple">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>Name</th>
-                            <!-- <th>Office</th>
-                            <th>Age</th>
-                            <th>Start date</th>
-                            <th>Salary</th> -->
+                            <th>User</th>
+                            <th>Food</th>
+                            <th>Date Ordered</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>No</th>
-                            <th>Name</th>
-                            <!-- <th>Office</th>
-                            <th>Age</th>
-                            <th>Start date</th>
-                            <th>Salary</th> -->
+                            <th>User</th>
+                            <th>Food</th>
+                            <th>Date Ordered</th>
                         </tr>
                     </tfoot>
                     <tbody>
 
-                        {% for foodCategorys in foodCategory %}
-                        <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td>{{ foodCategorys.name}}</td>
-                            
-                        </tr>
-                        {% endfor %}
+                            {% for item in items %}
+                                <tr>
+                                    <td>{{ item.user.username }}</td>
+                                    <td>{{ item.item.name }}</td>
+                                    <td>{{ item.added_at }}</td>
+                                </tr>
+                            {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
+
     </div>
 </main>
 {% endblock body %}

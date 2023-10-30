@@ -51,6 +51,14 @@ class AdminRegistrationForm(forms.ModelForm):
         self.fields['email'].widget.attrs.update({'class': 'form-control'})
         self.fields['full_name'].widget.attrs.update({'class': 'form-control'})
 
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password'])  # Hash the password
+        if commit:
+            user.save()
+        return user
+
+
 
 
 class FoodCategoryForm(forms.ModelForm):

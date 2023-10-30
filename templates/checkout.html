@@ -1,68 +1,71 @@
-<!-- checkout.html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <-- Include necessary CSS and scripts --
-    <title>Checkout</title>
-</head>
-<body>
-    <h2>Checkout</h2>
-    <form method="post" action="{% url 'canteen:payment' %}">
-        {% csrf_token %}
-        <label for="payment_type">Payment Type:</label>
-        <select name="payment_type" id="payment_type">
-            <option value="Afri-Money">Afri-Money</option>
-            <option value="Orange_Money">Orange_Money</option>
-            <option value="Visa Card">Visa Card</option>
-        </select>
-        <button type="submit">Proceed to Payment</button>
-    </form>
-</body>
-</html> -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Checkout</title>
+    <!-- Include Bootstrap CSS (You may need to adjust the path to your Bootstrap CSS file) -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <!-- checkout.html -->
-    <form method="post" action="{% url 'canteen:payment' %}">
-        {% csrf_token %}
-        <!-- ... Your existing cart items table ... -->
-        
-        <div>
-            <label for="payment_type">Payment Type:</label>
-            <select id="payment_type" name="payment_type">
-                <option value="Cash">Cash</option>
-                <option value="Credit">Credit</option>
-                <option value="MobileMoney">Mobile Money</option>
-                <option value="VisaCard">Visa Card</option>
-            </select>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">Checkout</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" action="{% url 'canteen:payment' %}">
+                            {% csrf_token %}
+                            <!-- ... Your existing cart items table ... -->
+                            
+                            <div class="form-group">
+                                <label for="payment_type">Payment Type:</label>
+                                <select id="payment_type" name="payment_type" class="form-control">
+                                    <option value="Cash">Cash</option>
+                                    <option value="Credit">Credit</option>
+                                    <option value="MobileMoney">Mobile Money</option>
+                                    <option value="VisaCard">Visa Card</option>
+                                </select>
+                            </div>
+                
+                            <!-- Afri-Money or Orange Money Phone Number -->
+                            <div id="phone_number_field" style="display: none;">
+                                <div class="form-group">
+                                    <label for="phone_number">Phone Number:</label>
+                                    <input type="text" id="phone_number" name="phone_number" class="form-control">
+                                </div>
+                            </div>
+                
+                            <!-- Visa Card Fields -->
+                            <div id="visa_card_fields" style="display: none;">
+                                <div class="form-group">
+                                    <label for="account_number">Account Number:</label>
+                                    <input type="text" id="account_number" name="account_number" class="form-control">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="expiring_date">Expiring Date:</label>
+                                    <input type="text" id="expiring_date" name="expiring_date" class="form-control">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="pattern">Pattern:</label>
+                                    <input type="text" id="pattern" name="pattern" class="form-control">
+                                </div>
+                            </div>
+                
+                            <button type="submit" class="btn btn-primary btn-block">Pay Now</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
 
-        <!-- Afri-Money or Orange Money Phone Number -->
-        <div id="phone_number_field" style="display: none;">
-            <label for="phone_number">Phone Number:</label>
-            <input type="text" id="phone_number" name="phone_number">
-        </div>
-
-        <!-- Visa Card Fields -->
-        <div id="visa_card_fields" style="display: none;">
-            <label for="account_number">Account Number:</label>
-            <input type="text" id="account_number" name="account_number">
-            
-            <label for="expiring_date">Expiring Date:</label>
-            <input type="text" id="expiring_date" name="expiring_date">
-            
-            <label for="pattern">Pattern:</label>
-            <input type="text" id="pattern" name="pattern">
-        </div>
-
-        <button type="submit">Pay Now</button>
-    </form>
+    <!-- Include Bootstrap JS (You may need to adjust the path to your Bootstrap JS file) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
         // Show/hide additional fields based on the selected payment type

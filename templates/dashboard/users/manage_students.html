@@ -1,4 +1,4 @@
-{% extends "admin/base.html" %}
+{% extends "dashboard/base.html" %}
 {% block title %}View Employee {% endblock title %}
 
 {% load static %}
@@ -85,7 +85,7 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Name</th>
+                           
                             <th>Username</th>
                             <th>Full Name</th>
                             <th>Student_Email</th>
@@ -98,7 +98,7 @@
                     <tfoot>
                         <tr>
                             <th>No</th>
-                            <th>Name</th>
+                           
                             <th>Username</th>
                             <th>Full Name</th>
                             <th>Student_Email</th>
@@ -112,7 +112,7 @@
                         {% for student_user in student_users %}
                             <tr>
                                 <td>{{ forloop.counter }}</td>
-                                <td>{{ student_user.name}}</td>
+                               
                                 <td>{{ student_user.username}}</td>
                                 <td>{{ student_user.full_name}}</td>
                                 <td>{{ student_user.email}}</td>

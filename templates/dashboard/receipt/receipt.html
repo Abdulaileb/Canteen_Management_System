@@ -1,4 +1,4 @@
-{% extends "admin/base.html" %}
+{% extends "dashboard/base.html" %}
 {% block title %}ADMIN DASHBOARD{% endblock title %}
 
 {% load static %}
@@ -61,6 +61,16 @@
                 <footer class="blockquote-footer">Central Canteen <cite title="Source Title">Mile  91</cite></footer>
             </blockquote>
 
+            <div class="modal-body">                        
+                {% if messages %}
+                    <div class="alert alert-success messages">
+                        {% for message in messages %}
+                            <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
                 Ordered Items
@@ -96,6 +106,7 @@
                 </table>
             </div>
         </div>
+        
     </div>
 </main>
 {% endblock body %}

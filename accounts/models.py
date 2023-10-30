@@ -124,10 +124,12 @@ class CustomUserManager(BaseUserManager):
 class CustomUser(AbstractUser):
     STUDENT = 'student'
     ADMIN = 'admin'
+    CASHIER = 'cashier'
 
     ROLE_CHOICES = [
         (STUDENT, _('Student')),
         (ADMIN, _('Admin')),
+        (CASHIER, _('Cashier')),
     ]
 
     email = models.EmailField(unique=True)
@@ -155,6 +157,10 @@ class CustomUser(AbstractUser):
     @property
     def is_admin(self):
         return self.role == self.ADMIN
+    
+    @property
+    def is_cashier(self):
+        return self.role == self.CASHIER
 
     def save(self, *args, **kwargs):
         if self.is_admin:

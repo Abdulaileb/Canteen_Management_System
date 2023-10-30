@@ -110,15 +110,20 @@ def view_cart(request):
     if request.user.is_authenticated:
         # Retrieve the user's cart items
         cart_items = OrderItem.objects.filter(order__user=request.user)
+
+
         
         # Calculate the total quantity and total price
         total_quantity = cart_items.aggregate(Sum('quantity'))['quantity__sum'] or 0
         total_price = cart_items.aggregate(Sum('food_item__price'))['food_item__price__sum'] or 0
 
+        # total_cost = cart_items.
+
         context = {
             'cart_items': cart_items,
             'total_quantity': total_quantity,
             'total_price': total_price,
+            # 'total_cost':total_cost
         }
 
         return render(request, 'view_cart.html', context)
@@ -155,7 +160,7 @@ def receipt(request):
     return render(request, 'receipt.html', context)
 
 
-from django.core.exceptions import ObjectDoesNotExist  # Import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist
 
 @login_required
 def payment(request):
@@ -164,8 +169,15 @@ def payment(request):
         user = request.user
 
         try:
-            # Get the user's active order
-            order = Order.objects.get(user=user, is_paid=False)
+            # Mark any existing active orders as "paid"
+            active_orders = Order.objects.filter(user=user, is_paid=False)
+            for order in active_orders:
+                order.is_paid = True
+                order.save()
+
+            # Create a new order
+            order = Order(user=user)
+            order.save()
 
             # Calculate the total cost of the order by summing the costs of its associated OrderItem objects
             total_cost = order.orderitem_set.aggregate(Sum('food_item__price'))['food_item__price__sum']
@@ -183,21 +195,21 @@ def payment(request):
 
                 payment.save()
 
-                # Mark the order as paid
-                order.is_paid = True
-                order.save()
+                # Generate a receipt
+                receipt = Receipt(order=order)
+                receipt.save()
 
                 # Add a success message for the user
                 messages.success(request, 'Payment successful!')
 
-                # Redirect to the receipt page or any other appropriate page
+                # Redirect to the receipt page
                 return redirect('canteen:receipt')
             else:
                 # Add an error message for the user
                 messages.error(request, 'Payment failed. Please try again.')
                 return redirect('canteen:checkout')
-        except Order.DoesNotExist:
-            # Handle the case where there is no active order
+        except ObjectDoesNotExist:
+            # Handle the case where no active order is found
             messages.error(request, 'No active order found. Please add items to your cart.')
             return redirect('canteen:home')
 

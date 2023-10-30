@@ -1,0 +1,138 @@
+{% extends "dashboard/base.html" %}
+{% block title %}ADMIN DASHBOARD{% endblock title %}
+
+{% load static %}
+{% block body %}
+<main>
+    <div class="container-fluid px-4">
+        <div class="marquee-container">
+             <marquee behavior="scroll" direction="left">
+             <h1 class="mt-4 marquee-text" style="font-family: 'Bradley Hand ITC', cursive; font-weight: bold; letter-spacing: 30px;">
+                    CENTRAL UNIVERSITY CANTTEEN MANAGEMENT SYSTEM
+                </h1>
+            </marquee>
+
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item active"></li>
+        </ol>
+        <div class="row">
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-primary text-white mb-4">
+                    <div class="card-body" style="font-weight: bold;">Oders this Month</div>
+
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="#">View Details</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-warning text-white mb-4">
+                    <div class="card-body" style="font-weight: bold;">Initial Items</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="#">View Details</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-success text-white mb-4">
+                    <div class="card-body" style="font-weight: bold">Items Available </div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="#">View Details</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-danger text-white mb-4">
+                    <div class="card-body" style="font-weight: bold">Unique Customer's</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="{% url 'accounts:manage-students' %}">View Details</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-secondary text-white mb-4">
+                    <div class="card-body" style="font-weight: bold">Monthly Revenue Earned</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="{% url 'accounts:management_report' %}">View Details</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-danger text-white mb-4">
+                    <div class="card-body" style="font-weight: bold">Number Of Dishes</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="{% url 'accounts:view_orders' %}">View Details</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-dark text-white mb-4">
+                    <div class="card-body" style="font-weight: bold">Food Catergory</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="{% url 'accounts:manage_foodCategory' %}">View Details</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-info text-white mb-4">
+                    <div class="card-body" style="font-weight: bold">Oders</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="{% url 'accounts:view_orders' %}">View Details</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+       <br><br><br>
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                Recent Orders
+            </div>
+            <div class="card-body">
+                <table id="datatablesSimple">
+                    <thead>
+                        
+                        <tr>
+                            <th>No</th>
+                            <th>User</th>
+                            <th>Food</th>
+                            <th>Date Ordered</th>
+                            <!-- <th>Start date</th>
+                            <th>Salary</th> -->
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>No</th>
+                            <th>User</th>
+                            <th>Food</th>
+                            <th>Date Ordered</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        {% for item in items %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ item.user.username }}</td>
+                                <td>{{ item.item.name }}</td>
+                                <td>{{ item.added_at }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+{% endblock body %}
