@@ -36,12 +36,16 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return self.order
+    
+class InventoryItem(models.Model):
+    name = models.CharField(max_length=255)
+    location = models.CharField(max_length=20)
+    type = models.CharField(max_length=255)
+    date = models.DateField()
+    quantity = models.PositiveIntegerField()
 
-# class Payment(models.Model):
-#     order = models.OneToOneField(Order, on_delete=models.CASCADE)
-#     payment_type = models.CharField(max_length=50)  # Cash, Credit, Mobile Money
-#     amount_paid = models.DecimalField(max_digits=10, decimal_places=2)
-#     payment_date = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return self.name
 
 class Payment(models.Model):
     order = models.OneToOneField(Order, on_delete=models.CASCADE)
@@ -55,14 +59,6 @@ class Payment(models.Model):
 
     def __str__(self):
         return self.order
-
-# class Receipt(models.Model):
-#     order = models.OneToOneField(Order, on_delete=models.CASCADE)
-#     receipt_date = models.DateTimeField(auto_now_add=True)
-
-
-#     def __str__(self):
-#         return self.order
 
 
 class Receipt(models.Model):

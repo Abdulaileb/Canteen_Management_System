@@ -21,7 +21,7 @@ app_name = 'accounts'
 
 urlpatterns = [
     path('dashboard', views.Dashboard, name='dashboard'),
-    path('register/', views.register_student, name='register'),
+    path('register/', views.register_user, name='register'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
     # Add other app URLs here
@@ -32,6 +32,8 @@ urlpatterns = [
 
     path('manage-food-category/', views.manage_food_category, name='manage_foodCategory'),
     path('manage-food-item/', views.manage_food_items, name='manage_foodItems'),
+
+    path('manage-inventory/', views.manage_inventory_category, name='manage-inventory'),
 
     path('orders/', views.OrderListView, name='view_orders'),
 

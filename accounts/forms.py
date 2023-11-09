@@ -3,27 +3,13 @@ from .models import CustomUser
 
 from canteen.models import *
 
-class StudentRegistrationForm(forms.ModelForm):
+class UsersRegistrationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'password', 'student_ID', 'department', 'levels', 'email', 'full_name']
+        fields = ['username', 'password', 'contacts', 'email', 'full_name']
 
-    email = forms.EmailField(
-        error_messages={
-            'invalid': 'Invalid email. Enter your student email ending with @cusl.com.',
-        }
-    )
-
-    def clean_email(self):
-        email = self.cleaned_data['email']
-
-        # Check if the email ends with "cusl.com"
-        if not email.endswith('@cusl.com'):
-            raise forms.ValidationError("Email must end with @cusl.com")
-
-        return email
 
     def save(self, commit=True):
         # Get the user instance from the form
@@ -69,6 +55,20 @@ class FoodCategoryForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['name'].widget.attrs.update({'class': 'form-control'})
+
+
+class InventoryForm(forms.ModelForm):
+    class Meta:
+        model = InventoryItem
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['location'].widget.attrs.update({'class': 'form-control'})
+        self.fields['type'].widget.attrs.update({'class': 'form-control'})
+        self.fields['date'].widget.attrs.update({'class': 'form-control'})
+        self.fields['quantity'].widget.attrs.update({'class': 'form-control'})
        
 
 

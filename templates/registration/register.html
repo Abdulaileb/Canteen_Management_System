@@ -1,159 +1,119 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
 
-        <title>Register</title>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Canteen Management System </title>
 
-        <link href="https://fonts.googleapis.com/css?family=Poppins:400,700" rel="stylesheet">
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{% static 'manager/plugins/fontawesome-free/css/all.min.css' %}">
+  <!-- check bootstrap -->
+  <link rel="stylesheet" href="{% static 'manager/plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{% static 'manager/dist/css/adminlte.min.css' %}">
+</head>
+
+<body class="hold-transition login-page">
+<div class="login-box">
+  <div class="login-logo">
+    <!-- <a href="{% static 'log.ico' %}"><b>Admin</b>LTE</a> -->
+
+    <img src="{% static 'log.ico' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="height: 120px;">
+  </div>
+  <!-- /.login-logo -->
+  <div class="card">
+    <div class="card-body login-card-body">
+      <p class="login-box-msg">Register to experience a great moment </p>
 
 
-        <style>
-            /* Custom CSS for styling the top text */
-             #top-text {
-                 text-align: center;
-                 padding: 20px 0;
-                 font-size: 36px; /* Adjust the font size as needed */
-                 font-family: 'Poppins', sans-serif; /* Use the Google Fonts font */
-                 color: #000; /* Black color */
-             }
- 
-             /* Responsive font size for smaller screens */
-             @media (max-width: 768px) {
-                 #top-text {
-                     font-size: 24px; /* Adjust font size for smaller screens */
-                 }
-             }
- 
- 
-         </style>
+      <form method="post">
 
-        <link href="{% static 'admin/css/styles.css' %}" rel="stylesheet" />
+        {% csrf_token %}
 
-       
-    </head>
-    <body class="bg-primary">
-        <div id="layoutAuthentication">
-            <div id="layoutAuthentication_content">
-                <main>
-
-                    <div id="top-text">
-                        Cusl - Canteen Management System
-                    </div>
-
-                    <div class="modal-body">                        
-                        {% if messages %}
-                            <div class="alert alert-success messages">
-                                {% for message in messages %}
-                                    <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
-
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-7">
-                                <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Create Account</h3></div>
-                                    <div class="card-body">
-
-                                        <form method="post">
-
-                                            {% csrf_token %}
-
-                                            <div class="row mb-3">
-
-                                                <div class="col-md-6">
-                                                    <div class="form-floating mb-3">
-                                                        <input type="text" name="username" class="form-control" placeholder="Username" required="">
-                                                        <label for="inputFirstName">Username</label>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <div class="form-floating mb-3 mb-md-0">
-                                                        <input type="text" name="full_name" class="form-control" placeholder="Full Name" required="">
-                                                        <label for="inputPasswordConfirm">Full_Name</label>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <div class="form-floating">
-                                                        <input type="text" name="student_ID" class="form-control" placeholder="Student ID" required="">
-                                                        <label for="inputEmail">Student_ID</label>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-                                            <div class="form-floating mb-3">
-                                                <input type="email" name="email" class="form-control" placeholder="Student_Email" required="">
-                                                        <label for="inputLastName">Student_Email</label>
-                                            </div>
-
-                                            <div class="row mb-3">
-                                                <div class="col-md-6">
-                                                    <div class="form-floating mb-3">
-                                                        <input type="text" name="department" class="form-control" placeholder="Department" required="">
-                                                        <label for="inputPassword">Department</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-floating mb-3 mb-md-0">
-                                                        <input type="text" name="levels" class="form-control" placeholder="Academic Year" required="">
-                                                        <label for="inputPasswordConfirm">Academic Year</label>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <div class="form-floating mb-3 mb-md-0">
-                                                        <input type="password" name="password" class="form-control" placeholder="Password" required="">
-                                                        <label for="inputPasswordConfirm">Password:</label>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-                                            <div class="mt-4 mb-0">
-                                                <button type="submit" class="btn btn-primary btn-block">
-                                                    Sign Up
-                                                </button>
-                                                <!-- <div class="d-grid"><a class="btn btn-primary btn-block" href="login.html">Create Account</a></div> -->
-                                            </div>
-
-                                        </form>
-                                    </div>
-                                    <div class="card-footer text-center py-3">
-                                        <div class="small"><a href="{% url 'accounts:login' %}">Have an account? login</a></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </main>
+        <div class="input-group mb-3">
+            
+          <input type="text" name="username" class="form-control" placeholder="Username" required="">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
             </div>
-            <div id="layoutAuthentication_footer">
-                <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid px-4">
-                        <div class="d-flex justify-content-center align-items-center small">
-                            <div class="text-muted text-center">
-                                Copyright &copy; Cusl Canteen Management System 2023
-                            </div>
-                        </div>
-                    </div>
-                </footer>
-            </div>
+          </div>
         </div>
 
-        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="{% static 'js/scripts.js' %}"></script>
+        <div class="input-group mb-3">
+            <input type="text" name="full_name" class="form-control" placeholder="Full Name" required="">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+        </div>
 
-    </body>
+        <div class="input-group mb-3">
+            <input type="email" name="email" class="form-control" placeholder="Email" required="">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group mb-3">
+            <input type="text" name="contacts" class="form-control" placeholder="Telephone" required="">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fa-solid fa-phone"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group mb-3">
+            <input type="password" name="password" class="form-control" placeholder="Password" required="">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+      </form>
+
+
+      <div class="social-auth-links text-center mb-3">
+        <!-- <p>- OR -</p> -->
+        <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+        <!-- <a href="#" class="btn btn-block btn-primary">
+          <i class="fab fa-facebook mr-2"></i> Sign In
+        </a> -->
+
+        <!-- <a href="#" class="btn btn-block btn-danger">
+          <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
+        </a> -->
+      </div>
+      <!-- /.social-auth-links -->
+
+      <!-- <p class="mb-1">
+        <a href="forgot-password.html">I forgot my password</a>
+      </p> -->
+
+      <p class="mb-0">
+        <a href="{% url 'accounts:login' %}" class="text-center">Have an account</a>
+      </p>
+    </div>
+    <!-- /.login-card-body -->
+  </div>
+</div>
+<!-- /.login-box -->
+
+<!-- jQuery -->
+<script src="{% static 'manager/plugins/jquery/jquery.min.js' %}"></script>
+<!-- Bootstrap 4 -->
+<script src="{% static 'manager/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- AdminLTE App -->
+<script src="{% static 'manager/dist/js/adminlte.min.js' %}"></script>
+</body>
 </html>

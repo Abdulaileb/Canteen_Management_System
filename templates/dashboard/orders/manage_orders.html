@@ -1,112 +1,130 @@
 {% extends "dashboard/base.html" %}
-{% block title %}ADMIN DASHBOARD{% endblock title %}
 
 {% load static %}
-{% block body %}
-<main>
-    <div class="container-fluid px-4">
 
-        <div class="modal fade" id="foodModal" tabindex="-1" aria-labelledby="registrationModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="col-sm-12">
-                  <div class="bg-light rounded h-100 p-4">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="registrationModalLabel">Register Food Items</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                        <div class="modal-body">
+{% block content %}
 
-                            {% if form.errors %}
-                                <ul class="errorlist">
-                                    {% for field_errors in form.errors.values %}
-                                    {% for error in field_errors %}
-                                        <li>{{ error }}</li>
-                                    {% endfor %}
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
+  <!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
 
-                          <form method="post" enctype="multipart/form-data">
-                            {% csrf_token %}
+
+                    <blockquote class="blockquote text-center mt-5">
+                        <h1 class="mb-3"> ORDERED FOOD.</h1>
+                        <footer class="blockquote-footer">Central Canteen <cite title="Source Title">Mile  91</cite></footer>
+                    </blockquote>
+                </div>
+
+            </div>
+        </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+            <div class="col-12">
+    
+                <div class="modal-body">                        
+                    {% if messages %}
+                        <div class="alert alert-success messages">
+                            {% for message in messages %}
+                                <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+    
+                <div class="card">
+               
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <table id="example2" class="table table-bordered table-hover">
+    
+                    <thead>
+                        <th>No</th>
+    
+                        <th>User</th>
+                        <th>Food</th>
+                        <th>Date Ordered</th>
+    
+                    </thead>
+    
+                    <tbody>
+    
+    
+                        {% for item in items %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{ item.user.username }}</td>
+                            <td>{{ item.item.name }}</td>
+                            <td>{{ item.added_at }}</td>
+                        </tr>                
+                        {% empty %}
+                        <tr>
+                            <td colspan="3">No ORDER yet</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+    
+                    <tfoot>
+                    <tr>
+                        <th>No</th>
+                        <th>User</th>
+                        <th>Food</th>
+                        <th>Date Ordered</th>
+                    </tr>
+                    </tfoot>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+    
+                <div class="modal fade" id="foodModal" tabindex="-1" aria-labelledby="registrationModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="col-sm-12">
+                        <div class="bg-light rounded h-100 p-4">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="registrationModalLabel">Register Food Items</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
                             
-                            {{ form }}
-          
-                            
-                            <!-- <div class="mb-3">
-                              <label for="exampleInputEmail1" class="form-label">Email address</label>
-                              <input type="email" class="form-control" name="email" id="exampleInputEmail1"
-                                  aria-describedby="emailHelp">
-                              <div id="emailHelp" class="form-text">We'll never share your email with anyone else.
-                              </div>
-                             </div> -->
-
-                        
-                            <button type="submit" class="btn btn-primary mt-3" >Add</button>
-      
-                          </form>
+                                <div class="modal-body">
+    
+                                    {% if form.errors %}
+                                        <ul class="errorlist">
+                                            {% for field_errors in form.errors.values %}
+                                            {% for error in field_errors %}
+                                                <li>{{ error }}</li>
+                                            {% endfor %}
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+    
+                                <form method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    
+                                    {{ form }}
+    
+                                    <button type="submit" class="btn btn-primary mt-3" >Add</button>
+            
+                                </form>
+                                </div>
+                            </div>
+                        </div>
                         </div>
                     </div>
-                  </div>
                 </div>
+    
             </div>
+            <!-- /.col -->
+            </div>
+            <!-- /.row -->
         </div>
-
-       
-
-
-        <div class="card mt-5">
-            <blockquote class="blockquote text-center mt-5">
-                <p class="mb-3"> Food Ordered for by individuals.</p>
-                <footer class="blockquote-footer">Central Canteen <cite title="Source Title">Mile  91</cite></footer>
-            </blockquote>
-
-            <div class="modal-body">                        
-                {% if messages %}
-                    <div class="alert alert-success messages">
-                        {% for message in messages %}
-                            <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-
-            <div class="card-header">
-                <i class="fas fa-table me-1"></i>
-                Ordered Items
-            </div>
-
-            
-            <div class="card-body">
-                <table id="datatablesSimple">
-                    <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>Food</th>
-                            <th>Date Ordered</th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <th>User</th>
-                            <th>Food</th>
-                            <th>Date Ordered</th>
-                        </tr>
-                    </tfoot>
-                    <tbody>
-
-                            {% for item in items %}
-                                <tr>
-                                    <td>{{ item.user.username }}</td>
-                                    <td>{{ item.item.name }}</td>
-                                    <td>{{ item.added_at }}</td>
-                                </tr>
-                            {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </div>
-</main>
-{% endblock body %}
+        <!-- /.container-fluid -->
+    </section>
+</div>
+{% endblock %}

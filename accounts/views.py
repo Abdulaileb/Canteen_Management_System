@@ -1,25 +1,49 @@
 
 from django.contrib.auth import login, authenticate, logout
 from django.shortcuts import render, redirect
-from .forms import StudentRegistrationForm, AdminRegistrationForm
+from .forms import UsersRegistrationForm, AdminRegistrationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 
 from accounts .forms import *
+
+from canteen.models import * 
 
 
 def Dashboard(request):
 
     items = CartItemAdded.objects.all()
 
-    context = {'items':items}
+    total_user_count = CustomUser.objects.filter(role=CustomUser.USERS).count()
+
+    food_catergory = FoodCategory.objects.count()
+
+    items_available = InventoryItem.objects.count()
+
+    food_items = FoodItem.objects.count()
+
+    items_ordered = CartItemAdded.objects.count()
+
+    total_reports = Receipt.objects.count()
+
+    total_inventory = InventoryItem.objects.count()
+
+
+    context = {'items':items,
+               'total_user_count':total_user_count,
+               'food_catergory':food_catergory,
+               'items_ordered':items_ordered,
+               'food_items':food_items,
+               'items_available':items_available,
+               'total_reports':total_reports,
+               'total_inventory':total_inventory}
 
     return render(request, 'dashboard/index.html', context)
 
 
-def register_student(request):
+def register_user(request):
     if request.method == 'POST':
-        form = StudentRegistrationForm(request.POST)
+        form = UsersRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)  # Automatically log in the student after registration
@@ -30,7 +54,7 @@ def register_student(request):
         else:
             messages.error(request, 'Please enter your student email address')
     else:
-        form = StudentRegistrationForm()
+        form = UsersRegistrationForm()
         
     
     return render(request, 'registration/register.html', {'form': form})
@@ -74,10 +98,10 @@ def login_view(request):
                 print('success')
                 return redirect('admin:index')  # Redirect to the admin dashboard
             
-            elif user.is_cashier:
+            elif user.is_manager:
                 return redirect('accounts:dashboard')
                 
-            elif user.is_student:
+            elif user.is_users:
                 return redirect('canteen:home')  # Redirect to the student dashboard
         else:
             messages.error(request, 'Invalid username or password')
@@ -95,9 +119,6 @@ def create_income_chart(request):
     # This view is used to serve the income chart
     with open('income_chart.png', 'rb') as chart:
         return FileResponse(chart)
-
-
-
 
 
 ####### USER FOOD ITEMS ########
@@ -121,6 +142,29 @@ def manage_food_category(request):
                }
 
     return render(request, 'dashboard/manage-food/food-category.html', context)
+
+def manage_inventory_category(request):
+
+    inventory = InventoryItem.objects.all()
+
+    form = InventoryForm()
+    if request.method == 'POST':
+        form = InventoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Inventory has been successfully added')
+            return redirect('accounts:manage-inventory')
+    else:
+            # messages.error(request, 'Check the fields again')
+        form = InventoryForm()
+    context = {'form':form,
+               'inventory':inventory,
+               }
+
+    return render(request, 'dashboard/manage-inventory/manage-inventory.html', context)
+
+
+
 
 def manage_food_items(request):
 
@@ -150,11 +194,11 @@ def OrderListView(request):
 
 
 def user_list(request):
-    student_users = CustomUser.objects.filter(role=CustomUser.STUDENT)
+    users = CustomUser.objects.filter(role=CustomUser.USERS)
 
-    context = {'student_users':student_users}
+    context = {'users':users}
     
-    return render(request, 'dashboard/users/manage_students.html', context)
+    return render(request, 'dashboard/users/manage_users.html', context)
 
 # def admin_list(request):
     

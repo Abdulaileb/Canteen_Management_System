@@ -25,6 +25,8 @@ def HomePage(request):
 
     food_items = FoodItem.objects.all()
 
+    top_items = FoodItem.objects.all()[:3]
+
     # # user = request.user
     # orders = Order.objects.filter(user=user)
     # payments = Payment.objects.filter(order__user=user)
@@ -32,9 +34,10 @@ def HomePage(request):
 
     to_render = {
         'food_items': food_items,
+        'top_items':top_items
         # 'user': user, 'orders': orders, 'payments': payments, 'receipts': receipts
     }    
-    return render(request, 'home.html', to_render)
+    return render(request, 'index.html', to_render)
 
 def Product(request):
 
@@ -51,7 +54,9 @@ def Contact(request):
 def dashboardPage(request):
     return render(request, 'admin_dashboard.html', )
 
-@login_required
+from . decorators import user_required
+
+@user_required
 def add_to_cart(request, food_item_id):
     if request.method == 'POST' and request.user.is_authenticated:
         form = AddToCartForm(request.POST)
@@ -105,31 +110,86 @@ def delete_cart_item(request, item_id):
     item.delete()
     return redirect('canteen:view_cart')
 
-@login_required
-def view_cart(request):
-    if request.user.is_authenticated:
-        # Retrieve the user's cart items
-        cart_items = OrderItem.objects.filter(order__user=request.user)
+# @login_required
+# def view_cart(request):
+#     if request.user.is_authenticated:
+#         # Retrieve the user's cart items
+#         cart_items = OrderItem.objects.filter(order__user=request.user)
 
 
         
+#         # Calculate the total quantity and total price
+#         total_quantity = cart_items.aggregate(Sum('quantity'))['quantity__sum'] or 0
+#         total_price = cart_items.aggregate(Sum('food_item__price'))['food_item__price__sum'] or 0
+
+#         # total_cost = cart_items.
+
+#         context = {
+#             'cart_items': cart_items,
+#             'total_quantity': total_quantity,
+#             'total_price': total_price,
+#             # 'total_cost':total_cost
+#         }
+
+#         return render(request, 'view_cart.html', context)
+#     else:
+#         messages.error(request, 'You need to be logged in to view your cart.')
+#         return redirect('canteen:home')
+
+from django.db.models import F, Sum
+
+# @login_required
+# def view_cart(request):
+#     if request.user.is_authenticated:
+#         # Retrieve the user's cart items
+#         cart_items = OrderItem.objects.filter(order__user=request.user)
+
+#         # Calculate the total quantity
+#         total_quantity = cart_items.aggregate(Sum('quantity'))['quantity__sum'] or 0
+
+#         # Calculate the total cost by multiplying quantity with the price of each food item
+#         # and then summing up those values.
+#         total_cost = cart_items.annotate(
+#             item_total=F('quantity') * F('food_item__price')
+#         ).aggregate(
+#             total_cost=Sum('item_total')
+#         )['total_cost'] or 0
+
+#         context = {
+#             'cart_items': cart_items,
+#             'total_quantity': total_quantity,
+#             'total_cost': total_cost,
+#         }
+
+#         return render(request, 'view_cart.html', context)
+#     else:
+#         messages.error(request, 'You need to be logged in to view your cart.')
+#         return redirect('canteen:home')
+
+
+@login_required
+def view_cart(request):
+    if request.user.is_authenticated:
+        # Retrieve the user's cart items and annotate them with the total cost
+        cart_items = OrderItem.objects.filter(order__user=request.user).annotate(
+            total_cost=F('quantity') * F('food_item__price')
+        )
+
         # Calculate the total quantity and total price
         total_quantity = cart_items.aggregate(Sum('quantity'))['quantity__sum'] or 0
-        total_price = cart_items.aggregate(Sum('food_item__price'))['food_item__price__sum'] or 0
-
-        # total_cost = cart_items.
+        total_cost = cart_items.aggregate(total_cost=Sum('total_cost'))['total_cost'] or 0
 
         context = {
             'cart_items': cart_items,
             'total_quantity': total_quantity,
-            'total_price': total_price,
-            # 'total_cost':total_cost
+            'total_cost': total_cost,
         }
 
         return render(request, 'view_cart.html', context)
     else:
         messages.error(request, 'You need to be logged in to view your cart.')
         return redirect('canteen:home')
+
 
 @login_required
 def checkout(request):
@@ -162,6 +222,59 @@ def receipt(request):
 
 from django.core.exceptions import ObjectDoesNotExist
 
+# @login_required
+# def payment(request):
+#     if request.method == 'POST':
+#         payment_type = request.POST.get('payment_type')
+#         user = request.user
+
+#         try:
+#             # Mark any existing active orders as "paid"
+#             active_orders = Order.objects.filter(user=user, is_paid=False)
+#             for order in active_orders:
+#                 order.is_paid = True
+#                 order.save()
+
+#             # Create a new order
+#             order = Order(user=user)
+#             order.save()
+
+#             # Calculate the total cost of the order by summing the costs of its associated OrderItem objects
+#             total_cost = order.orderitem_set.aggregate(Sum('food_item__price'))['food_item__price__sum']
+
+#             if total_cost is not None:
+#                 # Create a payment record
+#                 payment = Payment(order=order, payment_type=payment_type, amount_paid=total_cost)
+
+#                 if payment_type == 'MobileMoney':
+#                     payment.phone_number = request.POST.get('phone_number')
+#                 elif payment_type == 'VisaCard':
+#                     payment.account_number = request.POST.get('account_number')
+#                     payment.expiring_date = request.POST.get('expiring_date')
+#                     payment.pattern = request.POST.get('pattern')
+
+#                 payment.save()
+
+#                 # Generate a receipt
+#                 receipt = Receipt(order=order)
+#                 receipt.save()
+
+#                 # Add a success message for the user
+#                 messages.success(request, 'Payment successful!')
+
+#                 # Redirect to the receipt page
+#                 return redirect('canteen:receipt')
+#             else:
+#                 # Add an error message for the user
+#                 #messages.error(request, 'Payment failed. Please try again.')
+#                 return redirect('canteen:checkout')
+#         except ObjectDoesNotExist:
+#             # Handle the case where no active order is found
+#             messages.error(request, 'No active order found. Please add items to your cart.')
+#             return redirect('canteen:home')
+
+#     return redirect('canteen:checkout')
+
 @login_required
 def payment(request):
     if request.method == 'POST':
@@ -169,22 +282,21 @@ def payment(request):
         user = request.user
 
         try:
-            # Mark any existing active orders as "paid"
-            active_orders = Order.objects.filter(user=user, is_paid=False)
-            for order in active_orders:
-                order.is_paid = True
-                order.save()
-
-            # Create a new order
-            order = Order(user=user)
-            order.save()
-
-            # Calculate the total cost of the order by summing the costs of its associated OrderItem objects
-            total_cost = order.orderitem_set.aggregate(Sum('food_item__price'))['food_item__price__sum']
+            # Retrieve the active order
+            active_order = Order.objects.get(user=user, is_paid=False)
+            
+            # Calculate the total cost of the active order
+            total_cost = active_order.orderitem_set.aggregate(
+                total_cost=Sum(F('quantity') * F('food_item__price'))
+            )['total_cost']
 
             if total_cost is not None:
+                # Mark the active order as "paid"
+                active_order.is_paid = True
+                active_order.save()
+
                 # Create a payment record
-                payment = Payment(order=order, payment_type=payment_type, amount_paid=total_cost)
+                payment = Payment(order=active_order, payment_type=payment_type, amount_paid=total_cost)
 
                 if payment_type == 'MobileMoney':
                     payment.phone_number = request.POST.get('phone_number')
@@ -195,25 +307,27 @@ def payment(request):
 
                 payment.save()
 
-                # Generate a receipt
-                receipt = Receipt(order=order)
+                # Generate a receipt for the active order
+                receipt = Receipt(order=active_order)
                 receipt.save()
 
                 # Add a success message for the user
                 messages.success(request, 'Payment successful!')
 
-                # Redirect to the receipt page
-                return redirect('canteen:receipt')
+                # Redirect to the receipt page with the order id to view the receipt
+                return redirect('canteen:receipt', order_id=active_order.id)
             else:
                 # Add an error message for the user
                 messages.error(request, 'Payment failed. Please try again.')
                 return redirect('canteen:checkout')
-        except ObjectDoesNotExist:
+
+        except Order.DoesNotExist:
             # Handle the case where no active order is found
             messages.error(request, 'No active order found. Please add items to your cart.')
             return redirect('canteen:home')
 
-    return redirect('canteen:checkout')
+    # If not POST request, redirect to checkout
+    return redirect('canteen:receipt_pdf', order_id=active_order.id)
 
 
 @login_required
@@ -384,3 +498,16 @@ def receipt_pdf(request):
     doc.build(elements)
 
     return response
+
+
+
+# @login_required
+# def receipt_pdf(request, order_id):
+#     user = request.user
+#     try:
+#         order = Order.objects.get(user=user, is_paid=True, id=order_id)
+#         # ... [rest of your receipt_pdf view code]
+#     except Order.DoesNotExist:
+#         # Handle the error, maybe return an error message or redirect
+#         messages.error(request, 'Order not found.')
+#         return redirect('canteen:home')

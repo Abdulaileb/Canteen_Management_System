@@ -1,0 +1,95 @@
+{% extends "dashboard/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+
+          <blockquote class="blockquote text-center mt-5">
+            <h1 class="mb-3">CUSTOMERS.</h1>
+            <footer class="blockquote-footer">Central Canteen <cite title="Source Title">Mile  91</cite></footer>
+        </blockquote>
+
+          
+
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                    <div class="col-12">
+                        <div class="modal-body">                        
+                            {% if messages %}
+                                <div class="alert alert-success messages">
+                                    {% for message in messages %}
+                                        <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="card">
+                                <div class="card-body">
+                                    <table id="example2" class="table table-bordered table-hover">
+                    
+                                    <thead>
+                    
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Username</th>
+                                            <th>Full Name</th>
+                                            <th>Email</th>
+                                            <th>Contacts</th>
+                                        </tr>
+                    
+                                    </thead>
+                    
+                                    <tbody>
+                    
+                                        {% for user in users %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                        
+                                            <td>{{ user.username}}</td>
+                                            <td>{{ user.full_name}}</td>
+                                            <td>{{ user.email}}</td>
+                                            <td>{{ user.contacts}}</td>
+                                            
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td>
+                                                No Record for a Customer
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                        
+                    
+                                    </tbody>
+                    
+                                    <tfoot>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Username</th>
+                                        <th>Full Name</th>
+                                        <th>Email</th>
+                                        <th>Contacts</th>
+                                    </tr>
+                                    </tfoot>
+                                    </table>  
+                              </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+{% endblock content %}

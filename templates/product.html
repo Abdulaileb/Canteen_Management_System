@@ -65,9 +65,17 @@
                                             </a>
                                         </small>
 
-                                        <small class="w-50 text-center py-2">
+                                        <form method="post" action="{% url 'canteen:add_to_cart' food_item.id %}">
+                                            {% csrf_token %}
+                                            <div class="input-group">
+                                                <input type="number" name="quantity" class="form-control mb-2" value="1" min="1" required>
+                                                <button type="submit" class="btn btn-dark ml-2">Add to Cart</button>
+                                            </div>
+                                        </form>
+
+                                        <!-- <small class="w-50 text-center py-2">
                                             <a class="text-body" href="{% url 'canteen:add_to_cart' food_item.id %}"><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                        </small>
+                                        </small> -->
                                     </div>
                                 </div>
                             </div>
