@@ -68,6 +68,7 @@
                         <tr>
                             <td>{{ forloop.counter }}</td>
                             <td>{{ foodItem.name}}</td>
+                            
                             <td>
                                 {% if foodItem.image %}
                                 <div class="circular-image">
@@ -77,6 +78,7 @@
                                     No Image is Available
                                 {% endif %}
                             </td>
+
                             <td>{{ foodItem.category}}</td>
                             <td>Nle: {{ foodItem.price}}</td>
                             <td>{{ foodItem.description}}</td>

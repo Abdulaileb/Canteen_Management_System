@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="{% static 'manager/plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{% static 'manager/dist/css/adminlte.min.css' %}">
+  
 </head>
 
 <body class="hold-transition login-page">
@@ -80,25 +81,28 @@
             </div>
           </div>
         </div>
+
+
+        <div class="social-auth-links text-center mb-3">
+            <!-- <p>- OR -</p> -->
+            <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+            <!-- <a href="#" class="btn btn-block btn-primary">
+              <i class="fab fa-facebook mr-2"></i> Sign In
+            </a> -->
+    
+            <!-- <a href="#" class="btn btn-block btn-danger">
+              <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
+            </a> -->
+          </div>
+          <!-- /.social-auth-links -->
+    
+          <!-- <p class="mb-1">
+            <a href="forgot-password.html">I forgot my password</a>
+          </p> -->
       </form>
 
 
-      <div class="social-auth-links text-center mb-3">
-        <!-- <p>- OR -</p> -->
-        <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
-        <!-- <a href="#" class="btn btn-block btn-primary">
-          <i class="fab fa-facebook mr-2"></i> Sign In
-        </a> -->
-
-        <!-- <a href="#" class="btn btn-block btn-danger">
-          <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
-        </a> -->
-      </div>
-      <!-- /.social-auth-links -->
-
-      <!-- <p class="mb-1">
-        <a href="forgot-password.html">I forgot my password</a>
-      </p> -->
+      
 
       <p class="mb-0">
         <a href="{% url 'accounts:login' %}" class="text-center">Have an account</a>

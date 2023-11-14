@@ -33,6 +33,36 @@
 	<!-- responsive -->
 	<link rel="stylesheet" href="{% static 'assets/css/responsive.css' %}">
 
+    <style>
+        /* Add some styles to the form and its elements */
+        .styled-form {
+            max-width: 300px; /* Adjust the maximum width as needed */
+            margin: 0 auto; /* Center the form on the page */
+        }
+
+        .form-row {
+            margin-top: 10px; /* Add some space between the input and button */
+        }
+
+        /* Style the quantity input */
+        .form-control {
+            width: 70px; /* Adjust the width of the input */
+        }
+
+        /* Style the Add to Cart button */
+        .btn-dark {
+            background-color: #343a40; /* Change the background color */
+            color: #fff; /* Change the text color */
+            border: 1px solid #343a40; /* Add a border */
+        }
+
+        .btn-dark:hover {
+            background-color: #1d2124; /* Change the background color on hover */
+            border: 1px solid #1d2124; /* Adjust the border on hover */
+        }
+
+    </style>
+
 </head>
 
 <body>
@@ -53,7 +83,7 @@
 					<div class="main-menu-wrap">
 						<!-- logo -->
 						<div class="site-logo">
-							<a href="index.html">
+							<a href="#">
 								<img src="{% static 'log.ico' %}" alt="" style="height: 80px;">
 							</a>
 						</div>
@@ -63,38 +93,18 @@
 						<nav class="main-menu">
 							<ul>
 
-								<li class="current-list-item"><a href="#">Home</a>
-									<ul class="sub-menu">
-										<li><a href="index.html">Static Home</a></li>
-										<li><a href="index_2.html">Slider Home</a></li>
-									</ul>
-								</li>
-
-                                <li><a href="shop.html">Products</a>
-									<ul class="sub-menu">
-										<li><a href="shop.html">Shop</a></li>
-										<li><a href="checkout.html">Check Out</a></li>
-										<li><a href="single-product.html">Single Product</a></li>
-										<li><a href="cart.html">Cart</a></li>
-									</ul>
-								</li>
-
-
-								<li><a href="about.html">About</a></li>
-
-								<!-- <li><a href="#">Pages</a>
-									<ul class="sub-menu">
-										<li><a href="404.html">404 page</a></li>
-										<li><a href="about.html">About</a></li>
-										<li><a href="cart.html">Cart</a></li>
-										<li><a href="checkout.html">Check Out</a></li>
-										<li><a href="contact.html">Contact</a></li>
-										<li><a href="news.html">News</a></li>
-										<li><a href="shop.html">Shop</a></li>
-									</ul>
-								</li> -->
+								<li class="current-list-item"><a href="{% url 'canteen:home' %}">Home</a>
 								
-								<li><a href="contact.html">Contact</a></li>
+								</li>
+
+                                <li><a href="{% url 'canteen:product' %}">Products</a>
+									
+								</li>
+
+
+								<!-- <li><a href="about.html">About</a></li>
+
+								<li><a href="contact.html">Contact</a></li> -->
 
 								
 								<li>
@@ -103,18 +113,24 @@
 
                                         {% if user.is_authenticated %}
 
-                                            <a class="shopping-cart" href="cart.html"><i class="fas fa-shopping-cart"></i></a>
+                                            <a class="shopping-cart" href="{% url 'canteen:view_cart' %}">
+                                                <i class="fas fa-shopping-cart"></i>
+                                                <span id="cart-count">{{ cart_item_count|default:0 }}</span>
 
-                                            <a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
+                                                <span id="cart-count"></span>
 
-                                            <a class="user-account" href="account.html"><i class="fas fa-user"></i></a>
+                                            </a>
 
-                                            <a class="logout" href="logout.html" onclick="confirmLogout()"><i class="fas fa-sign-out-alt"></i></a>
+                                            <!-- <a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a> -->
+
+                                            <a class="user-account" href="{% url 'canteen:user_account' %}"><i class="fas fa-user"></i></a>
+
+                                            <a class="logout" href="{% url 'accounts:logout' %}" onclick="confirmLogout()"><i class="fas fa-sign-out-alt"></i></a>
                                             
 										<!-- Login Icon -->
                                         {% else %}
 
-										    <a class="login" href="login.html"><i class="fas fa-sign-in-alt"></i></a>
+										    <a class="login" href="{% url 'accounts:login' %}"><i class="fas fa-sign-in-alt"></i></a>
 
                                         {% endif %}
 										
@@ -154,26 +170,74 @@
 	</div>
 	<!-- end search area -->
 
-	<!-- hero area -->
-	<div class="hero-area hero-bg">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-9 offset-lg-2 text-center">
-					<div class="hero-text">
-						<div class="hero-text-tablecell">
-							<p class="subtitle">Central, Fresh & Clean Food</p>
-							<h1>Delicious Universal Foods</h1>
-							<div class="hero-btns">
-								<a href="shop.html" class="boxed-btn">Create Account</a>
-								<a href="contact.html" class="bordered-btn">Products</a>
+   
+
+
+    	<!-- home page slider -->
+	<div class="homepage-slider">
+
+
+		<!-- single home slider -->
+		<div class="single-homepage-slider homepage-bg-1">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12 col-lg-7 offset-lg-1 offset-xl-0">
+						<div class="hero-text">
+							<div class="hero-text-tablecell">
+								<p class="subtitle">Central, Fresh & Clean Food</p>
+								<h1>Delicious Seasonal Fruits</h1>
+								<div class="hero-btns">
+									<a href="{% url 'canteen:product' %}" class="boxed-btn">Food Collection</a>
+									<a href="{% url 'canteen:product' %}" class="bordered-btn">Products</a>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+		<!-- single home slider -->
+		<div class="single-homepage-slider homepage-bg-2">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-10 offset-lg-1 text-center">
+						<div class="hero-text">
+							<div class="hero-text-tablecell">
+								<p class="subtitle">Central, Fresh & Clean Food</p>
+								<h1>Delicious Universal Foods</h1>
+								<div class="hero-btns">
+									<a href="{% url 'canteen:product' %}" class="boxed-btn">Visit Shop</a>
+									<a href="{% url 'canteen:product' %}" class="bordered-btn">Products</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- single home slider -->
+		<div class="single-homepage-slider homepage-bg-3">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-10 offset-lg-1 text-right">
+						<div class="hero-text">
+							<div class="hero-text-tablecell">
+								<p class="subtitle">Central, Fresh & Clean Food</p>
+								<h1>Get December Discount</h1>
+								<div class="hero-btns">
+									<a href="{% url 'canteen:product' %}" class="boxed-btn">Visit Shop</a>
+									<a href="{% url 'canteen:product' %}" class="bordered-btn">Products</a>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
 	</div>
-	<!-- end hero area -->
+	<!-- end home page slider -->
 
     {% block content %}
 
@@ -199,15 +263,7 @@
 						</ul>
 					</div>
 				</div>
-				<div class="col-lg-3 col-md-6">
-					<div class="footer-box pages">
-						<h2 class="widget-title">Pages</h2>
-						<ul>
-							<li><a href="services.html">Products</a></li>
-							<li><a href="contact.html">Contact</a></li>
-						</ul>
-					</div>
-				</div>
+				
 			</div>
 		</div>
 	</div>
@@ -218,7 +274,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-6 col-md-12">
-					<p>Copyrights &copy; 2023 - <a href="">Cusl Hossain</a>,  All Rights Reserved.<br>
+					<p>Copyrights &copy; 2023 - <a href="">Cusl</a>,  All Rights Reserved.<br>
 					</p>
 				</div>
 			</div>
@@ -230,7 +286,7 @@
         function confirmLogout() {
             if (confirm("Are you sure you want to log out?")) {
                 // If the user confirms, redirect to the logout URL
-                window.location.href = "{% url 'accounts:logout' %}";
+                window.location.href = "{% url 'canteen:home' %}";
             }
         }
 
@@ -268,6 +324,58 @@
 	<script src="{% static 'assets/js/sticker.js' %}"></script>
 	<!-- main js -->
 	<script src="{% static 'assets/js/main.js' %}"></script>
+
+<!-- 
+    <script>
+
+        document.querySelectorAll('.delete-button').forEach(function (button) {
+            button.addEventListener('click', function () {
+                
+                var itemId = this.getAttribute('data-item-id');
+                
+                
+                var deleteUrl = "{% url 'canteen:delete_cart_item' 0 %}".replace('0', itemId);
+                
+               
+                window.location.href = deleteUrl;
+            });
+        });
+    </script> -->
+
+<script>
+    // Add a click event listener to the delete button
+    document.querySelectorAll('.delete-button').forEach(function (button) {
+        button.addEventListener('click', function () {
+            // Get the item ID from the data attribute
+            var itemId = this.getAttribute('data-item-id');
+            
+            // Attach the item ID to the "Delete" button in the modal for future reference
+            document.getElementById('confirmDelete').setAttribute('data-item-id', itemId);
+        });
+    });
+
+    // Add a click event listener to the confirm delete button in the modal
+    document.getElementById('confirmDelete').addEventListener('click', function () {
+        // Get the item ID from the "Delete" button in the modal
+        var itemId = this.getAttribute('data-item-id');
+        
+        // Build the URL using Django template tags
+        var deleteUrl = "{% url 'canteen:delete_cart_item' 0 %}".replace('0', itemId);
+        
+        // Redirect to the delete URL
+        window.location.href = deleteUrl;
+        
+        // Close the confirmation modal
+        $('#confirmationModal').modal('hide');
+    });
+    
+</script>
+
+
+
+
+
+
 
 </body>
 </html>

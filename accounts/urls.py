@@ -38,11 +38,15 @@ urlpatterns = [
     path('orders/', views.OrderListView, name='view_orders'),
 
     path('manage-employees/', views.register_admin, name='manage-employees'),
-    path('manage-students/', views.user_list, name='manage-students'),
+    path('manage-users/', views.user_list, name='manage-users'),
+
+    path('update_users/<int:user_id>', views.update_users, name='update_users'),
+
+
 
     path('summary_report/', views.summary_report, name='summary_report'),
 
     path('management/report/', views.management_report, name='management_report'),
 
-    path('receipt/', views.view_receipts, name='view_receipts'),
+    path('view_receipts/', views.all_receipts, name='view_receipts'),
 ]

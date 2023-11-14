@@ -7,8 +7,17 @@ from . import views
 app_name = 'canteen'
 
 urlpatterns = [
-    path('', views.HomePage, name='home'),
+    path('home', views.HomePage, name='home'),
+
+    path('about', views.aboutUs, name='about'),
+
+    path('contacts', views.contactUs, name='contacts'),
+
+    path('', views.index_for_unauthenticated, name='index_unauthenticated'),
+
     path('product/', views.Product, name='product'),
+
+    path('products/', views.Products, name='products'),
 
     path('contact/', views.Contact, name='contact'),
 
@@ -21,12 +30,17 @@ urlpatterns = [
 
     # path('', views.dashboardPage, name='admin_dashboard'),
     path('checkout/', views.checkout, name='checkout'),
-    path('payment/', views.payment, name='payment'),
-    path('receipt/', views.receipt, name='receipt'),
+    # path('payment/', views.payment, name='payment'),
+    # path('receipt/', views.receipt, name='receipt'),
 
-    path('receipt_pdf/', views.receipt_pdf, name='receipt_pdf'),
+    # path('receipt_pdf/', views.receipt_pdf, name='receipt_pdf'),
 
-    path('user_account_view/', views.user_account_view, name='user_account_view'),
+    path('user_account/', views.user_account, name='user_account'),
+
+
+    path('generate_receipt/<int:order_id>/', views.generate_receipt, name='generate_receipt'),
+
+    path('order/<int:order_id>/', views.view_order, name='view_order'),
 
 
    

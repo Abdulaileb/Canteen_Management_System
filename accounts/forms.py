@@ -10,18 +10,35 @@ class UsersRegistrationForm(forms.ModelForm):
         model = CustomUser
         fields = ['username', 'password', 'contacts', 'email', 'full_name']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'class': 'form-control'})
+        self.fields['password'].widget.attrs.update({'class': 'form-control'})
+        self.fields['contacts'].widget.attrs.update({'class': 'form-control'})
+        self.fields['email'].widget.attrs.update({'class': 'form-control'})
+        self.fields['full_name'].widget.attrs.update({'class': 'form-control'})
 
     def save(self, commit=True):
-        # Get the user instance from the form
         user = super().save(commit=False)
-
-        # Hash the password using set_password
-        user.set_password(self.cleaned_data["password"])
-
+        user.set_password(self.cleaned_data['password'])  # Hash the password
         if commit:
             user.save()
-
         return user
+    
+class UsersUpdateForm(forms.ModelForm):
+   
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'contacts', 'email', 'full_name']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'class': 'form-control'})
+        self.fields['contacts'].widget.attrs.update({'class': 'form-control'})
+        self.fields['email'].widget.attrs.update({'class': 'form-control'})
+        self.fields['full_name'].widget.attrs.update({'class': 'form-control'})
+
+
 
 class AdminRegistrationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)

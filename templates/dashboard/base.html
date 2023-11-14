@@ -75,7 +75,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item menu-open">
-            <a href="#" class="nav-link">
+            <a href="{% url 'accounts:dashboard' %}" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
@@ -117,7 +117,7 @@
           </li>
 
           <li class="nav-item">
-            <a href="{% url 'accounts:manage-students' %}" class="nav-link">
+            <a href="{% url 'accounts:manage-users' %}" class="nav-link">
               <i class="nav-icon fas fa-chart-pie"></i>
               <p>
                 Customers
@@ -165,7 +165,7 @@
           </li> -->
 
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{% url 'accounts:view_receipts' %}" class="nav-link">
               <i class="nav-icon fas fa-table"></i>
               <p>
                 Receipts
@@ -268,5 +268,9 @@
 <script src="{% static 'manager/dist/js/demo.js' %}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{% static 'manager/dist/js/pages/dashboard.js' %}"></script>
+
+<script>
+
+</script>
 </body>
 </html>

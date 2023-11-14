@@ -1,6 +1,6 @@
 
 from django.contrib.auth import login, authenticate, logout
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UsersRegistrationForm, AdminRegistrationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -12,31 +12,42 @@ from canteen.models import *
 
 def Dashboard(request):
 
-    items = CartItemAdded.objects.all()
+    items = Order.objects.all()
 
     total_user_count = CustomUser.objects.filter(role=CustomUser.USERS).count()
 
-    food_catergory = FoodCategory.objects.count()
+    food_category = FoodCategory.objects.count()
 
     items_available = InventoryItem.objects.count()
 
     food_items = FoodItem.objects.count()
 
-    items_ordered = CartItemAdded.objects.count()
+    items_ordered = Order.objects.count()
 
     total_reports = Receipt.objects.count()
 
     total_inventory = InventoryItem.objects.count()
+    
 
+    orders = Order.objects.all().order_by('-order_date')
+   
+    accumulated_amount = 0  # Initialize the accumulated amount
+
+    for order in orders:
+        total_cost = sum(item.quantity * item.food_item.price for item in order.orderitem_set.all())
+        accumulated_amount += total_cost  # Add to the accumulated amount
+       
 
     context = {'items':items,
                'total_user_count':total_user_count,
-               'food_catergory':food_catergory,
+               'food_category':food_category,
                'items_ordered':items_ordered,
                'food_items':food_items,
                'items_available':items_available,
                'total_reports':total_reports,
-               'total_inventory':total_inventory}
+               'total_inventory':total_inventory,
+               'accumulated_amount':accumulated_amount
+               }
 
     return render(request, 'dashboard/index.html', context)
 
@@ -110,7 +121,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('accounts:login')  # Redirect to the login page after logout
+    return redirect('canteen:index_unauthenticated')  # Redirect to the login page after logout
 
 
 from django.http import FileResponse
@@ -186,8 +197,9 @@ def manage_food_items(request):
 
     return render(request, 'dashboard/manage-food/food-items.html', context)
 
+
 def OrderListView(request):
-    items = CartItemAdded.objects.all()
+    items = Order.objects.all()
     context = {'items':items}
     return render(request, 'dashboard/orders/manage_orders.html', context)
 
@@ -196,9 +208,65 @@ def OrderListView(request):
 def user_list(request):
     users = CustomUser.objects.filter(role=CustomUser.USERS)
 
-    context = {'users':users}
+    if request.method == 'POST':
+        form = UsersRegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            # Add any additional logic you need after creating the user
+            messages.success(request, 'User created successfully', extra_tags='success')
+            return redirect('accounts:manage-students')
+        else:
+            messages.error(request, 'Please enter valid information')
+
+    else:
+        form = UsersRegistrationForm()
+
+
+    context = {'users':users,
+               'form':form,
+               }
     
     return render(request, 'dashboard/users/manage_users.html', context)
+
+# def update_user(request, user_id):
+#     user = CustomUser.objects.get(id=user_id)
+#     if request.method == 'POST':
+#         form = UsersRegistrationForm(request.POST, instance=user)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, 'User updated successfully', extra_tags='success')
+#             return redirect('accounts:manage-users')
+#     else:
+#         form = UsersRegistrationForm(instance=user)
+
+#     context = {'form': form}
+#     return render(request, 'dashboard/users/update_user.html', context)
+
+def update_users(request, user_id):
+
+    # Try to get the user with the specified ID and role 'users'
+    user = get_object_or_404(CustomUser, id=user_id, role=CustomUser.USERS)
+
+    print("Updating user:", user, "with role:", user.role)  # Debug print
+
+    # Check if the user has the 'users' role
+    # if user.role != CustomUser.USERS:
+    #     messages.error(request, "You can only update users with 'users' role.")
+    #     return redirect('accounts:manage-users')
+    
+    if request.method == 'POST':
+        form = UsersUpdateForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'User updated successfully', extra_tags='success')
+            return redirect('accounts:manage-users')
+    else:
+        form = UsersUpdateForm(instance=user)
+
+    context = {'form': form}
+    # Note: This template should only contain the form and necessary form fields
+    return render(request, 'dashboard/users/update_user.html', context)
+
 
 # def admin_list(request):
     
@@ -241,11 +309,31 @@ def management_report(request):
 
 
 
-def view_receipts(request):
-    total_receipts = Receipt.objects.all()
+# def view_receipts(request):
+#     total_receipts = Receipt.objects.all()
 
-    context = {
-        'total_receipts':total_receipts
-    }
+#     context = {
+#         'total_receipts':total_receipts
+#     }
 
-    return render(request, 'dashboard/report/report.html', context)
+#     return render(request, 'dashboard/report/report.html', context)
+
+from datetime import datetime
+
+def all_receipts(request):
+    # Retrieve all orders
+    orders = Order.objects.all().order_by('-order_date')
+    receipts = []
+    accumulated_amount = 0  # Initialize the accumulated amount
+
+    for order in orders:
+        total_cost = sum(item.quantity * item.food_item.price for item in order.orderitem_set.all())
+        accumulated_amount += total_cost  # Add to the accumulated amount
+        receipts.append({
+            'order_id': order.id,
+            'user': order.user.username,
+            'amount': total_cost,
+            'date': order.order_date.strftime('%Y-%m-%d')
+        })
+
+    return render(request, 'dashboard/receipt/receipt.html', {'receipts': receipts, 'accumulated_amount': accumulated_amount })

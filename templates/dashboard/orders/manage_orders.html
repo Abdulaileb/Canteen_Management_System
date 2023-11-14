@@ -58,8 +58,13 @@
                         <tr>
                             <td>{{forloop.counter}}</td>
                             <td>{{ item.user.username }}</td>
-                            <td>{{ item.item.name }}</td>
-                            <td>{{ item.added_at }}</td>
+                            <td>
+                                {% for food_item in item.items.all %}
+                                    {{ food_item.name }}
+                                    {% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>{{ item.order_date }}</td>
                         </tr>                
                         {% empty %}
                         <tr>
