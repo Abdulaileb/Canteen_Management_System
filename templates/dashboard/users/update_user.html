@@ -1,0 +1,19 @@
+      
+    {% if form.errors %}
+        <ul class="errorlist">
+            {% for field_errors in form.errors.values %}
+            {% for error in field_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        
+        {{ form }}
+
+        <button type="submit" class="btn btn-primary mt-3" >Update</button>
+
+    </form>

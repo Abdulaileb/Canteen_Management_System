@@ -1,0 +1,8 @@
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+
+  <div class="social-auth-links text-center mb-3">
+      <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+  </div>
+</form>

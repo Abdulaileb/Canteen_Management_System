@@ -1,0 +1,136 @@
+{% extends "dashboard/base.html" %}
+
+{% load static %}
+{% block content %}
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+
+          <blockquote class="blockquote text-center mt-5">
+            <h1 class="mb-3">Products Category.</h1>
+            <footer class="blockquote-footer">Central Canteen <cite title="Source Title">Mile  91</cite></footer>
+        </blockquote>
+
+          
+
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+
+            <div class="modal-body">                        
+                {% if messages %}
+                    <div class="alert alert-success messages">
+                        {% for message in messages %}
+                            <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <button type="button" class="btn btn-primary btn-sm mt-3 ms-auto" data-bs-toggle="modal" data-bs-target="#foodModal">
+                    Add Food Category
+                </button>
+      
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="example2" class="table table-bordered table-hover">
+
+                  <thead>
+
+                    <tr>
+                        <th>No</th>
+                        <th>Name</th>
+                    </tr>
+
+                  </thead>
+
+                  <tbody>
+
+                    {% for foodCategories in foodCategory %}
+
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ foodCategories.name}}</td>
+                            
+                        </tr>
+
+                   {% endfor %}
+
+                  </tbody>
+
+                  <tfoot>
+                  <tr>
+                    <th>No</th>
+                    <th>Name</th>
+                    
+                  </tr>
+                  </tfoot>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+            <div class="modal fade" id="foodModal" tabindex="-1" aria-labelledby="registrationModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="col-sm-12">
+                    <div class="bg-light rounded h-100 p-4">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="registrationModalLabel">Register Food Items</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        
+                            <div class="modal-body">
+
+                                {% if form.errors %}
+                                    <ul class="errorlist">
+                                        {% for field_errors in form.errors.values %}
+                                        {% for error in field_errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                
+                                {{ form }}
+
+                                <button type="submit" class="btn btn-primary mt-3" >Add</button>
+        
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+
+
+{% endblock content %}
+

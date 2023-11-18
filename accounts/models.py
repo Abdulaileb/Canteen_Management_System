@@ -122,19 +122,19 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(username, email, password, **extra_fields)
 
 class CustomUser(AbstractUser):
-    STUDENT = 'student'
+    USERS = 'users'
     ADMIN = 'admin'
+    MANAGER = 'manager'
 
     ROLE_CHOICES = [
-        (STUDENT, _('Student')),
+        (USERS, _('Users')),
         (ADMIN, _('Admin')),
+        (MANAGER, _('Manager')),
     ]
 
     email = models.EmailField(unique=True)
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default=STUDENT)
-    student_ID = models.CharField(max_length=10, unique=True, blank=True, null=True)
-    department = models.CharField(max_length=50, blank=True, null=True)
-    levels = models.CharField(max_length=10, blank=True, null=True)
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default=USERS)
+    contacts = models.CharField(max_length=10, blank=True, null=True)
     is_staff = models.BooleanField(default=False)  # Admin users are staff
     full_name = models.CharField(max_length=100)
 
@@ -149,12 +149,16 @@ class CustomUser(AbstractUser):
         return self.username
 
     @property
-    def is_student(self):
-        return self.role == self.STUDENT
+    def is_users(self):
+        return self.role == self.USERS
 
     @property
     def is_admin(self):
         return self.role == self.ADMIN
+    
+    @property
+    def is_manager(self):
+        return self.role == self.MANAGER
 
     def save(self, *args, **kwargs):
         if self.is_admin:

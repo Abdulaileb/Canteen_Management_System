@@ -1,84 +1,115 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Canteen Management System </title>
 
-    <title>Log in | CANTEEN SYSTEM</title>
-
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="/static/vendor/fontawesome-free/css/all.min.css">
-
-    <!-- Bootstrap and adminLTE -->
-    <link rel="stylesheet" href="/static/vendor/adminlte/css/adminlte.min.css">
-
-    <!-- Bootswatch theme -->
-    
-        <link rel="stylesheet" href="/static/vendor/bootswatch/minty/bootstrap.min.css" id="jazzmin-theme">
-    
-        <link rel="stylesheet" href="/static/vendor/bootswatch/darkly/bootstrap.min.css" id="jazzmin-dark-mode-theme" media="(prefers-color-scheme: dark)">
-
-    <!-- Custom fixes for django -->
-    <link rel="stylesheet" href="/static/jazzmin/css/main.css">
-
-    <!-- favicons -->
-    <link rel="shortcut icon" href="/static/logoIco.ico" type="image/png">
-    <link rel="icon" href="/static/logoIco.ico" sizes="32x32" type="image/png">
-
-    
-    <!-- Google Font: Source Sans Pro -->
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{% static 'manager/plugins/fontawesome-free/css/all.min.css' %}">
+  <!-- icheck bootstrap -->
+  <link rel="stylesheet" href="{% static 'manager/plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{% static 'manager/dist/css/adminlte.min.css' %}">
 </head>
-<body class="jazzmin-login-page" style="min-height: 366.898px;">
-    <div class="login-box">
-        <div class="login-logo">
-            <h1>
-                <picture>
-                    <source srcset="/static/used_logo.ico" media="(prefers-color-scheme: dark)">
-                    <img src="/static/used_logo.ico" alt="Canteen Management System">
-                </picture>
-            </h1>
-        </div>
-    
-        <div class="card">
-            <div class="card-body">
-                <form method="post">
-                    {% csrf_token %}
-                    
-                    <div class="input-group mb-3">
-                        <input type="text" name="username" class="form-control" placeholder="Email" required="">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-user"></span>
+
+<body class="hold-transition login-page">
+<div class="login-box">
+  <div class="login-logo">
+    <!-- <a href="{% static 'log.ico' %}"><b>Admin</b>LTE</a> -->
+
+    <img src="{% static 'log.ico' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="height: 120px;">
+  </div>
+  <!-- /.login-logo -->
+  <div class="card">
+    <div class="modal-body">                        
+        {% if messages %}
+            <div class="alert alert-danger messages">
+                {% for message in messages %}
+                    <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="card-body login-card-body">
+      <p class="login-box-msg">Sign in to experience a great moment </p>
+
+            <form method="post">
+
+               {% csrf_token %}
+
+                <div class="input-group mb-3">
+                <input type="text" id="inputEmail" class="form-control" placeholder="Email" name="username" required=""/>
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                    <span class="fas fa-envelope"></span>
+                    </div>
+                </div>
+                </div>
+
+                <div class="input-group mb-3">
+                <input type="password" class="form-control" id="inputPassword" name="password" placeholder="Password" required=""/>
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                    <span class="fas fa-lock"></span>
+                    </div>
+                </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-8">
+                            <div class="icheck-primary">
+                            <input type="checkbox" id="remember">
+                                <label for="remember">
+                                    Remember Me
+                                </label>
                             </div>
-                        </div>
                     </div>
-                    
-                    <div class="input-group mb-3">
-                        <input type="password" name="password" class="form-control" placeholder="Password" required="">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-primary btn-block">
-                                Log in
-                            </button>
-                        </div>
-                    </div>
-                </form>
+                </div>
+            
+
+                <div class="social-auth-links text-center mb-3">  
+                    <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                </div>
+         </form>
+
+         <div class="d-flex justify-content-between align-items-center">
+            <p class="mb-0">
+                <a href="{% url 'accounts:register' %}" class="text-center">Register as a new customer</a>
+            </p>
+            <div>
+                <a href="{% url 'canteen:index_unauthenticated' %}">
+                     <i class="fa fa-home" aria-hidden="true"></i>
+                </a>
             </div>
         </div>
-        <!-- jQuery -->
-        <script src="/static/admin/js/vendor/jquery/jquery.js"></script>
-        <!-- Bootstrap 4 -->
-        <script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
-        <!-- AdminLTE App -->
-        <script src="/static/vendor/adminlte/js/adminlte.min.js"></script>
+        
+
+      <!-- <p class="mb-0">
+        <a href="{% url 'accounts:register' %}" class="text-center">Register as a new customer</a>
+      </p>
+      <div>
+       
+            <a href="#">Home
+                <i class="fa fa-home" aria-hidden="true"></i>
+            </a>
+        
+      </div> -->
+    </div>
+  </div>
+</div>
+
+
+<!-- jQuery -->
+<script src="{% static 'manager/plugins/jquery/jquery.min.js' %}"></script>
+<!-- Bootstrap 4 -->
+<script src="{% static 'manager/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- AdminLTE App -->
+<script src="{% static 'manager/dist/js/adminlte.min.js' %}"></script>
 </body>
 </html>

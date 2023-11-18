@@ -77,13 +77,12 @@ from .models import CustomUser
 
 
 class CustomUserAdmin(UserAdmin):
-    list_display = ('username', 'email', 'role', 'student_ID', 'department', 'levels', 'full_name', 'is_staff')
+    list_display = ('username', 'email', 'role', 'contacts', 'full_name', 'is_staff')
     list_filter = ('role', 'is_staff')
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         ('Personal info', {'fields': ('email', 'full_name')}),
         ('Role', {'fields': ('role',)}),
-        ('Student Info', {'fields': ('student_ID', 'department', 'levels')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
@@ -93,7 +92,7 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('username', 'email', 'password1', 'password2', 'role', 'full_name', 'is_staff'),
         }),
     )
-    search_fields = ('username', 'email', 'student_ID', 'department', 'email')
+    search_fields = ('username', 'email', 'contacts', 'email')
     ordering = ('username',)
 
 # Register the CustomUser model with the CustomUserAdmin class

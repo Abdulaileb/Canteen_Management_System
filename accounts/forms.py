@@ -1,86 +1,43 @@
-# from django import forms
-# # from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-
-# from django.contrib.auth import get_user_model
-
-
-# # class CustomAdminCreationForm(UserCreationForm):
-# #     class Meta(UserCreationForm.Meta):
-# #         model = CustomUser
-# #         fields = ['email', 'username', 'Full_Name', 'password1', 'password2']
-
-# # class CustomAdminChangeForm(UserChangeForm):
-# #     class Meta:
-# #         model = CustomUser
-# #         fields = UserChangeForm.Meta.fields
-
-# # class CustomUserCreationForm(UserCreationForm):
-# #     class Meta:
-# #         model = get_user_model()
-# #         fields = ['username', 'student_ID', 'department', 'levels', 'student_email', 'password1', 'password2']
-
-# # class CustomUserChangeForm(UserChangeForm):
-# #     class Meta:
-# #         model = get_user_model()
-# #         fields = UserChangeForm.Meta.fields
-
-# from django import forms
-# from .models import AdminUser, StudentUser
-# from django.contrib.auth.forms import AuthenticationForm
-
-# class AdminUserRegistrationForm(forms.ModelForm):
-#     class Meta:
-#         model = AdminUser
-#         fields = ['username', 'email', 'full_name', 'password']
-
-# class StudentUserRegistrationForm(forms.ModelForm):
-#     class Meta:
-#         model = StudentUser
-#         fields = ['username', 'student_ID', 'department', 'levels', 'student_email', 'password']
-
-# class CustomLoginForm(AuthenticationForm):
-#     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Email address'}))
-#     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}))
-
-
 from django import forms
 from .models import CustomUser
 
-class StudentRegistrationForm(forms.ModelForm):
+from canteen.models import *
+
+class UsersRegistrationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'password', 'student_ID', 'department', 'levels', 'email', 'full_name']
+        fields = ['username', 'password', 'contacts', 'email', 'full_name']
 
-    email = forms.EmailField(
-        error_messages={
-            'invalid': 'Invalid email. Enter your student email ending with @cusl.com.',
-        }
-    )
-
-    def clean_email(self):
-        email = self.cleaned_data['email']
-
-        # Check if the email ends with "cusl.com"
-        if not email.endswith('@cusl.com'):
-            raise forms.ValidationError("Email must end with @cusl.com")
-
-        return email
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'class': 'form-control'})
+        self.fields['password'].widget.attrs.update({'class': 'form-control'})
+        self.fields['contacts'].widget.attrs.update({'class': 'form-control'})
+        self.fields['email'].widget.attrs.update({'class': 'form-control'})
+        self.fields['full_name'].widget.attrs.update({'class': 'form-control'})
 
     def save(self, commit=True):
-        # Get the user instance from the form
         user = super().save(commit=False)
-
-        # Hash the password using set_password
-        user.set_password(self.cleaned_data["password"])
-
+        user.set_password(self.cleaned_data['password'])  # Hash the password
         if commit:
             user.save()
-
         return user
+    
+class UsersUpdateForm(forms.ModelForm):
+   
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'contacts', 'email', 'full_name']
 
-        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'class': 'form-control'})
+        self.fields['contacts'].widget.attrs.update({'class': 'form-control'})
+        self.fields['email'].widget.attrs.update({'class': 'form-control'})
+        self.fields['full_name'].widget.attrs.update({'class': 'form-control'})
+
 
 
 class AdminRegistrationForm(forms.ModelForm):
@@ -89,3 +46,59 @@ class AdminRegistrationForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = ['username', 'password', 'email', 'full_name']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'class': 'form-control'})
+        self.fields['password'].widget.attrs.update({'class': 'form-control'})
+        self.fields['email'].widget.attrs.update({'class': 'form-control'})
+        self.fields['full_name'].widget.attrs.update({'class': 'form-control'})
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password'])  # Hash the password
+        if commit:
+            user.save()
+        return user
+
+
+
+
+class FoodCategoryForm(forms.ModelForm):
+    class Meta:
+        model = FoodCategory
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs.update({'class': 'form-control'})
+
+
+class InventoryForm(forms.ModelForm):
+    class Meta:
+        model = InventoryItem
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['location'].widget.attrs.update({'class': 'form-control'})
+        self.fields['type'].widget.attrs.update({'class': 'form-control'})
+        self.fields['date'].widget.attrs.update({'class': 'form-control'})
+        self.fields['quantity'].widget.attrs.update({'class': 'form-control'})
+       
+
+
+class FoodItemsForm(forms.ModelForm):
+    class Meta:
+        model = FoodItem
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['image'].widget.attrs.update({'class': 'form-control'})
+        self.fields['category'].widget.attrs.update({'class': 'form-control'})
+        self.fields['price'].widget.attrs.update({'class': 'form-control'})
+        self.fields['description'].widget.attrs.update({'class': 'form-control'})
+

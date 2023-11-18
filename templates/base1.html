@@ -1,0 +1,344 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Canteen Management System</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="{% static 'again/favicon.ico' %}" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Lora:wght@600;700&display=swap" rel="stylesheet"> 
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link type="text/css" href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> -->
+
+
+    <style>
+        @keyframes slideInLeft {
+          0% {
+            transform: translateX(-100%);
+          }
+          100% {
+            transform: translateX(0);
+          }
+        }
+        header {
+          animation: 1s ease-out 0s 1 slideInLeft;
+      
+          padding: 10px;
+        }
+        body {
+          margin: 0;
+          font-family: "Segoe UI", Arial, Helvetica, Sans Serif;
+        }
+        
+      </style>
+</head>
+
+<body>
+    <!-- Spinner Start -->
+    <!-- <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" role="status"></div>
+    </div> -->
+    <!-- Spinner End -->
+
+
+    <!-- Navbar Start -->
+    <div class="container-fluid fixed-top px-0 wow fadeIn" data-wow-delay="0.1s">
+        <div class="top-bar row gx-0 align-items-center d-none d-lg-flex">
+
+            <div class="col-lg-6 px-5 text-start">
+
+                {% if user.is_authenticated %}
+                <h4><i class="fa-solid fa-user"></i>  Welcome, {{ user.username }}</h4>
+                {% else %}
+                    <header>
+                        <div class="h3 fw-bold text-center mt-2">Welcome, Please sign in   </div>
+                  </header>  
+                {% endif %}
+        
+            </div>
+
+
+            <div class="col-lg-6 px-5 text-end">
+                {% if user.is_authenticated %}
+                    <a class="text-body ms-3" href="#" onclick="confirmLogout()"><i class="fa-sharp fa-solid fa-power-off"></i></a>
+                {% else %}
+                    <a class="text-body ms-3" href="{% url 'accounts:login' %}"><i class="fa-solid fa-arrow-right-to-bracket"></i></a>
+                {% endif %}
+            </div>
+
+        </div>
+
+           <!-- Modal Structure -->
+                <div class="modal fade" id="messagesModal" tabindex="-1" role="dialog" aria-labelledby="messagesModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="messagesModalLabel">Message</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">                        
+                        {% if messages %}
+                            <div class="alert alert-success messages">
+                            {% for message in messages %}
+                                <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
+                            {% endfor %}
+                            </div>
+                        {% endif %}
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                
+                <!-- JavaScript to trigger the modal -->
+                <script>
+                    $(document).ready(function(){
+                    // Check if there are messages
+                    if ($('.messages').length > 0) {
+                        // Show the modal
+                        $('#messagesModal').modal('show');
+                    }
+                    });
+                </script>
+  
+
+        <nav class="navbar navbar-expand-lg navbar-light py-lg-0 px-lg-5 wow fadeIn" data-wow-delay="0.1s">
+            <a href="index.html" class="navbar-brand ms-4 ms-lg-0">
+                <!-- <img src="{% static 'central.png' %}" alt="Image" width="50" height="50"> -->
+           <h1 class="fw-bold text-primary m-0">
+             <span style="color: skyblue;">Central</span>
+             <span class="text-secondary">Canteen</span>
+             <span  style="color: rgb(84, 84, 45);"></span>
+             <span class="text-secondary">Sys</span>tem</h1>
+
+            </a>
+            <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav ms-auto p-4 p-lg-0">
+                    <a href="{% url 'canteen:home' %}" class="nav-item nav-link active">Home</a>
+                    
+                    <a href="{% url 'canteen:product' %}" class="nav-item nav-link">Products</a>
+                   
+                    <a href="{% url 'canteen:contact' %}" class="nav-item nav-link">Contact Us</a>
+                </div>
+
+                {% if user.is_authenticated %}
+                    <div class="d-none d-lg-flex ms-2">
+                       
+
+                        <a class="btn-sm-square bg-white rounded-circle ms-3" data-toggle="modal" data-target="#accountModal">
+                            <small class="fa  fa-user text-body"></small>
+                        </a>
+
+                        
+                        <a class="btn-sm-square bg-white rounded-circle ms-3" href="{% url 'canteen:view_cart' %}">
+                            <small class="fa fa-shopping-bag text-body"></small>
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="d-none d-lg-flex ms-2">
+                       
+                    </div>
+                {% endif %}
+            </div>
+
+        </nav>
+    </div>
+    <!-- Navbar End -->
+
+
+        <!-- Carousel Start -->
+        <div class="container-fluid p-0 mb-5 wow fadeIn" data-wow-delay="0.1s">
+            <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                       
+
+                        <img class="w-100" src="../static/carousel-12.jpg" alt="Image">
+                        <div class="carousel-caption">
+                            <div class="container">
+                                <div class="row justify-content-start">
+                                    <div class="col-lg-7">
+                                        <h1 class="display-2 mb-5 animated slideInDown">Canteen Food Is Good For Health</h1>
+                                        <a href="{% url 'canteen:product' %}" class="btn btn-primary rounded-pill py-sm-3 px-sm-5">Slides <</a>
+                                        <a href="{% url 'canteen:product' %}" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3">Slides > </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img class="w-100" src="../static/again/carousel-2.jpg" alt="Image">
+                        <div class="carousel-caption">
+                            <div class="container">
+                                <div class="row justify-content-start">
+                                    <div class="col-lg-7">
+                                        <h1 class="display-2 mb-5 animated slideInDown">Canteen Food Is Always Healthy</h1>
+                                        <a href="{% url 'canteen:product' %}" class="btn btn-primary rounded-pill py-sm-3 px-sm-5">Slides <</a>
+                                        <a href="" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3">Slides ></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#header-carousel"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#header-carousel"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+
+
+  
+
+
+    {% block content %}
+
+    {% endblock content %}
+
+
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-lg-3 col-md-6">
+                    <h1 class="fw-bold text-primary mb-4"> CUSL Canteen Management <span class="text-secondary"> S</span>ystem</h1>
+                    <p>This is Central University Canteen System, and in here we provide the best food for our students</p>
+                   
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-light mb-4">Address</h4>
+                    <p><i class="fa fa-map-marker-alt me-3"></i>1 Silicon Hills, Mile 91, Tonkollili District</p>
+                    <p><i class="fa fa-phone-alt me-3"></i>+232 77 294 295</p>
+                    <p><i class="fa fa-envelope me-3"></i>info@cusl.com</p>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-light mb-4">Quick Links</h4>
+                    <a class="btn btn-link" href="{% url 'canteen:contact' %}">Contact Us</a>
+                    <a class="btn btn-link" href="">Terms & Condition</a>
+                    <a class="btn btn-link" href="">Support</a>
+                </div>
+               
+            </div>
+        </div>
+        <div class="container-fluid copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        &copy; <a href="#">Central University Canteen Management System</a>, All Right Reserved.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+    <script>
+        function toggleDescription(link) {
+            const card = link.closest('.product-item');
+            const descriptionSection = card.querySelector('.description-section');
+            const descriptionContent = card.querySelector('.description-content');
+    
+            // Check if the description is already visible
+            if (descriptionSection.style.display === 'none' || descriptionSection.style.display === '') {
+                // Get the description text and populate the content
+                const descriptionText = "{{ food_item.description }}"; // Replace with the actual Django template tag
+                descriptionContent.textContent = descriptionText;
+    
+                // Show the description section
+                descriptionSection.style.display = 'block';
+            } else {
+                // Hide the description section
+                descriptionSection.style.display = 'none';
+            }
+        }
+    </script>
+
+    <script>
+        function confirmLogout() {
+            if (confirm("Are you sure you want to log out?")) {
+                // If the user confirms, redirect to the logout URL
+                window.location.href = "{% url 'accounts:logout' %}";
+            }
+        }
+
+        $(document).ready(function(){
+        // When the user clicks on <span> (x), close the modal
+        $('.close').on('click', function() {
+            $('#myModal').fadeOut('slow', function() {
+            $(this).css('display', 'none');
+            });
+        });
+
+        // To simulate a successful payment and show the modal
+        $('#successMessage').text('Payment successful!').parent().parent().parent().fadeIn('slow').delay(5000).fadeOut('slow');
+        });
+
+    </script>
+
+    
+
+    
+    <!-- Include Bootstrap JS and jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script src="https://kit.fontawesome.com/b9c3836094.js" crossorigin="anonymous"></script>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'lib/wow/wow.min.js' %}"></script>
+    <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
+    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+
+    <!-- Template Javascript -->
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+
+</html>

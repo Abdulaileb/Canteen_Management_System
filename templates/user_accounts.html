@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <div class="row mb-2">
+        <blockquote class="blockquote text-center mt-5">
+            <h1 class="mb-3">CUSTOMERS.</h1>
+            <footer class="blockquote-footer">Central Canteen <cite title="Source Title">Mile  91</cite></footer>
+        </blockquote>
+    </div>
+
+{% endblock content %}
+
+<h2>User Account</h2>
+<p>Welcome, {{ request.user.username }}</p>
+
+<table>
+    <tr>
+        <th>Order #</th>
+        <th>Ordered Items</th>
+        <th>Date</th>
+        <th>Total Cost</th>
+        <th>Download</th>
+    </tr>
+    {% for order in orders %}
+    <tr>
+        <td>{{ order.id }}</td>
+        <td>
+            {% for item in order.orderitem_set.all %}
+                {{ item.food_item.name }} ({{ item.quantity }}),
+            {% endfor %}
+        </td>
+        <td>{{ order.order_date|date:"Y-m-d" }}</td>
+        <td>{{ order.get_total_cost }}</td> <!-- Assuming you have a method to calculate total cost -->
+        <td>
+            <a href="{% url 'canteen:generate_receipt' order.id %}">Download Receipt</a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="5">No orders found.</td>
+    </tr>
+    {% endfor %}
+</table>

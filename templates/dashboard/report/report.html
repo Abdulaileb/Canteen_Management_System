@@ -1,0 +1,83 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}REPORT {% endblock title %}
+
+{% load static %}
+
+{% block body %}
+<main>
+    <div class="container-fluid px-4">
+
+        <div class="card mt-5">
+
+            <blockquote class="blockquote text-center mt-5">
+                <p class="mb-3"> Reports.</p>
+                <footer class="blockquote-footer">Central Canteen <cite title="Source Title">Mile  91</cite></footer>
+            </blockquote>
+
+            <!-- <button ></button>  -->
+
+            <!-- <button type="button" class="btn btn-dark" onclick="printReport()">Print Report</button> -->
+            <div class="d-grid gap-2 d-md-block">
+                <button class="btn btn-primary" type="button" onclick="printReport()">Print Report</button>
+               
+            </div> <br />
+
+
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                Receipt
+            </div>
+
+                        
+            <div class="card-body">
+                <table id="datatablesSimple">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>User</th>
+                            <th>Order Date</th>
+                            <th>Food Ordered</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>No</th>
+                            <th>User</th>
+                            <th>Order Date</th>
+                            <th>Food Ordered</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        {% for order in orders %}
+
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ order.user.username }}</td>
+                                <td>{{ order.order_date }}</td>
+                                <td>
+                                    <ul>
+                                        {% for order_item in order.orderitem_set.all %}
+                                            <li>{{ order_item.food_item.name }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+                                <td>
+
+                                    <ul>
+                                        {% for order_item in order.orderitem_set.all %}
+                                            <li>{{ order_item.quantity }}</li>
+                                        {% endfor %}
+                                    </ul>
+
+                                </td>
+                            </tr>
+                            
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+</main>
+{% endblock body %}
