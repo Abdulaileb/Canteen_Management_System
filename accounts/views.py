@@ -27,7 +27,7 @@ def Dashboard(request):
     total_reports = Receipt.objects.count()
 
     total_inventory = InventoryItem.objects.count()
-    
+
 
     orders = Order.objects.all().order_by('-order_date')
    
@@ -53,17 +53,26 @@ def Dashboard(request):
 
 
 def register_user(request):
+
     if request.method == 'POST':
+
         form = UsersRegistrationForm(request.POST)
+
         if form.is_valid():
+
+            print (form)
+
             user = form.save()
-            login(request, user)  # Automatically log in the student after registration
+
+            
+
+            login(request, user)  # Automatically log in the user after registration
             #messages.success(request, 'You have successfully created an account.')
 
             messages.success(request, 'Success message', extra_tags='success')
             return redirect('canteen:home')  # Redirect to the student dashboard or desired page
         else:
-            messages.error(request, 'Please enter your student email address')
+            messages.error(request, 'OOps! An error ocurred, Please check your form and try again')
     else:
         form = UsersRegistrationForm()
         
@@ -154,6 +163,7 @@ def manage_food_category(request):
 
     return render(request, 'dashboard/manage-food/food-category.html', context)
 
+
 def manage_inventory_category(request):
 
     inventory = InventoryItem.objects.all()
@@ -214,7 +224,7 @@ def user_list(request):
             form.save()
             # Add any additional logic you need after creating the user
             messages.success(request, 'User created successfully', extra_tags='success')
-            return redirect('accounts:manage-students')
+            return redirect('accounts:manage-users')
         else:
             messages.error(request, 'Please enter valid information')
 

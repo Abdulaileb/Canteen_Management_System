@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="{% static 'manager/plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{% static 'manager/dist/css/adminlte.min.css' %}">
-  
+
 </head>
 
 <body class="hold-transition login-page">
@@ -31,22 +31,84 @@
     <div class="card-body login-card-body">
       <p class="login-box-msg">Register to experience a great moment </p>
 
+        <div class="modal-body">                        
+            {% if messages %}
+                <div class="alert alert-errors messages">
+                    {% for message in messages %}
+                        <p {% if message.tags %} class="{{ message.tags }}"{% endif %}><strong>{{ message }}</strong></p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
 
       <form method="post">
 
         {% csrf_token %}
 
         <div class="input-group mb-3">
+            <input type="text" name="username" class="form-control" placeholder="Username" required="">
+            {% for error in form.username.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+            <div class="input-group-append">
+                ...
+            </div>
+        </div>
+
+        <div class="input-group mb-3">
+            <input type="text" name="full_name" class="form-control" placeholder="Full_Name" required="" >
+            {% for error in form.full_name.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+            <div class="input-group-append">
+                ...
+            </div>
+        </div>
+
+        <div class="input-group mb-3">
+            <input type="email" name="email" class="form-control" placeholder="Email" required="" >
+            {% for error in form.email.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+            <div class="input-group-append">
+                ...
+            </div>
+        </div>
+
+        <div class="input-group mb-3">
+            <input type="text" name="contacts" class="form-control" placeholder="contacts" required="" >
+            {% for error in form.contacts.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+            <div class="input-group-append">
+                ...
+            </div>
+        </div>
+
+        <div class="input-group mb-3">
+            <input type="password" name="password" class="form-control" placeholder="password" required="">
+            {% for error in form.password.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+            <div class="input-group-append">
+                ...
+            </div>
+        </div>
+        
+
+        <!-- <div class="input-group mb-3">
             
           <input type="text" name="username" class="form-control" placeholder="Username" required="">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
+              
             </div>
-          </div>
-        </div>
+           
+        </div> -->
 
-        <div class="input-group mb-3">
+        <!-- <div class="input-group mb-3">
             <input type="text" name="full_name" class="form-control" placeholder="Full Name" required="">
           <div class="input-group-append">
             <div class="input-group-text">
@@ -80,7 +142,7 @@
               <span class="fas fa-lock"></span>
             </div>
           </div>
-        </div>
+        </div> -->
 
 
         <div class="social-auth-links text-center mb-3">

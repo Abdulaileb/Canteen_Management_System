@@ -31,6 +31,3 @@ import matplotlib.pyplot as plt
 
 admin.site.register(FoodCategory)
 admin.site.register(FoodItem)
-
-admin.site.register(Payment)
-admin.site.register(Receipt)
