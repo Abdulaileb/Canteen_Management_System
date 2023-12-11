@@ -121,3 +121,14 @@ class CartItem(models.Model):
     def __str__(self):
         return f"{self.food_item.name} x {self.quantity}"
     
+
+class ContactSubmission(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+    subject = models.CharField(max_length=100)
+    message = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name

@@ -843,3 +843,22 @@ def view_order(request, order_id):
     order = Order.objects.get(id=order_id, user=request.user)
     order_items = OrderItem.objects.filter(order=order)
     return render(request, 'view_order.html', {'order': order, 'order_items': order_items})
+
+def contact_us(request):
+    contactForm = ContactForm()
+    if request.method == 'POST':
+        print ('Done POSTED:', request.POST)
+        contactForm = ContactForm(request.POST)
+        if contactForm.is_valid():
+         contactForm.save()
+
+         print('Success')
+
+        messages.success(request, 'Email sent successfully')
+    else:
+        form = ContactForm()
+    
+    return render(request, 'public/contact_success.html', {'contactForm': contactForm})
+
+def successEmail(request):
+    return render(request, 'public/contact_success.html')

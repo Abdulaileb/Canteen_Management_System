@@ -2,6 +2,23 @@
 
 {% load static %}
 
+{% block pro %}
+	<!-- hero area -->
+		<div class="breadcrumb-section breadcrumb-bg">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-8 offset-lg-2 text-center">
+						<div class="breadcrumb-text">
+							<p>Delicious Meals and Quality Service</p>
+							<h1>Contact Us</h1>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	<!-- end hero area -->
+{% endblock %}
+
 {% block public_content %}
 
 	<!-- contact form -->
@@ -15,18 +32,29 @@
 					</div>
 				 	<div id="form_status"></div>
 					<div class="contact-form">
-						<form type="POST" id="fruitkha-contact" onSubmit="return valid_datas( this );">
-							<p>
-								<input type="text" placeholder="Name" name="name" id="name">
-								<input type="email" placeholder="Email" name="email" id="email">
+
+						<form method="post">
+
+							{% csrf_token %} 
+
+							{{form.as_p}}
+							<!-- <p>
+								<input type="text" placeholder="Name" name="name">
+								<input type="email" placeholder="Email" name="email">
 							</p>
 							<p>
-								<input type="tel" placeholder="Phone" name="phone" id="phone">
-								<input type="text" placeholder="Subject" name="subject" id="subject">
+								<input type="tel" placeholder="Phone" name="phone">
+								<input type="text" placeholder="Subject" name="subject">
 							</p>
-							<p><textarea name="message" id="message" cols="30" rows="10" placeholder="Message"></textarea></p>
-							<input type="hidden" name="token" value="FsWga4&@f6aw" />
-							<p><input type="submit" value="Submit"></p>
+							<p><textarea name="message" cols="30" rows="10" placeholder="Message"></textarea></p> -->
+							<!-- <input type="hidden" name="token" value="FsWga4&@f6aw" /> -->
+
+							 <!-- Include a CSRF token for form security -->
+
+							<!-- {{ form.as_p }}  Display form fields as paragraphs (you can customize this) -->
+							<button type="submit" class="btn btn-primary">Submit</button>
+
+							<!-- <p><input type="submit" value="Submit"></p> -->
 						</form>
 					</div>
 				</div>

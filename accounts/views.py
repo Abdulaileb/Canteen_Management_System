@@ -9,7 +9,14 @@ from accounts .forms import *
 
 from canteen.models import * 
 
+from django.contrib.auth.decorators import login_required, user_passes_test
 
+from .utils import is_manager
+
+
+
+@login_required
+@user_passes_test(is_manager)
 def Dashboard(request):
 
     items = Order.objects.all()
