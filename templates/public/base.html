@@ -109,27 +109,30 @@
 	</div>
 	<!-- end search area -->
 
-	<!-- hero area -->
-	<div class="hero-area hero-bg">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-9 offset-lg-2 text-center">
-					<div class="hero-text">
-						<div class="hero-text-tablecell">
-							<p class="subtitle">Central, Fresh & Clean Food</p>
-							<h1>Delicious Seasonal Fruits</h1>
-							<div class="hero-btns">
-								<a href="{% url 'canteen:products' %}" class="boxed-btn">Visit Shop</a>
-								<a href="{% url 'canteen:products' %}" class="bordered-btn">Products</a>
+	{% block pro %}
+		<!-- hero area -->
+			<div class="hero-area hero-bg">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-9 offset-lg-2 text-center">
+							<div class="hero-text">
+								<div class="hero-text-tablecell">
+									<p class="subtitle">Central, Fresh & Clean Food</p>
+									<h1>Delicious Seasonal Fruits</h1>
+									<div class="hero-btns">
+										<!-- <a href="{% url 'canteen:products' %}" class="boxed-btn">Visit Shop</a> -->
+										<a href="{% url 'canteen:products' %}" class="bordered-btn">Products</a>
 
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	</div>
-	<!-- end hero area -->
+		<!-- end hero area -->
+	{% endblock %}
+
 
 
     {% block public_content %}
@@ -205,6 +208,26 @@
 
 </script>
 
+<!-- To make the navbar active -->
+
+
+<script>
+	$(document).ready(function() {
+	  // Get all the navigation links
+	  var navLinks = $(".main-menu ul li");
+	
+	  // Add a click event listener to each navigation link
+	  navLinks.click(function() {
+		// Remove the "current-list-item" class from all links
+		navLinks.removeClass("current-list-item");
+	
+		// Add the "current-list-item" class to the clicked link
+		$(this).addClass("current-list-item");
+	  });
+	});
+</script>
+	
+
 <!-- jquery -->
 <script src="{% static 'assets/js/jquery-1.11.3.min.js' %}"></script>
 <!-- bootstrap -->
@@ -226,5 +249,12 @@
 <!-- main js -->
 <script src="{% static 'assets/js/main.js' %}"></script>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
 </body>
 </html>
+
+
+
+
