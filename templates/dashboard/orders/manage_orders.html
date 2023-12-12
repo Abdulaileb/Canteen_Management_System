@@ -42,45 +42,36 @@
                 <div class="card-body">
                     <table id="example2" class="table table-bordered table-hover">
     
-                    <thead>
-                        <th>No</th>
-    
-                        <th>User</th>
-                        <th>Food</th>
-                        <th>Date Ordered</th>
-    
-                    </thead>
-    
-                    <tbody>
-    
-    
-                        {% for item in items %}
-                        <tr>
-                            <td>{{forloop.counter}}</td>
-                            <td>{{ item.user.username }}</td>
-                            <td>
-                                {% for food_item in item.items.all %}
-                                    {{ food_item.name }}
-                                    {% if not forloop.last %}, {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td>{{ item.order_date }}</td>
-                        </tr>                
-                        {% empty %}
-                        <tr>
-                            <td colspan="3">No ORDER yet</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-    
-                    <tfoot>
-                    <tr>
-                        <th>No</th>
-                        <th>User</th>
-                        <th>Food</th>
-                        <th>Date Ordered</th>
-                    </tr>
-                    </tfoot>
+                        <thead>
+                            <th>No</th>
+        
+                            <th>User</th>
+                            <th>Food</th>
+                            <th>Date Ordered</th>
+        
+                        </thead>
+        
+                        <tbody>
+        
+        
+                            {% for item in items %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{ item.user.username }}</td>
+                                <td>
+                                    {% for food_item in item.items.all %}
+                                        {{ food_item.name }}
+                                        {% if not forloop.last %}, {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td>{{ item.order_date }}</td>
+                            </tr>                
+                            {% empty %}
+                            <tr>
+                                <td colspan="3">No ORDER yet</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
                     </table>
                 </div>
                 <!-- /.card-body -->
