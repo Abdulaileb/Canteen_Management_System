@@ -19,15 +19,6 @@ class FoodItem(models.Model):
 
     def __str__(self):
         return self.name
-
-# class Order(models.Model):
-#     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-#     items = models.ManyToManyField(FoodItem, through='OrderItem')
-#     order_date = models.DateTimeField(auto_now_add=True)
-#     is_paid = models.BooleanField(default=False)
-
-#     def __str__(self):
-#         return self.user.username
     
 class Order(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -44,16 +35,6 @@ class Order(models.Model):
     def __str__(self):
         return self.user.username
 
-# class OrderedItem(models.Model):
-#     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-#     food_item = models.ForeignKey(FoodItem, on_delete=models.CASCADE)
-#     quantity = models.PositiveIntegerField()
-#     order_date = models.DateTimeField(auto_now_add=True)
-
-#     def __str__(self):
-#         return f"{self.food_item.name} x {self.quantity} - Ordered by {self.user.username}"
-
-
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     food_item = models.ForeignKey(FoodItem, on_delete=models.CASCADE)
@@ -62,14 +43,6 @@ class OrderItem(models.Model):
     def __str__(self):
         return f"{self.food_item.name} (x{self.quantity}) in Order {self.order.id}"
 
-
-# class OrderItem(models.Model):
-#     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-#     food_item = models.ForeignKey(FoodItem, on_delete=models.CASCADE)
-#     quantity = models.PositiveIntegerField()
-
-#     def __str__(self):
-#         return self.order
     
 class InventoryItem(models.Model):
     name = models.CharField(max_length=255)
@@ -101,15 +74,6 @@ class Receipt(models.Model):
 
     def __str__(self):
         return str(self.order.id)  # Return the order ID as a string
-    
-
-# class CartItemAdded(models.Model):
-#     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-#     item = models.ForeignKey(FoodItem, on_delete=models.CASCADE)  # Replace FoodItem with your item model
-#     added_at = models.DateTimeField(auto_now_add=True)
-
-#     def __str__(self):
-#         return f"Order #{self.id} by {self.user}"
 
 
 class CartItem(models.Model):
