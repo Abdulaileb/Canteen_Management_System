@@ -42,9 +42,10 @@ urlpatterns = [
 
     path('order/<int:order_id>/', views.view_order, name='view_order'),
 
-    path('contact/', views.contact_us, name='contact_us'),
+    path('contact_us/', views.contact_us, name='contact_us'),
 
     path('contact_success/', views.successEmail, name='contact_success'),
+
 
 
    

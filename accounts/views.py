@@ -354,3 +354,10 @@ def all_receipts(request):
         })
 
     return render(request, 'dashboard/receipt/receipt.html', {'receipts': receipts, 'accumulated_amount': accumulated_amount })
+
+
+
+@login_required  # Add login required to restrict access to admin
+def email_submissions(request):
+    email_submissions = ContactSubmission.objects.all().order_by('-timestamp')
+    return render(request, 'dashboard/email_submissions.html', {'email_submissions': email_submissions})

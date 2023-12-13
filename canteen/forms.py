@@ -9,15 +9,21 @@ class AddToCartForm(forms.Form):
         widget=forms.NumberInput(attrs={'class': 'form-control'}),
     )
 
-class ContactForm(forms.ModelForm):
-    class Meta:
-        Model = ContactSubmission
-        fields = '__all__'
+# class ContactForm(forms.ModelForm):
+#     class Meta:
+#         Model = ContactSubmission
+#         fields = '__all__'
     
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['name'].widget.attrs.update({'class': 'form-control'})
-        self.fields['email'].widget.attrs.update({'class': 'form-control'})
-        self.fields['phone'].widget.attrs.update({'class': 'form-control'})
-        self.fields['subject'].widget.attrs.update({'class': 'form-control'})
-        self.fields['message'].widget.attrs.update({'class': 'form-control'})
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.fields['name'].widget.attrs.update({'class': 'form-control'})
+#         self.fields['email'].widget.attrs.update({'class': 'form-control'})
+#         self.fields['phone'].widget.attrs.update({'class': 'form-control'})
+#         self.fields['subject'].widget.attrs.update({'class': 'form-control'})
+#         self.fields['message'].widget.attrs.update({'class': 'form-control'})
+
+
+class ContactSubmissionForm(forms.ModelForm):
+    class Meta:
+        model = ContactSubmission
+        fields = ['name', 'email', 'phone', 'subject', 'message']

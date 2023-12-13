@@ -49,4 +49,6 @@ urlpatterns = [
     path('management/report/', views.management_report, name='management_report'),
 
     path('view_receipts/', views.all_receipts, name='view_receipts'),
+
+    path('view_emails/', views.email_submissions, name='view_emails'),
 ]
