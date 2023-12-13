@@ -28,19 +28,19 @@ urlpatterns = [
 
     path('delete_cart_item/<int:item_id>/', views.delete_cart_item, name='delete_cart_item'),
 
-    # path('', views.dashboardPage, name='admin_dashboard'),
     path('checkout/', views.checkout, name='checkout'),
-    # path('payment/', views.payment, name='payment'),
-    # path('receipt/', views.receipt, name='receipt'),
-
-    # path('receipt_pdf/', views.receipt_pdf, name='receipt_pdf'),
-
+  
     path('user_account/', views.user_account, name='user_account'),
 
 
     path('generate_receipt/<int:order_id>/', views.generate_receipt, name='generate_receipt'),
 
     path('order/<int:order_id>/', views.view_order, name='view_order'),
+
+    path('contact_us/', views.contact_us, name='contact_us'),
+
+    path('contact_success/', views.successEmail, name='contact_success'),
+
 
 
    

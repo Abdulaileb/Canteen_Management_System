@@ -9,7 +9,16 @@ from accounts .forms import *
 
 from canteen.models import * 
 
+from django.contrib.auth.decorators import login_required, user_passes_test
 
+from .utils import is_manager
+
+from django.http import FileResponse
+
+
+
+@login_required
+@user_passes_test(is_manager)
 def Dashboard(request):
 
     items = Order.objects.all()
@@ -83,10 +92,6 @@ def register_admin(request):
 
     admin_users = CustomUser.objects.filter(role=CustomUser.ADMIN)
 
-    # Check if the current user is a superuser before allowing admin registration
-    # if not request.user.is_superuser:
-    #     return redirect('accounts:login')  # Redirect to login or an unauthorized page
-
     if request.method == 'POST':
         form = AdminRegistrationForm(request.POST)
         if form.is_valid():
@@ -132,9 +137,6 @@ def logout_view(request):
     logout(request)
     return redirect('canteen:index_unauthenticated')  # Redirect to the login page after logout
 
-
-from django.http import FileResponse
-
 def create_income_chart(request):
     # This view is used to serve the income chart
     with open('income_chart.png', 'rb') as chart:
@@ -163,7 +165,6 @@ def manage_food_category(request):
 
     return render(request, 'dashboard/manage-food/food-category.html', context)
 
-
 def manage_inventory_category(request):
 
     inventory = InventoryItem.objects.all()
@@ -183,9 +184,6 @@ def manage_inventory_category(request):
                }
 
     return render(request, 'dashboard/manage-inventory/manage-inventory.html', context)
-
-
-
 
 def manage_food_items(request):
 
@@ -207,13 +205,10 @@ def manage_food_items(request):
 
     return render(request, 'dashboard/manage-food/food-items.html', context)
 
-
 def OrderListView(request):
     items = Order.objects.all()
     context = {'items':items}
     return render(request, 'dashboard/orders/manage_orders.html', context)
-
-
 
 def user_list(request):
     users = CustomUser.objects.filter(role=CustomUser.USERS)
@@ -237,20 +232,6 @@ def user_list(request):
                }
     
     return render(request, 'dashboard/users/manage_users.html', context)
-
-# def update_user(request, user_id):
-#     user = CustomUser.objects.get(id=user_id)
-#     if request.method == 'POST':
-#         form = UsersRegistrationForm(request.POST, instance=user)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, 'User updated successfully', extra_tags='success')
-#             return redirect('accounts:manage-users')
-#     else:
-#         form = UsersRegistrationForm(instance=user)
-
-#     context = {'form': form}
-#     return render(request, 'dashboard/users/update_user.html', context)
 
 def update_users(request, user_id):
 
@@ -277,15 +258,6 @@ def update_users(request, user_id):
     # Note: This template should only contain the form and necessary form fields
     return render(request, 'dashboard/users/update_user.html', context)
 
-
-# def admin_list(request):
-    
-#     admin_users = CustomUser.objects.filter(role=CustomUser.ADMIN)
-
-#     context = {'admin_users':admin_users}
-    
-#     return render(request, 'admin/users/manage_employees.html', context)
-
 def summary_report(request):
     # Get all order items to create the summary report
     order_items = OrderItem.objects.all()
@@ -295,8 +267,6 @@ def summary_report(request):
     }
 
     return render(request, 'admin/report/report.html', context)
-
-
 
 def management_report(request):
     # Filter users who have placed orders
@@ -317,19 +287,6 @@ def management_report(request):
 
     return render(request, 'dashboard/report/report.html', context)
 
-
-
-# def view_receipts(request):
-#     total_receipts = Receipt.objects.all()
-
-#     context = {
-#         'total_receipts':total_receipts
-#     }
-
-#     return render(request, 'dashboard/report/report.html', context)
-
-from datetime import datetime
-
 def all_receipts(request):
     # Retrieve all orders
     orders = Order.objects.all().order_by('-order_date')
@@ -347,3 +304,8 @@ def all_receipts(request):
         })
 
     return render(request, 'dashboard/receipt/receipt.html', {'receipts': receipts, 'accumulated_amount': accumulated_amount })
+
+@login_required  # Add login required to restrict access to admin
+def email_submissions(request):
+    email_submissions = ContactSubmission.objects.all().order_by('-timestamp')
+    return render(request, 'dashboard/email_submissions.html', {'email_submissions': email_submissions})

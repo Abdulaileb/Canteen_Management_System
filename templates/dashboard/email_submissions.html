@@ -1,0 +1,66 @@
+{% extends "dashboard/base.html" %}
+
+{% load static %}
+{% block content %}
+
+
+  <!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+        <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+
+            <blockquote class="blockquote text-center mt-5">
+                <h1 class="mb-3">Email Submissions.</h1>
+                <footer class="blockquote-footer">Central Canteen <cite title="Source Title">Mile  91</cite></footer>
+            </blockquote>
+            </div>
+        </div><!-- /.container-fluid -->
+        </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header"></div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Subject</th>
+                                        <th>Message</th>
+                                        <th>Timestamp</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for submission in email_submissions %}
+                                    <tr>
+                                        <td>{{ submission.name }}</td>
+                                        <td>{{ submission.email }}</td>
+                                        <td>{{ submission.phone }}</td>
+                                        <td>{{ submission.subject }}</td>
+                                        <td>{{ submission.message }}</td>
+                                        <td>{{ submission.timestamp }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="6">No email submissions yet.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

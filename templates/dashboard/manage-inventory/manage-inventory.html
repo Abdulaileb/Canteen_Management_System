@@ -64,35 +64,22 @@
                   </thead>
 
                   <tbody>
-
-
-                    {% for inventories in inventory %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ inventories.name}}</td>
-                        <td>{{ inventories.location}}</td>
-                        <td>{{ inventories.type}}</td>
-                        <td>{{ inventories.date}}</td>
-                        <td>{{ inventories.quantity}}</td>
-                        
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="6">No Inventory added yet</td>
-                    </tr>
-                    {% endfor %}
+                      {% for inventories in inventory %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ inventories.name}}</td>
+                            <td>{{ inventories.location}}</td>
+                            <td>{{ inventories.type}}</td>
+                            <td>{{ inventories.date}}</td>
+                            <td>{{ inventories.quantity}}</td>
+                            
+                        </tr>
+                      {% empty %}
+                        <tr>
+                            <td colspan="6">No Inventory added yet</td>
+                        </tr>
+                      {% endfor %}
                   </tbody>
-
-                  <tfoot>
-                  <tr>
-                        <th>No</th>
-                        <th>Name</th>
-                        <th>Location</th>
-                        <th>Type</th>
-                        <th>Date</th>
-                        <th>Quantity</th>
-                  </tr>
-                  </tfoot>
                 </table>
               </div>
               <!-- /.card-body -->

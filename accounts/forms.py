@@ -3,6 +3,8 @@ from .models import CustomUser
 
 from canteen.models import *
 
+
+## For User Registration 
 class UsersRegistrationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
 
@@ -24,7 +26,8 @@ class UsersRegistrationForm(forms.ModelForm):
         if commit:
             user.save()
         return user
-    
+
+ ## For updating a user instance     
 class UsersUpdateForm(forms.ModelForm):
    
     class Meta:
@@ -40,6 +43,7 @@ class UsersUpdateForm(forms.ModelForm):
 
 
 
+ ## For registering an admin 
 class AdminRegistrationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
 
@@ -61,9 +65,7 @@ class AdminRegistrationForm(forms.ModelForm):
             user.save()
         return user
 
-
-
-
+ ## To add foodCategory
 class FoodCategoryForm(forms.ModelForm):
     class Meta:
         model = FoodCategory
@@ -73,7 +75,7 @@ class FoodCategoryForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['name'].widget.attrs.update({'class': 'form-control'})
 
-
+ ## To add Inventory Form
 class InventoryForm(forms.ModelForm):
     class Meta:
         model = InventoryItem
@@ -88,7 +90,7 @@ class InventoryForm(forms.ModelForm):
         self.fields['quantity'].widget.attrs.update({'class': 'form-control'})
        
 
-
+ ## To add Food Items
 class FoodItemsForm(forms.ModelForm):
     class Meta:
         model = FoodItem
