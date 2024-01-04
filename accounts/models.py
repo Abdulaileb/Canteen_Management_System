@@ -8,7 +8,7 @@ from django.contrib.auth.models import BaseUserManager
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email, password=None, **extra_fields):
         if not email:
-            raise ValueError('The Student Email field must be set')
+            raise ValueError('The Student Email field  must be set')
         extra_fields.setdefault('is_active', True)
         user = self.model(username=username, email=email, **extra_fields)
         user.set_password(password)
