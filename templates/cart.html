@@ -73,7 +73,7 @@
                             <!-- <input type="number" placeholder="0"> -->
                             {{ item.quantity }}
                         </td>
-                        <td class="product-total">1</td>
+                        <td class="product-total">{{ total_cost }}</td>
 
                         <td>
                             <form method="post" action="{% url 'canteen:delete_cart_item' item.id %}">
@@ -119,10 +119,7 @@
                           <td><strong>Subtotal: </strong></td>
                           <td>Nle: {{ subtotal }}</td>
                       </tr>
-                      <tr class="total-data">
-                          <td><strong>Delivery: </strong></td>
-                          <td>Nle: {{ shipping_cost }}</td>
-                      </tr>
+      
                       <tr class="total-data">
                           <td><strong>Total: </strong></td>
                           <td>Nle: {{ total_cost }}</td>
