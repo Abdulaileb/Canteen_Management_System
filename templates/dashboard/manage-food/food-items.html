@@ -82,7 +82,96 @@
                             <td>{{ foodItem.category}}</td>
                             <td>Nle: {{ foodItem.price}}</td>
                             <td>{{ foodItem.description}}</td>
+                            <td>
+                              <button type="button" class="btn btn-info" data-toggle="modal" data-target="#updateModal{{ foodItem.id }}"> Edit</button>
+                            </td>
+                            <td>
+                              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ foodItem.id }}"> Delete</button>
+                            </td>
                         </tr>
+
+                        <!-- Delete Modal -->
+                        <div class="modal fade" id="deleteModal{{ foodItem.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- Delete Form Inside the Modal Body -->
+                                        <form method="post" action="{% url 'accounts:delete_foodItems' pk=foodItem.id %}">
+                                            {% csrf_token %}
+                                            <h1>Are you sure you want to delete {{ foodItem.condition }}?</h1><br>
+                                            <!-- <input class="btn btn-danger" type="submit" value="delete" />
+                                            <button type="button" class="btn btn-primary cancel-delete" data-dismiss="modal">Cancel</button> -->
+                                            <button type="submit" name="action" value="delete" class="btn btn-danger">Confirm</button>
+                                            <input type="hidden" name="asset_id" value="{{ foodItem.id }}">
+                                            <button type="button" class="btn btn-primary cancel-delete" data-dismiss="modal">Cancel</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Update Modal -->
+                        <div class="modal fade" id="updateModal{{ foodItem.id }}" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel{{ foodItem.id }}" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                  <div class="modal-header">
+                                      <h5 class="modal-title" id="updateModalLabel{{ foodItem.id }}">Update Asset foodItem</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                      </button>
+                                  </div>
+                                  <div class="modal-body">
+                                      <!-- Update Form Inside the Modal Body -->
+                                      <form method="post" action="{% url 'accounts:update_foodItems' pk=foodItem.id %}">
+                                          {% csrf_token %}
+                                          <!-- Dynamically populate form fields with foodItem data -->
+                                          <!-- Assuming you have a field named 'condition' in your AssetConditionForm -->
+
+                                          <div class="form-group">
+                                              <label for="conditionField{{ foodItem.id }}">Name:</label>
+                                              <input type="text" class="form-control" id="conditionField{{ foodItem.id }}" name="name" value="{{ foodItem.name }}">
+                                          </div>
+                                          <div class="form-group">
+                                            <label for="imageField{{ foodItem.id }}">Image:</label>
+                                            <input type="file" class="form-control" id="imageField{{ foodItem.id }}" name="image">
+                                            {% if foodItem.image %}
+                                                Current Image: <a href="{{ foodItem.image.url }}">View</a>
+                                            {% endif %}
+                                          </div>
+                                        
+                                          <div class="form-group">
+                                            <label for="categoryField{{ foodItem.id }}">Category:</label>
+                                            <select class="form-control" id="categoryField{{ foodItem.id }}" name="category">
+                                                {% for category in foodItems %}
+                                                    <option value="{{ category.id }}" {% if foodItem.category.id == category.id %} selected {% endif %}>{{ category.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                          </div>
+                                        
+                                          <div class="form-group">
+                                            <label for="conditionField{{ foodItem.id }}">Price:</label>
+                                            <input type="number" class="form-control" id="conditionField{{ foodItem.id }}" name="price" value="{{ foodItem.price }}">
+                                          </div>
+                                          <div class="form-group">
+                                            <label for="conditionField{{ foodItem.id }}">Description:</label>
+                                            <input type="text" class="form-control" id="conditionField{{ foodItem.id }}" name="description" value="{{ foodItem.description }}">
+                                          </div>
+                          
+                                          <!-- Add other form fields as needed -->
+                                          <button type="submit" class="btn btn-success">Save changes</button>
+                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                      </form>
+                                  </div>
+                              </div>
+                          </div>
+                        </div>
+
 
                    {% endfor %}
 
@@ -115,7 +204,7 @@
                                     </ul>
                                 {% endif %}
 
-                            <form method="post" enctype="multipart/form-data">
+                            <form method="post" enctype="multipart/form-data" action="{% url 'accounts:create_foodItems'%}">
                                 {% csrf_token %}
                                 
                                 {{ form }}

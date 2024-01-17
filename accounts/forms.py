@@ -7,6 +7,8 @@ from canteen.models import *
 ## For User Registration 
 class UsersRegistrationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
+    password = forms.CharField(widget=forms.PasswordInput, required=False)
+
 
     class Meta:
         model = CustomUser
@@ -80,6 +82,7 @@ class InventoryForm(forms.ModelForm):
     class Meta:
         model = InventoryItem
         fields = '__all__'
+        exclude = ("total_cost",)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -88,6 +91,9 @@ class InventoryForm(forms.ModelForm):
         self.fields['type'].widget.attrs.update({'class': 'form-control'})
         self.fields['date'].widget.attrs.update({'class': 'form-control'})
         self.fields['quantity'].widget.attrs.update({'class': 'form-control'})
+        self.fields['quantity'].required = False
+        self.fields['unit_cost'].widget.attrs.update({'class': 'form-control'})
+        self.fields['unit_cost'].required = False
        
 
  ## To add Food Items
@@ -99,8 +105,8 @@ class FoodItemsForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['image'].required = False
         self.fields['image'].widget.attrs.update({'class': 'form-control'})
         self.fields['category'].widget.attrs.update({'class': 'form-control'})
         self.fields['price'].widget.attrs.update({'class': 'form-control'})
         self.fields['description'].widget.attrs.update({'class': 'form-control'})
-

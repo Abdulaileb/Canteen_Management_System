@@ -12,3 +12,8 @@ class ContactSubmissionForm(forms.ModelForm):
     class Meta:
         model = ContactSubmission
         fields = ['name', 'email', 'phone', 'subject', 'message']
+
+class EditCartItemForm(forms.ModelForm):
+    class Meta:
+        model = CartItem
+        fields = ['quantity']  # Include other fields if necessary

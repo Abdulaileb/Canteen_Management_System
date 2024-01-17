@@ -26,26 +26,26 @@
 		<div class="container">
 			<div class="row">
 
-                <!-- Add this modal at the end of your HTML body -->
-                <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                Are you sure you want to delete this item?
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
-                            </div>
-                        </div>
+        <!-- Add this modal at the end of your HTML body -->
+        <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this item?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
                     </div>
                 </div>
+            </div>
+        </div>
 
 				<div class="col-lg-8 col-md-12">
 					<div class="cart-table-wrap">
@@ -58,110 +58,233 @@
 									<th class="product-price">Price</th>
 									<th class="product-quantity">Quantity</th>
 									<th class="product-total">Total</th>
-                                    <th class="product-remove"></th>
+                  <th class="product-remove" colspan="2">Action</th>
 								</tr>
 							</thead>
 							<tbody>
-                                {% for item in cart_items %}
-                                
-                                    <tr class="table-body-row">
+                {% for item in cart_items %}
+                
+                    <tr class="table-body-row">
 
-                                        <td class="product-image"><img src="{{ item.food_item.image.url }}" alt="{{ item.food_item.name }} Image"></td>
-                                        <td class="product-name">{{ item.food_item.name }}</td>
-                                        <td class="product-price">Nle {{ item.food_item.price }}</td>
-                                        <td class="product-quantity">
-                                            <!-- <input type="number" placeholder="0"> -->
-                                            {{ item.quantity }}
-                                        </td>
-                                        <td class="product-total">1</td>
+                        <td class="product-image"><img src="{{ item.food_item.image.url }}" alt="{{ item.food_item.name }} Image"></td>
+                        <td class="product-name">{{ item.food_item.name }}</td>
+                        <td class="product-price">Nle {{ item.food_item.price }}</td>
+                        <td class="product-quantity">
+                            <!-- <input type="number" placeholder="0"> -->
+                            {{ item.quantity }}
+                        </td>
+                        <td class="product-total">{{ total_cost }}</td>
 
-                                        <td>
-                                            <form method="post" action="{% url 'canteen:delete_cart_item' item.id %}">
-                                                {% csrf_token %}
-                                                <div class="d-flex justify-content-center">
-                                                    <button class="btn border text-danger" type="submit">
-                                                        <i class="fas fa-trash fa-lg"></i>
-                                                        Delete
-                                                    </button>
-                                                </div>
-                                            </form>
-                                            
-                                        </td>
+                        <td>
+                            <form method="post" action="{% url 'canteen:delete_cart_item' item.id %}">
+                                {% csrf_token %}
+                                <div class="d-flex justify-content-center">
+                                    <button class="btn border text-danger" type="submit">
+                                        <i class="fas fa-trash fa-lg"></i>
+                                        Delete
+                                    </button>
+                                </div>
+                            </form>
+                        </td>
 
-
-                                    </tr>
+                        <td>
+                          <div class="d-flex justify-content-center">
+                            <a href="{% url 'canteen:edit_cart_item' item.id %}">Edit</a>
+                          </div>
+                          
+                        </td>
+                      </tr>
  
 								{% endfor %}
 							</tbody>
 						</table>
 					</div>
-				</div>
-                
+				</div>     
 
 				<div class="col-lg-4">
 
 					 <div class="total-section">
-                        <table class="total-table">
-                            <thead class="total-table-head">
+              <table class="total-table">
+                  <thead class="total-table-head">
 
-                                <tr class="table-total-row">
-                                    <th>Total</th>
-                                    <th>Price</th>
-                                </tr>
+                      <tr class="table-total-row">
+                          <th>Total</th>
+                          <th>Price</th>
+                      </tr>
 
-                            </thead>
+                  </thead>
 
-                            <tbody>
-                                <tr class="total-data">
-                                    <td><strong>Subtotal: </strong></td>
-                                    <td>Nle: {{ subtotal }}</td>
-                                </tr>
-                                <tr class="total-data">
-                                    <td><strong>Delivery: </strong></td>
-                                    <td>Nle: {{ shipping_cost }}</td>
-                                </tr>
-                                <tr class="total-data">
-                                    <td><strong>Total: </strong></td>
-                                    <td>Nle: {{ total_cost }}</td>
-                                </tr>
-                            </tbody>
+                  <tbody>
+                      <!-- <tr class="total-data">
+                          <td><strong>Subtotal: </strong></td>
+                          <td>Nle: {{ subtotal }}</td>
+                      </tr> -->
+      
+                      <tr class="total-data">
+                          <td><strong>Total: </strong></td>
+                          <td>Nle: {{ total_cost }}</td>
+                      </tr>
+                  </tbody>
 
-                            <p>Cash on Delivery</p>
+                  <p>Cash on Delivery</p>
 
-                        </table>
+              </table>
 
-                        <div class="cart-buttons">
-                            
 
-                            <!-- <a href="#" class="boxed-btn">Update Cart</a>
-                            <a href="#" class="boxed-btn black" data-toggle="modal" data-target="#paymentModal">Check Out</a> -->
 
-                            <form action="{% url 'canteen:checkout' %}" method="post">
-                                {% csrf_token %}
-                                <input type="submit" class="boxed-btn black" value="Check Out">
-                            </form>
-                            
+              <!-- <div class="cart-buttons">
+                <form id="checkoutForm" action="{% url 'canteen:checkout' %}" method="post">
+                    {% csrf_token %}
+            
+                    <div class="payment-options row">
+                      <div class="col">
+                          <a href="#" class="payment-method" data-method="method1">
+                              <img src="{% static 'assets/img/afr.jpeg' %}" alt="Payment Method 1" class="img-fluid" style="border-radius: 5px;">
+                          </a>
+                      </div>
+                      <div class="col">
+                          <a href="#" class="payment-method" data-method="method2">
+                              <img src="{% static 'assets/img/orange.jpeg' %}" alt="Payment Method 2" class="img-fluid" style="border-radius: 5px;">
+                          </a>
+                      </div>
+                  </div>
+                
 
-                            <!-- <a href="checkout.html" class="boxed-btn black">Check Out</a> -->
-
-                        </div>
-
+                    <div id="phoneInputForm" style="display:none;">
+                      <input type="text"  id="phoneNumber" placeholder="Enter Phone Number">
                     </div>
 
-					<!-- <div class="coupon-section">
-						<h3>Apply Coupon</h3>
-						<div class="coupon-form-wrap">
-							<form action="index.html">
-								<p><input type="text" placeholder="Coupon"></p>
-								<p><input type="submit" value="Apply"></p>
-							</form>
-						</div>
-					</div> -->
+                    <div id="confirm-ok" style="display:none;">
+                      <input id="confirmCheckout" type="submit" class="boxed-btn black" value="Check Out" disabled>
+                    </div>
+            
+                    
+                </form>
+            </div> -->
+            
+            <div class="cart-buttons">
+              <form id="checkoutForm" action="{% url 'canteen:checkout' %}" method="post">
+                  {% csrf_token %}
+          
+                  <div class="payment-options row">
+                      <!-- Payment Method 1 -->
+                      <div class="col">
+                          <a href="#" class="payment-method" data-method="method1">
+                              <img src="{% static 'assets/img/afr.jpeg' %}" alt="Payment Method 1" class="img-fluid" style="border-radius: 5px;">
+                          </a>
+                      </div>
+                      <!-- Payment Method 2 -->
+                      <div class="col">
+                          <a href="#" class="payment-method" data-method="method2">
+                              <img src="{% static 'assets/img/orange.jpeg' %}" alt="Payment Method 2" class="img-fluid" style="border-radius: 5px;">
+                          </a>
+                      </div>
+                  </div>
+          
+                  <div id="phoneInputAndCheckout" style="display:none; padding-top: 10px;" class="form-group mb-3">
+                      <input type="text" id="phoneNumber" placeholder="Enter Phone Number">
+                      <input id="confirmCheckout" type="submit" class="boxed-btn black" value="Check Out">
+                  </div>
+              </form>
+          </div>
+          
+          
+
+          </div>
 				</div>
+
 			</div>
 		</div>
 	</div>
+
+  <!-- <script>
+    document.getElementById('paymentMethod').addEventListener('change', function() {
+        var phoneInput = document.getElementById('phoneInput');
+        var checkoutButton = document.querySelector('#checkoutForm input[type="submit"]');
+
+        if(this.value) {
+            phoneInput.style.display = 'block';
+            checkoutButton.disabled = false;
+        } else {
+            phoneInput.style.display = 'none';
+            checkoutButton.disabled = true;
+        }
+    });
+</script> -->
+
+<!-- <script>
+  document.querySelectorAll('.payment-methods img').forEach(function(img) {
+      img.addEventListener('click', function() {
+          var selectedMethod = this.getAttribute('data-method');
+          document.getElementById('selectedPaymentMethod').value = selectedMethod;
+
+          var phoneInput = document.getElementById('phoneInput');
+          var checkoutButton = document.querySelector('#checkoutForm input[type="submit"]');
+
+          phoneInput.style.display = 'block';
+          checkoutButton.disabled = false;
+      });
+  });
+
+  document.querySelectorAll('.payment-methods img').forEach(function(img) {
+    img.addEventListener('click', function() {
+        // Remove 'selected' class from all images
+        document.querySelectorAll('.payment-methods img').forEach(function(i) {
+            i.classList.remove('selected');
+        });
+
+        // Add 'selected' class to clicked image
+        this.classList.add('selected');
+
+        // Rest of the event listener code...
+    });
+});
+
+</script> -->
+
+<script>
+  document.querySelectorAll('.payment-method').forEach(function(method) {
+      method.addEventListener('click', function(event) {
+          event.preventDefault();
+          document.getElementById('phoneInputForm').style.display = 'flex';
+      });
+  });
+
+  document.getElementById('confirmCheckout').addEventListener('click', function() {
+      var phoneNumber = document.getElementById('phoneNumber').value;
+      if(phoneNumber) {
+          // Here you can add an AJAX request to backend to process payment and clear cart
+          alert("Checkout Successful");
+          // Optionally, redirect to a different page or refresh the page
+          location.reload(); // This will reload the page. Replace with appropriate redirection if needed.
+      } else {
+          alert("Please enter your phone number");
+      }
+  });
+</script>
+
+
+
 	<!-- end cart -->
+
+          <!-- Edit Cart Item Modal Placeholder -->
+          <div class="modal fade" id="editCartItemModal" tabindex="-1" role="dialog" aria-labelledby="editCartItemModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editCartItemModalLabel">Edit Cart Item</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Form will be loaded here dynamically -->
+                    </div>
+                </div>
+            </div>
+          </div>
+  
+  
 
 	<!-- logo carousel -->
 	<div class="logo-carousel-section">
@@ -256,55 +379,65 @@
 
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    var paymentTypeDropdown = document.getElementById('paymentType');
-    var phoneNumberSection = document.getElementById('phoneNumberSection');
 
-    // Show/hide phone number section based on payment type
-    paymentTypeDropdown.addEventListener('change', function() {
-        var paymentType = paymentTypeDropdown.value;
-        if (paymentType === 'orange_money' || paymentType === 'afri_money') {
-            phoneNumberSection.style.display = 'block';
-        } else {
-            phoneNumberSection.style.display = 'none';
-        }
+document.querySelectorAll('.payment-method').forEach(function(method) {
+    method.addEventListener('click', function(event) {
+        event.preventDefault();
+        document.getElementById('phoneInputAndCheckout').style.display = 'block';
     });
-
-    var confirmButton = document.getElementById('confirmPayment');
-    if (confirmButton) {
-        confirmButton.addEventListener('click', function() {
-
-            var phoneNumber = document.getElementById('phoneNumber');
-            var confirmPayment = confirm('Are you sure you want to make payment for the items?');
-            if (confirmPayment) {
-                // Trigger AJAX call to process payment and generate receipt
-                // On success, show success message and download receipt
-                processPayment(paymentTypeDropdown.value, phoneNumber);
-            }
-            
-        });
-    }
 });
 
-function processPayment(paymentType, phoneNumber = null) {
-    // AJAX call to Django view for processing payment and generating receipt
-    // On success, show success message and download receipt
-    // For example purposes, a simple success alert is used here
-    alert('Payment successful! Your receipt is being downloaded.');
-    // Trigger download of receipt
-}
+  document.addEventListener('DOMContentLoaded', function() {
+      var paymentTypeDropdown = document.getElementById('paymentType');
+      var phoneNumberSection = document.getElementById('phoneNumberSection');
 
-  document.getElementById('confirmPayment').addEventListener('click', function() {
-    // Close the modal
-    $('#paymentModal').modal('hide');
+      // Show/hide phone number section based on payment type
+      paymentTypeDropdown.addEventListener('change', function() {
+          var paymentType = paymentTypeDropdown.value;
+          if (paymentType === 'orange_money' || paymentType === 'afri_money') {
+              phoneNumberSection.style.display = 'block';
+          } else {
+              phoneNumberSection.style.display = 'none';
+          }
+      });
 
-    // Assuming order_id is available in your JavaScript context.
-    // Redirect to the Django view for receipt generation
-    // window.location.href = `/generate_receipt/${order_id}/`;
+      var confirmButton = document.getElementById('confirmPayment');
+      if (confirmButton) {
+          confirmButton.addEventListener('click', function() {
+
+              var phoneNumber = document.getElementById('phoneNumber');
+              var confirmPayment = confirm('Are you sure you want to make payment for the items?');
+              if (confirmPayment) {
+                  // Trigger AJAX call to process payment and generate receipt
+                  // On success, show success message and download receipt
+                  processPayment(paymentTypeDropdown.value, phoneNumber);
+              }
+              
+          });
+      }
   });
 
+  function processPayment(paymentType, phoneNumber = null) {
+      // AJAX call to Django view for processing payment and generating receipt
+      // On success, show success message and download receipt
+      // For example purposes, a simple success alert is used here
+      alert('Payment successful! Your receipt is being downloaded.');
+      // Trigger download of receipt
+  }
+
+    document.getElementById('confirmPayment').addEventListener('click', function() {
+      // Close the modal
+      $('#paymentModal').modal('hide');
+
+      // Assuming order_id is available in your JavaScript context.
+      // Redirect to the Django view for receipt generation
+      // window.location.href = `/generate_receipt/${order_id}/`;
+    });
+
 </script>
-    
+
+  
+  
 
 
 {% endblock content %}

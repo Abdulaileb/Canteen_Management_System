@@ -43,16 +43,22 @@ class OrderItem(models.Model):
     def __str__(self):
         return f"{self.food_item.name} (x{self.quantity}) in Order {self.order.id}"
 
-    
 class InventoryItem(models.Model):
     name = models.CharField(max_length=255)
     location = models.CharField(max_length=20)
     type = models.CharField(max_length=255)
     date = models.DateField()
     quantity = models.PositiveIntegerField()
+    unit_cost = models.DecimalField(max_digits=10, decimal_places=2)  # Cost per unit/item
+    total_cost = models.DecimalField(max_digits=10, decimal_places=2, editable=False)  # Total cost (quantity * unit cost)
+
+    def save(self, *args, **kwargs):
+        self.total_cost = self.quantity * self.unit_cost
+        super(InventoryItem, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
+
 
 class Payment(models.Model):
     order = models.OneToOneField(Order, on_delete=models.CASCADE)

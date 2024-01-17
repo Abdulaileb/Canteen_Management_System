@@ -72,7 +72,14 @@
                             <div class="single-product-item">
 
                                 <div class="product-image">
-                                    <a href=""><img src="{{ items.image.url }}" alt="{{ items.name }}"></a>
+
+									{% if user.is_authenticated %}
+										<a href=""><img src="{{ items.image.url }}" alt="{{ items.name }}"></a>
+									{% else %}
+										<!-- Redirect to login page if user is not authenticated -->
+										<a href="{% url 'accounts:login' %}?next={{ request.path }}"><img src="{{ items.image.url }}" alt="{{ items.name }}"></a>
+									{% endif %}
+									
                                 </div>
                                 <h3>{{ items.name }}</h3>
                                 <p class="product-price"><span>{{ items.category.name }}</span> Nle {{ items.price }} </p>

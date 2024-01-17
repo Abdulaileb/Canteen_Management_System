@@ -90,7 +90,7 @@
               <div class="icon">
                 <i class="ion ion-person-add"></i>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="{% url 'accounts:manage-users' %}">View Details</a>
+                        <a class="small text-white stretched-link" href="{% url 'accounts:manage_users' %}">View Details</a>
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
               </div>
@@ -108,7 +108,7 @@
             <!-- small box -->
             <div class="small-box bg-secondary">
               <div class="inner">
-                <h3> {{accumulated_amount}} </h3>
+                <h3> Nle: {{accumulated_amount}} </h3>
 
                 <p>Revenue (Nle) </p>
               </div>
@@ -162,14 +162,14 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>{{total_inventory}}</h3>
+                <h3>Nle: {{total_inventory_cost|default:"0.00"}}</h3>
                 
-                <p>Canteen Equipment</p>
+                <p>Canteen Expenses</p>
               </div>
               <div class="icon">
                <i class="fa-solid fa-chair"></i>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="{% url 'accounts:manage-inventory' %}">View Details</a>
+                        <a class="small text-white stretched-link" href="{% url 'accounts:manage_inventory' %}">View Details</a>
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
               </div>
