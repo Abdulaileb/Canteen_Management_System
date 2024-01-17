@@ -187,19 +187,47 @@ def manage_food_category(request, action=None, pk=None):
 
     return render(request, 'dashboard/manage-food/food-category.html', context)
 
-def manage_inventory_category(request):
+def manage_inventory_category(request, action=None, pk=None):
 
     inventory = InventoryItem.objects.all()
-
     form = InventoryForm()
+
+
     if request.method == 'POST':
-        form = InventoryForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Inventory has been successfully added')
+
+        if action == 'create':
+            form = InventoryForm(request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Inventory has been successfully added')
+            else:
+                messages.error(request, "Invalid Form Data! You must fill out all fields.")
+                return redirect('accounts:manage-inventory')
+            
+        elif action == 'update':
+            inventory_to_update = get_object_or_404(InventoryItem, pk=pk)
+            form = InventoryForm(request.POST, instance=inventory_to_update)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Inventory Item updated successfully')
+            else:
+                messages.error(request, "Invalid Form Data! You must fill out all fields.")
+                return redirect('accounts:manage-inventory')
+        
+        elif action == 'delete':
+            asset_to_delete = get_object_or_404(InventoryItem, pk=pk)
+            asset_to_delete.delete()
+            messages.success(request, 'Inventory item deleted successfully')
             return redirect('accounts:manage-inventory')
+        
+
+            # if form.is_valid():
+            #     form.save()
+            #     messages.success(request, 'Inventory has been successfully added')
+            # else:
+            #     messages.error(request, "Invalid Form Data! You must fill out all fields.")
+            #     return redirect('accounts:manage-inventory')
     else:
-            # messages.error(request, 'Check the fields again')
         form = InventoryForm()
     context = {'form':form,
                'inventory':inventory,
@@ -207,20 +235,46 @@ def manage_inventory_category(request):
 
     return render(request, 'dashboard/manage-inventory/manage-inventory.html', context)
 
-def manage_food_items(request):
+def manage_food_items(request, action=None, pk=None):
 
     foodItems = FoodItem.objects.all()
-
     form = FoodItemsForm()
+
     if request.method == 'POST':
-        form = FoodItemsForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Food Items has been successfully added')
+        if action == 'create':
+            form = FoodItemsForm(request.POST, request.FILES)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Food Items has been successfully added')
+            else:
+                messages.error(request, "Invalid form")
             return redirect('accounts:manage_foodItems')
-    else:
-            # messages.error(request, 'Check the fields again')
-        form = FoodItemsForm()
+    
+        elif action == 'update':
+            foodItemToUpdate = get_object_or_404(FoodItem, pk=pk)
+            
+            if request.FILES:
+                form = FoodItemsForm(request.POST, request.FILES, instance=foodItemToUpdate)
+            else:
+                form = FoodItemsForm(request.POST, instance=foodItemToUpdate)
+            # form = FoodItemsForm(request.POST, request.FILES, instance=foodItemToUpdate)
+            if form.is_valid():
+                    form.save()
+                    messages.success(request, 'Inventory Item updated successfully')
+            else:
+                messages.error(request, "Invalid Form Data! You must fill out all fields.")
+            return redirect('accounts:manage_foodItems')
+        
+        elif action == 'delete':
+            food_item_to_be_deleted = get_object_or_404(FoodItem, pk=pk)
+            food_item_to_be_deleted.delete()
+            messages.success(request, 'Food Item deleted successfully')
+            return redirect('accounts:manage_foodItems')
+
+    elif action == 'update' and request.method == 'GET':
+        foodItemToUpdate = get_object_or_404(FoodItem, pk=pk)
+        form = FoodItemsForm(instance=foodItemToUpdate)
+
     context = {'form':form,
                'foodItems':foodItems,
                }
