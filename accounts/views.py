@@ -202,33 +202,29 @@ def manage_inventory_category(request, action=None, pk=None):
                 messages.success(request, 'Inventory has been successfully added')
             else:
                 messages.error(request, "Invalid Form Data! You must fill out all fields.")
-                return redirect('accounts:manage-inventory')
+                return redirect('accounts:manage_inventory')
             
         elif action == 'update':
             inventory_to_update = get_object_or_404(InventoryItem, pk=pk)
             form = InventoryForm(request.POST, instance=inventory_to_update)
+            
             if form.is_valid():
                 form.save()
                 messages.success(request, 'Inventory Item updated successfully')
             else:
                 messages.error(request, "Invalid Form Data! You must fill out all fields.")
-                return redirect('accounts:manage-inventory')
+                return redirect('accounts:manage_inventory')
         
         elif action == 'delete':
             asset_to_delete = get_object_or_404(InventoryItem, pk=pk)
             asset_to_delete.delete()
             messages.success(request, 'Inventory item deleted successfully')
-            return redirect('accounts:manage-inventory')
+            return redirect('accounts:manage_inventory')
         
+    elif action == 'update' and request.method == 'GET':
+        inventory_to_update = get_object_or_404(InventoryItem, pk=pk)
+        form = InventoryForm(instance=inventory_to_update)
 
-            # if form.is_valid():
-            #     form.save()
-            #     messages.success(request, 'Inventory has been successfully added')
-            # else:
-            #     messages.error(request, "Invalid Form Data! You must fill out all fields.")
-            #     return redirect('accounts:manage-inventory')
-    else:
-        form = InventoryForm()
     context = {'form':form,
                'inventory':inventory,
                }
@@ -252,7 +248,7 @@ def manage_food_items(request, action=None, pk=None):
     
         elif action == 'update':
             foodItemToUpdate = get_object_or_404(FoodItem, pk=pk)
-            
+
             if request.FILES:
                 form = FoodItemsForm(request.POST, request.FILES, instance=foodItemToUpdate)
             else:

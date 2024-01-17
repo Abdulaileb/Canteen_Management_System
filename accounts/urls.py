@@ -25,8 +25,11 @@ urlpatterns = [
     path('manage_food_item/update/<int:pk>/', views.manage_food_items, {'action': 'update'}, name='update_foodItems'),
     path('manage_food_item/delete/<int:pk>/', views.manage_food_items, {'action': 'delete'}, name='delete_foodItems'),
 
-
-    path('manage-inventory/', views.manage_inventory_category, name='manage-inventory'),
+    ################# CANTEEN ITEMS #######################
+    path('manage_inventory/', views.manage_inventory_category, name='manage_inventory'),
+    path('manage_inventory/create/', views.manage_inventory_category, {'action': 'create'}, name='create_inventory'),
+    path('manage_inventory/update/<int:pk>/', views.manage_inventory_category, {'action': 'update'}, name='update_inventory'),
+    path('manage_inventory/delete/<int:pk>/', views.manage_inventory_category, {'action': 'delete'}, name='delete_inventory'),
 
     path('orders/', views.OrderListView, name='view_orders'),
 

@@ -80,6 +80,7 @@ class InventoryForm(forms.ModelForm):
     class Meta:
         model = InventoryItem
         fields = '__all__'
+        exclude = ("total_cost",)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -88,6 +89,9 @@ class InventoryForm(forms.ModelForm):
         self.fields['type'].widget.attrs.update({'class': 'form-control'})
         self.fields['date'].widget.attrs.update({'class': 'form-control'})
         self.fields['quantity'].widget.attrs.update({'class': 'form-control'})
+        self.fields['quantity'].required = False
+        self.fields['unit_cost'].widget.attrs.update({'class': 'form-control'})
+        self.fields['unit_cost'].required = False
        
 
  ## To add Food Items

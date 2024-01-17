@@ -60,6 +60,8 @@
                         <th>Type</th>
                         <th>Date</th>
                         <th>Quantity</th>
+                        <th>Total Cost</th>
+                        <th colspan="2">Action</th>
 
                   </thead>
 
@@ -72,7 +74,95 @@
                             <td>{{ inventories.type}}</td>
                             <td>{{ inventories.date}}</td>
                             <td>{{ inventories.quantity}}</td>
+                            <td>{{ inventories.total_cost }}</td>
+
+                            <td>
+                              <button type="button" class="btn btn-info" data-toggle="modal" data-target="#updateModal{{ inventories.id }}"> Edit</button>
+                            </td>
+                            <td>
+                              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ inventories.id }}"> Delete</button>
+                            </td>  
                             
+                              <!-- Delete Modal -->
+                              <div class="modal fade" id="deleteModal{{ inventories.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Delete Form Inside the Modal Body -->
+                                            <form method="post" action="{% url 'accounts:delete_inventory' pk=inventories.id %}">
+                                                {% csrf_token %}
+                                                <h1>Are you sure you want to delete {{ inventories.condition }}?</h1><br>
+                                                <!-- <input class="btn btn-danger" type="submit" value="delete" />
+                                                <button type="button" class="btn btn-primary cancel-delete" data-dismiss="modal">Cancel</button> -->
+                                                <button type="submit" name="action" value="delete" class="btn btn-danger">Confirm</button>
+                                                <input type="hidden" name="asset_id" value="{{ inventories.id }}">
+                                                <button type="button" class="btn btn-primary cancel-delete" data-dismiss="modal">Cancel</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                              </div>
+
+                              <!-- Update Modal -->
+                              <div class="modal fade" id="updateModal{{ inventories.id }}" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel{{ inventories.id }}" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="updateModalLabel{{ inventories.id }}">Update Asset inventories</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                           
+                                            <form method="post" action="{% url 'accounts:update_inventory' pk=inventories.id %}">
+                                                {% csrf_token %}
+
+                                                <div class="form-group">
+                                                    <label for="conditionField{{ inventories.id }}">Name:</label>
+                                                    <input type="text" class="form-control" id="conditionField{{ inventories.id }}" name="name" value="{{ inventories.name }}">
+                                                </div>
+
+                                                <div class="form-group">
+                                                  <label for="conditionField{{ inventories.id }}">location:</label>
+                                                  <input type="text" class="form-control" id="conditionField{{ inventories.id }}" name="location" value="{{ inventories.location }}">
+                                                </div>
+
+                                                <div class="form-group">
+                                                  <label for="conditionField{{ inventories.id }}">Type:</label>
+                                                  <input type="text" class="form-control" id="conditionField{{ inventories.id }}" name="type" value="{{ inventories.type }}">
+                                                </div>
+
+                                                <div class="form-group">
+                                                  <label for="conditionField{{ inventories.id }}">Date:</label>
+                                                  <input type="date" class="form-control" id="conditionField{{ inventories.id }}" name="date" value="{{ inventories.date|date:'Y-m-d' }}">
+
+                                                  
+                                                </div>
+                                              
+                                                <div class="form-group">
+                                                  <label for="conditionField{{ inventories.id }}">Quantity:</label>
+                                                  <input type="number" class="form-control" id="conditionField{{ inventories.id }}" name="quantity" value="{{ inventories.quantity }}">
+                                                </div>
+                                                <div class="form-group">
+                                                  <label for="conditionField{{ inventories.id }}">Unit Cost:</label>
+                                                  <input type="number" class="form-control" id="conditionField{{ inventories.id }}" name="unit_cost" value="{{ inventories.unit_cost }}">
+                                                </div>
+                                
+                                                <!-- Add other form fields as needed -->
+                                                <button type="submit" class="btn btn-success">Save changes</button>
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                              </div>
                         </tr>
                       {% empty %}
                         <tr>
@@ -108,7 +198,7 @@
                                     </ul>
                                 {% endif %}
 
-                            <form method="post" enctype="multipart/form-data">
+                            <form method="post" enctype="multipart/form-data" action="{% url 'accounts:create_inventory' %}">
                                 {% csrf_token %}
                                 
                                 {{ form }}
