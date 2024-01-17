@@ -115,10 +115,10 @@
                   </thead>
 
                   <tbody>
-                      <tr class="total-data">
+                      <!-- <tr class="total-data">
                           <td><strong>Subtotal: </strong></td>
                           <td>Nle: {{ subtotal }}</td>
-                      </tr>
+                      </tr> -->
       
                       <tr class="total-data">
                           <td><strong>Total: </strong></td>
@@ -130,38 +130,141 @@
 
               </table>
 
-              <div class="cart-buttons">
-                  
 
-                  <!-- <a href="#" class="boxed-btn">Update Cart</a>
-                  <a href="#" class="boxed-btn black" data-toggle="modal" data-target="#paymentModal">Check Out</a> -->
 
-                  <form action="{% url 'canteen:checkout' %}" method="post">
-                      {% csrf_token %}
-                      <input type="submit" class="boxed-btn black" value="Check Out">
-                  </form>
-                  
+              <!-- <div class="cart-buttons">
+                <form id="checkoutForm" action="{% url 'canteen:checkout' %}" method="post">
+                    {% csrf_token %}
+            
+                    <div class="payment-options row">
+                      <div class="col">
+                          <a href="#" class="payment-method" data-method="method1">
+                              <img src="{% static 'assets/img/afr.jpeg' %}" alt="Payment Method 1" class="img-fluid" style="border-radius: 5px;">
+                          </a>
+                      </div>
+                      <div class="col">
+                          <a href="#" class="payment-method" data-method="method2">
+                              <img src="{% static 'assets/img/orange.jpeg' %}" alt="Payment Method 2" class="img-fluid" style="border-radius: 5px;">
+                          </a>
+                      </div>
+                  </div>
+                
 
-                  <!-- <a href="checkout.html" class="boxed-btn black">Check Out</a> -->
+                    <div id="phoneInputForm" style="display:none;">
+                      <input type="text"  id="phoneNumber" placeholder="Enter Phone Number">
+                    </div>
 
-              </div>
+                    <div id="confirm-ok" style="display:none;">
+                      <input id="confirmCheckout" type="submit" class="boxed-btn black" value="Check Out" disabled>
+                    </div>
+            
+                    
+                </form>
+            </div> -->
+            
+            <div class="cart-buttons">
+              <form id="checkoutForm" action="{% url 'canteen:checkout' %}" method="post">
+                  {% csrf_token %}
+          
+                  <div class="payment-options row">
+                      <!-- Payment Method 1 -->
+                      <div class="col">
+                          <a href="#" class="payment-method" data-method="method1">
+                              <img src="{% static 'assets/img/afr.jpeg' %}" alt="Payment Method 1" class="img-fluid" style="border-radius: 5px;">
+                          </a>
+                      </div>
+                      <!-- Payment Method 2 -->
+                      <div class="col">
+                          <a href="#" class="payment-method" data-method="method2">
+                              <img src="{% static 'assets/img/orange.jpeg' %}" alt="Payment Method 2" class="img-fluid" style="border-radius: 5px;">
+                          </a>
+                      </div>
+                  </div>
+          
+                  <div id="phoneInputAndCheckout" style="display:none; padding-top: 10px;" class="form-group mb-3">
+                      <input type="text" id="phoneNumber" placeholder="Enter Phone Number">
+                      <input id="confirmCheckout" type="submit" class="boxed-btn black" value="Check Out">
+                  </div>
+              </form>
+          </div>
+          
+          
 
           </div>
-
-					<!-- <div class="coupon-section">
-						<h3>Apply Coupon</h3>
-						<div class="coupon-form-wrap">
-							<form action="index.html">
-								<p><input type="text" placeholder="Coupon"></p>
-								<p><input type="submit" value="Apply"></p>
-							</form>
-						</div>
-					</div> -->
 				</div>
 
 			</div>
 		</div>
 	</div>
+
+  <!-- <script>
+    document.getElementById('paymentMethod').addEventListener('change', function() {
+        var phoneInput = document.getElementById('phoneInput');
+        var checkoutButton = document.querySelector('#checkoutForm input[type="submit"]');
+
+        if(this.value) {
+            phoneInput.style.display = 'block';
+            checkoutButton.disabled = false;
+        } else {
+            phoneInput.style.display = 'none';
+            checkoutButton.disabled = true;
+        }
+    });
+</script> -->
+
+<!-- <script>
+  document.querySelectorAll('.payment-methods img').forEach(function(img) {
+      img.addEventListener('click', function() {
+          var selectedMethod = this.getAttribute('data-method');
+          document.getElementById('selectedPaymentMethod').value = selectedMethod;
+
+          var phoneInput = document.getElementById('phoneInput');
+          var checkoutButton = document.querySelector('#checkoutForm input[type="submit"]');
+
+          phoneInput.style.display = 'block';
+          checkoutButton.disabled = false;
+      });
+  });
+
+  document.querySelectorAll('.payment-methods img').forEach(function(img) {
+    img.addEventListener('click', function() {
+        // Remove 'selected' class from all images
+        document.querySelectorAll('.payment-methods img').forEach(function(i) {
+            i.classList.remove('selected');
+        });
+
+        // Add 'selected' class to clicked image
+        this.classList.add('selected');
+
+        // Rest of the event listener code...
+    });
+});
+
+</script> -->
+
+<script>
+  document.querySelectorAll('.payment-method').forEach(function(method) {
+      method.addEventListener('click', function(event) {
+          event.preventDefault();
+          document.getElementById('phoneInputForm').style.display = 'flex';
+      });
+  });
+
+  document.getElementById('confirmCheckout').addEventListener('click', function() {
+      var phoneNumber = document.getElementById('phoneNumber').value;
+      if(phoneNumber) {
+          // Here you can add an AJAX request to backend to process payment and clear cart
+          alert("Checkout Successful");
+          // Optionally, redirect to a different page or refresh the page
+          location.reload(); // This will reload the page. Replace with appropriate redirection if needed.
+      } else {
+          alert("Please enter your phone number");
+      }
+  });
+</script>
+
+
+
 	<!-- end cart -->
 
           <!-- Edit Cart Item Modal Placeholder -->
@@ -276,90 +379,63 @@
 
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    var paymentTypeDropdown = document.getElementById('paymentType');
-    var phoneNumberSection = document.getElementById('phoneNumberSection');
 
-    // Show/hide phone number section based on payment type
-    paymentTypeDropdown.addEventListener('change', function() {
-        var paymentType = paymentTypeDropdown.value;
-        if (paymentType === 'orange_money' || paymentType === 'afri_money') {
-            phoneNumberSection.style.display = 'block';
-        } else {
-            phoneNumberSection.style.display = 'none';
-        }
+document.querySelectorAll('.payment-method').forEach(function(method) {
+    method.addEventListener('click', function(event) {
+        event.preventDefault();
+        document.getElementById('phoneInputAndCheckout').style.display = 'block';
     });
-
-    var confirmButton = document.getElementById('confirmPayment');
-    if (confirmButton) {
-        confirmButton.addEventListener('click', function() {
-
-            var phoneNumber = document.getElementById('phoneNumber');
-            var confirmPayment = confirm('Are you sure you want to make payment for the items?');
-            if (confirmPayment) {
-                // Trigger AJAX call to process payment and generate receipt
-                // On success, show success message and download receipt
-                processPayment(paymentTypeDropdown.value, phoneNumber);
-            }
-            
-        });
-    }
 });
 
-function processPayment(paymentType, phoneNumber = null) {
-    // AJAX call to Django view for processing payment and generating receipt
-    // On success, show success message and download receipt
-    // For example purposes, a simple success alert is used here
-    alert('Payment successful! Your receipt is being downloaded.');
-    // Trigger download of receipt
-}
+  document.addEventListener('DOMContentLoaded', function() {
+      var paymentTypeDropdown = document.getElementById('paymentType');
+      var phoneNumberSection = document.getElementById('phoneNumberSection');
 
-  document.getElementById('confirmPayment').addEventListener('click', function() {
-    // Close the modal
-    $('#paymentModal').modal('hide');
+      // Show/hide phone number section based on payment type
+      paymentTypeDropdown.addEventListener('change', function() {
+          var paymentType = paymentTypeDropdown.value;
+          if (paymentType === 'orange_money' || paymentType === 'afri_money') {
+              phoneNumberSection.style.display = 'block';
+          } else {
+              phoneNumberSection.style.display = 'none';
+          }
+      });
 
-    // Assuming order_id is available in your JavaScript context.
-    // Redirect to the Django view for receipt generation
-    // window.location.href = `/generate_receipt/${order_id}/`;
+      var confirmButton = document.getElementById('confirmPayment');
+      if (confirmButton) {
+          confirmButton.addEventListener('click', function() {
+
+              var phoneNumber = document.getElementById('phoneNumber');
+              var confirmPayment = confirm('Are you sure you want to make payment for the items?');
+              if (confirmPayment) {
+                  // Trigger AJAX call to process payment and generate receipt
+                  // On success, show success message and download receipt
+                  processPayment(paymentTypeDropdown.value, phoneNumber);
+              }
+              
+          });
+      }
   });
+
+  function processPayment(paymentType, phoneNumber = null) {
+      // AJAX call to Django view for processing payment and generating receipt
+      // On success, show success message and download receipt
+      // For example purposes, a simple success alert is used here
+      alert('Payment successful! Your receipt is being downloaded.');
+      // Trigger download of receipt
+  }
+
+    document.getElementById('confirmPayment').addEventListener('click', function() {
+      // Close the modal
+      $('#paymentModal').modal('hide');
+
+      // Assuming order_id is available in your JavaScript context.
+      // Redirect to the Django view for receipt generation
+      // window.location.href = `/generate_receipt/${order_id}/`;
+    });
 
 </script>
 
-
-<script>
-  function openEditModal(cartItemId) {
-      // Load the form into the modal
-      // This can be done by rendering a partial template with the form
-      // For simplicity, assuming the form is static in the modal as shown earlier
-  
-      // Setup form submission via AJAX
-      $('#editCartItemModal form').on('submit', function(e) {
-          e.preventDefault();
-          $.ajax({
-              url: '',  // Submit to the current URL
-              type: 'POST',
-              data: $(this).serialize() + '&cart_item_id=' + cartItemId,
-              success: function(response) {
-                  if(response.success) {
-                      $('#editCartItemModal').modal('hide');
-                      location.reload();  // Reload the page to update the cart
-                  } else {
-                      // Handle form errors
-                      // e.g., display validation errors on the form
-                  }
-              }
-          });
-      });
-  
-      $('#editCartItemModal').modal('show');
-  }
-  
-  // Attach this function to your edit buttons
-  $('.edit-btn').click(function() {
-      var cartItemId = $(this).data('item-id');
-      openEditModal(cartItemId);
-  });
-  </script>
   
   
 

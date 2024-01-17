@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <!-- Include Bootstrap CSS (You may need to adjust the path to your Bootstrap CSS file) -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="mb-0">Checkout</h4>
+                        </div>
+                        <div class="card-body">
+                            {% for item in cart_items %}
+                            <!-- Display cart item details -->
+                            {% endfor %}
+                        
+                        <!-- Display total cost -->
+                        <p>Total Cost: {{ total_cost }}</p>
+                        
+                        <!-- Payment options -->
+                        <!-- Add your cart display logic here -->
+
+<!-- <form method="post" action="">
+    {% csrf_token %}
+    <div>
+        <label for="phone_number">Phone Number:</label>
+        <input type="text" id="phone_number" name="phone_number" required>
+    </div>
+    <div>
+        <label>Payment Method:</label>
+        <button type="submit" name="payment_method" value="method1">Pay with Method 1</button>
+        <button type="submit" name="payment_method" value="method2">Pay with Method 2</button>
+    </div>
+</form> -->
+
+
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            <div>
+                                <label for="phone_number">Phone Number:</label>
+                                <input type="text" name="phone_number" required>
+                            </div>
+                            <button type="submit" name="payment_method" value="payment_method_1">Pay with Method 1</button>
+                            <button type="submit" name="payment_method" value="payment_method_2">Pay with Method 2</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Bootstrap JS (You may need to adjust the path to your Bootstrap JS file) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // Show/hide additional fields based on the selected payment type
+        document.getElementById('payment_type').addEventListener('change', function () {
+            var selectedPaymentType = this.value;
+
+            if (selectedPaymentType === 'MobileMoney') {
+                document.getElementById('phone_number_field').style.display = 'block';
+                document.getElementById('visa_card_fields').style.display = 'none';
+            } else if (selectedPaymentType === 'VisaCard') {
+                document.getElementById('phone_number_field').style.display = 'none';
+                document.getElementById('visa_card_fields').style.display = 'block';
+            } else {
+                document.getElementById('phone_number_field').style.display = 'none';
+                document.getElementById('visa_card_fields').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

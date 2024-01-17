@@ -32,6 +32,7 @@ urlpatterns = [
     path('manage_inventory/delete/<int:pk>/', views.manage_inventory_category, {'action': 'delete'}, name='delete_inventory'),
 
     path('orders/', views.OrderListView, name='view_orders'),
+    path('orders/delete/<int:pk>', views.OrderListView, {'action': 'delete'}, name='delete_orders'),
 
     path('manage-employees/', views.register_admin, name='manage-employees'),
     
@@ -40,8 +41,6 @@ urlpatterns = [
     path('manage_users/create/', views.user_list, {'action': 'create'}, name='create_users'),
     path('manage_users/update/<int:pk>/', views.user_list, {'action': 'update'}, name='update_users'),
     path('manage_users/delete/<int:pk>/', views.user_list, {'action': 'delete'}, name='delete_users'),
-
-    path('update_users/<int:user_id>', views.update_users, name='update_users'),
 
     path('summary_report/', views.summary_report, name='summary_report'),
 

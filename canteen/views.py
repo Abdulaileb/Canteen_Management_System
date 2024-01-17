@@ -348,3 +348,54 @@ def contact_us(request):
         form = ContactSubmissionForm()
     
     return render(request, 'public/test.html', {'form': form})
+
+
+@login_required
+def checkouts(request):
+    cart_items = CartItem.objects.filter(user=request.user).annotate(
+        total_cost=F('quantity') * F('food_item__price')
+    )
+
+    # Calculate total cost safely
+    total_cost_aggregate = cart_items.aggregate(total_cost=Sum('total_cost'))
+    total_cost = total_cost_aggregate.get('total_cost', 0)
+
+    if request.method == 'POST':
+        phone_number = request.POST.get('phone_number')
+        payment_method = request.POST.get('payment_method')
+
+        # Simulate payment processing here
+        with transaction.atomic():
+            cart_items = CartItem.objects.filter(user=request.user)
+            if cart_items.exists():
+                order = Order.objects.create(user=request.user)
+                for item in cart_items:
+                    OrderItem.objects.create(
+                        order=order, 
+                        food_item=item.food_item, 
+                        quantity=item.quantity
+                    )
+                cart_items.delete()
+
+                messages.success(request, 'Checkout successful.')
+                return redirect('canteen:view_order', order_id=order.id)
+            else:
+                messages.error(request, 'Your cart is empty.')
+                return redirect('canteen:view_cart')
+        # # ...
+
+        # with transaction.atomic():
+            
+        #     # Clear the user's cart
+        #     cart_items.delete()
+        #     # Additional order recording logic here
+
+        # messages.success(request, 'Payment successful and order placed.')
+        # return redirect('canteen:view_order', order_id=order.id)  # Redirect to an order success page
+
+    context = {
+        'cart_items': cart_items,
+        'total_cost': total_cost,
+    }
+
+    return render(request, 'checkouts.html', context)

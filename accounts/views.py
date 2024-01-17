@@ -15,6 +15,7 @@ from .utils import is_manager
 
 from django.http import FileResponse
 
+from django.db.models import Sum
 
 
 @login_required
@@ -42,6 +43,8 @@ def Dashboard(request):
    
     accumulated_amount = 0  # Initialize the accumulated amount
 
+    total_inventory_cost = InventoryItem.objects.aggregate(Sum('total_cost'))['total_cost__sum']
+
     for order in orders:
         total_cost = sum(item.quantity * item.food_item.price for item in order.orderitem_set.all())
         accumulated_amount += total_cost  # Add to the accumulated amount
@@ -55,7 +58,8 @@ def Dashboard(request):
                'items_available':items_available,
                'total_reports':total_reports,
                'total_inventory':total_inventory,
-               'accumulated_amount':accumulated_amount
+               'accumulated_amount':accumulated_amount,
+               'total_inventory_cost':total_inventory_cost,
                }
 
     return render(request, 'dashboard/index.html', context)
@@ -277,8 +281,14 @@ def manage_food_items(request, action=None, pk=None):
 
     return render(request, 'dashboard/manage-food/food-items.html', context)
 
-def OrderListView(request):
+def OrderListView(request, action=None, pk=None):
     items = Order.objects.all()
+
+    if action == 'delete':
+        order_to_remove = get_object_or_404(Order, pk)
+        order_to_remove.delete()
+        return redirect('accounts:manage_orders')
+        
     context = {'items':items}
     return render(request, 'dashboard/orders/manage_orders.html', context)
 
