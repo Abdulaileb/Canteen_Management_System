@@ -7,6 +7,8 @@ from canteen.models import *
 ## For User Registration 
 class UsersRegistrationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
+    password = forms.CharField(widget=forms.PasswordInput, required=False)
+
 
     class Meta:
         model = CustomUser

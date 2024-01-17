@@ -34,7 +34,12 @@ urlpatterns = [
     path('orders/', views.OrderListView, name='view_orders'),
 
     path('manage-employees/', views.register_admin, name='manage-employees'),
-    path('manage-users/', views.user_list, name='manage-users'),
+    
+    ################# USERS ITEMS #######################
+    path('manage_users/', views.user_list, name='manage_users'),
+    path('manage_users/create/', views.user_list, {'action': 'create'}, name='create_users'),
+    path('manage_users/update/<int:pk>/', views.user_list, {'action': 'update'}, name='update_users'),
+    path('manage_users/delete/<int:pk>/', views.user_list, {'action': 'delete'}, name='delete_users'),
 
     path('update_users/<int:user_id>', views.update_users, name='update_users'),
 

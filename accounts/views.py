@@ -282,22 +282,42 @@ def OrderListView(request):
     context = {'items':items}
     return render(request, 'dashboard/orders/manage_orders.html', context)
 
-def user_list(request):
+def user_list(request, action=None, pk=None):
+
     users = CustomUser.objects.filter(role=CustomUser.USERS)
+    form = UsersRegistrationForm()
 
     if request.method == 'POST':
-        form = UsersRegistrationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            # Add any additional logic you need after creating the user
-            messages.success(request, 'User created successfully', extra_tags='success')
-            return redirect('accounts:manage-users')
-        else:
-            messages.error(request, 'Please enter valid information')
+        if action == 'create':
+            form = UsersRegistrationForm(request.POST)
+            if form.is_valid():
+                form.save()
+                # Add any additional logic you need after creating the user
+                messages.success(request, 'User created successfully', extra_tags='success')
+                return redirect('accounts:manage-users')
+            else:
+                messages.error(request, 'Please enter valid information')
+            
+        elif action == 'update':
+            customer_to_update = get_object_or_404(CustomUser, pk=pk)
+            form = UsersRegistrationForm(request.POST, instance=customer_to_update)
 
-    else:
-        form = UsersRegistrationForm()
-
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Customer updated successfully')
+            else:
+                messages.error(request, "Invalid Form Data! You must fill out all fields.")
+                return redirect('accounts:manage_users')
+        
+        elif action == 'delete':
+            customer_to_delete = get_object_or_404(CustomUser, pk=pk)
+            customer_to_delete.delete()
+            messages.success(request, 'Customer deleted successfully')
+            return redirect('accounts:manage_users')
+        
+    elif action == 'update' and request.method == 'GET':
+        customer_to_update = get_object_or_404(CustomUser, pk=pk)
+        form = UsersRegistrationForm(instance=customer_to_update)
 
     context = {'users':users,
                'form':form,
