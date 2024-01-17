@@ -145,20 +145,42 @@ def create_income_chart(request):
 
 ####### USER FOOD ITEMS ########
 
-def manage_food_category(request):
+def manage_food_category(request, action=None, pk=None):
 
     foodCategory = FoodCategory.objects.all()
-
     form = FoodCategoryForm()
+
     if request.method == 'POST':
-        form = FoodCategoryForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Food Category has been successfully added')
+        if action == 'create':
+            form = FoodCategoryForm(request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Food Category has been successfully added')
+            else:
+                messages.error(request, 'There was an error adding a new category')
             return redirect('accounts:manage_foodCategory')
-    else:
-            # messages.error(request, 'Check the fields again')
-        form = FoodCategoryForm()
+    
+        elif action == 'update':
+            category_to_update = get_object_or_404(FoodCategory, pk=pk)
+            form = FoodCategoryForm( request.POST, instance=category_to_update)
+
+            if form.is_valid():
+                form.save()
+                messages.success(request, f'Changes saved')
+            else:
+                messages.error(request, "invalid form data")
+            return redirect('accounts:manage_foodCategory')
+        
+        elif action == 'delete':
+            asset_to_delete = get_object_or_404(FoodCategory, pk=pk)
+            asset_to_delete.delete()
+            messages.success(request, f'Food Category Deleted')
+            return redirect('accounts:manage_foodCategory')        
+    
+    elif action == 'update' and request.method == 'GET':
+        category_to_update = get_object_or_404(FoodCategory, pk=pk)
+        form = FoodCategoryForm(instance=category_to_update)
+
     context = {'form':form,
                'foodCategory':foodCategory,
                }

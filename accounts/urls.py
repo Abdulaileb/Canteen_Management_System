@@ -11,7 +11,14 @@ urlpatterns = [
     # Add other app URLs here
     path('orders/income-chart/', views.create_income_chart, name='income_chart'),
 
-    path('manage-food-category/', views.manage_food_category, name='manage_foodCategory'),
+    # path('manage_food_category/', views.manage_food_category, name='manage_foodCategory'),
+
+    ################# ASSET CONDITION #######################
+    path('manage_food_category/', views.manage_food_category, name='manage_foodCategory'),
+    path('manage_food_category/create/', views.manage_food_category, {'action': 'create'}, name='create_foodCategory'),
+    path('manage_food_category/update/<int:pk>/', views.manage_food_category, {'action': 'update'}, name='update_foodCategory'),
+    path('manage_food_category/delete/<int:pk>/', views.manage_food_category, {'action': 'delete'}, name='delete_foodCategory'),
+    
     path('manage-food-item/', views.manage_food_items, name='manage_foodItems'),
 
     path('manage-inventory/', views.manage_inventory_category, name='manage-inventory'),
