@@ -1,0 +1,58 @@
+{% extends 'base.html' %}  <!-- Assuming you have a base template -->
+
+{% block content %}
+
+    <!-- The Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+  
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title" id="editModalLabel">Edit Item</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+  
+        <!-- Modal Body with Form -->
+        <div class="modal-body">
+          <form method="post">
+            <div class="form-group">
+              <!-- <label for="itemName">Item Name:</label>
+              <input type="text" class="form-control" id="itemName" placeholder="Enter item name"> -->
+
+              {% csrf_token %}
+            {{ form.as_p }}
+            </div>
+            <!-- <div class="form-group">
+              <label for="itemQuantity">Quantity:</label>
+              <input type="number" class="form-control" id="itemQuantity" placeholder="Enter quantity">
+            </div> -->
+            <button type="submit" class="btn btn-primary">Save changes</button>
+            <a href="{% url 'canteen:view_cart' %}" class="btn btn-secondary">Cancel</a>
+          </form>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Your existing HTML content above this line -->
+
+<script>
+    // Wait for the document to be fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      // Select the modal element by its ID
+      var modal = document.getElementById('editModal');
+  
+      // Show the modal
+      $(modal).modal('show');
+    });
+  </script>
+  
+{% endblock %}
+
+
+

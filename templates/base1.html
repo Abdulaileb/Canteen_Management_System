@@ -84,9 +84,9 @@
 
             <div class="col-lg-6 px-5 text-end">
                 {% if user.is_authenticated %}
-                    <a class="text-body ms-3" href="#" onclick="confirmLogout()"><i class="fa-sharp fa-solid fa-power-off"></i></a>
+                    <a class="text-body ms-3" href="#" onclick="confirmLogout()"><span> SignIn / SignOut </span></a>
                 {% else %}
-                    <a class="text-body ms-3" href="{% url 'accounts:login' %}"><i class="fa-solid fa-arrow-right-to-bracket"></i></a>
+                    <a class="text-body ms-3" href="{% url 'accounts:login' %}"><span> SignIn / SignOut </span></a>
                 {% endif %}
             </div>
 

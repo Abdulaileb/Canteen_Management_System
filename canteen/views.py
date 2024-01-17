@@ -170,6 +170,21 @@ def delete_cart_item(request, cart_item_id):
     return redirect('view_cart')
 
 @login_required
+def edit_cart_item(request, cart_item_id):
+    cart_item = get_object_or_404(CartItem, pk=cart_item_id)
+    
+    if request.method == 'POST':
+        form = EditCartItemForm(request.POST, instance=cart_item)
+        if form.is_valid():
+            form.save()
+            return redirect('canteen:view_cart')  # Redirect to the cart view or wherever appropriate
+    else:
+        # For GET request, display the current information of the cart item
+        form = EditCartItemForm(instance=cart_item)
+
+    return render(request, 'edit_cart_item.html', {'form': form, 'cart_item': cart_item})
+
+@login_required
 def view_cart(request):
     if request.user.is_authenticated:
         # Retrieve the user's cart items and annotate them with the total cost
