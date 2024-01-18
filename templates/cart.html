@@ -73,7 +73,7 @@
                             <!-- <input type="number" placeholder="0"> -->
                             {{ item.quantity }}
                         </td>
-                        <td class="product-total">{{ total_cost }}</td>
+                        <td class="product-total">{{ item.total_cost }}</td>
 
                         <td>
                             <form method="post" action="{% url 'canteen:delete_cart_item' item.id %}">
