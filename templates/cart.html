@@ -129,38 +129,6 @@
                   <p>Cash on Delivery</p>
 
               </table>
-
-
-
-              <!-- <div class="cart-buttons">
-                <form id="checkoutForm" action="{% url 'canteen:checkout' %}" method="post">
-                    {% csrf_token %}
-            
-                    <div class="payment-options row">
-                      <div class="col">
-                          <a href="#" class="payment-method" data-method="method1">
-                              <img src="{% static 'assets/img/afr.jpeg' %}" alt="Payment Method 1" class="img-fluid" style="border-radius: 5px;">
-                          </a>
-                      </div>
-                      <div class="col">
-                          <a href="#" class="payment-method" data-method="method2">
-                              <img src="{% static 'assets/img/orange.jpeg' %}" alt="Payment Method 2" class="img-fluid" style="border-radius: 5px;">
-                          </a>
-                      </div>
-                  </div>
-                
-
-                    <div id="phoneInputForm" style="display:none;">
-                      <input type="text"  id="phoneNumber" placeholder="Enter Phone Number">
-                    </div>
-
-                    <div id="confirm-ok" style="display:none;">
-                      <input id="confirmCheckout" type="submit" class="boxed-btn black" value="Check Out" disabled>
-                    </div>
-            
-                    
-                </form>
-            </div> -->
             
             <div class="cart-buttons">
               <form id="checkoutForm" action="{% url 'canteen:checkout' %}" method="post">
@@ -182,7 +150,7 @@
                   </div>
           
                   <div id="phoneInputAndCheckout" style="display:none; padding-top: 10px;" class="form-group mb-3">
-                      <input type="text" id="phoneNumber" placeholder="Enter Phone Number">
+                      <input type="number" id="phoneNumber" placeholder="Enter Phone Number">
                       <input id="confirmCheckout" type="submit" class="boxed-btn black" value="Check Out">
                   </div>
               </form>
@@ -196,51 +164,6 @@
 			</div>
 		</div>
 	</div>
-
-  <!-- <script>
-    document.getElementById('paymentMethod').addEventListener('change', function() {
-        var phoneInput = document.getElementById('phoneInput');
-        var checkoutButton = document.querySelector('#checkoutForm input[type="submit"]');
-
-        if(this.value) {
-            phoneInput.style.display = 'block';
-            checkoutButton.disabled = false;
-        } else {
-            phoneInput.style.display = 'none';
-            checkoutButton.disabled = true;
-        }
-    });
-</script> -->
-
-<!-- <script>
-  document.querySelectorAll('.payment-methods img').forEach(function(img) {
-      img.addEventListener('click', function() {
-          var selectedMethod = this.getAttribute('data-method');
-          document.getElementById('selectedPaymentMethod').value = selectedMethod;
-
-          var phoneInput = document.getElementById('phoneInput');
-          var checkoutButton = document.querySelector('#checkoutForm input[type="submit"]');
-
-          phoneInput.style.display = 'block';
-          checkoutButton.disabled = false;
-      });
-  });
-
-  document.querySelectorAll('.payment-methods img').forEach(function(img) {
-    img.addEventListener('click', function() {
-        // Remove 'selected' class from all images
-        document.querySelectorAll('.payment-methods img').forEach(function(i) {
-            i.classList.remove('selected');
-        });
-
-        // Add 'selected' class to clicked image
-        this.classList.add('selected');
-
-        // Rest of the event listener code...
-    });
-});
-
-</script> -->
 
 <script>
   document.querySelectorAll('.payment-method').forEach(function(method) {
@@ -263,9 +186,6 @@
   });
 </script>
 
-
-
-	<!-- end cart -->
 
           <!-- Edit Cart Item Modal Placeholder -->
           <div class="modal fade" id="editCartItemModal" tabindex="-1" role="dialog" aria-labelledby="editCartItemModalLabel" aria-hidden="true">
@@ -435,9 +355,5 @@ document.querySelectorAll('.payment-method').forEach(function(method) {
     });
 
 </script>
-
-  
-  
-
 
 {% endblock content %}
