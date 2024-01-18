@@ -45,8 +45,6 @@ class OrderItem(models.Model):
 
 class InventoryItem(models.Model):
     name = models.CharField(max_length=255)
-    location = models.CharField(max_length=20)
-    type = models.CharField(max_length=255)
     date = models.DateField()
     quantity = models.PositiveIntegerField()
     unit_cost = models.DecimalField(max_digits=10, decimal_places=2)  # Cost per unit/item

@@ -73,7 +73,7 @@
                             <!-- <input type="number" placeholder="0"> -->
                             {{ item.quantity }}
                         </td>
-                        <td class="product-total">{{ total_cost }}</td>
+                        <td class="product-total">{{ item.total_cost }}</td>
 
                         <td>
                             <form method="post" action="{% url 'canteen:delete_cart_item' item.id %}">
@@ -129,38 +129,6 @@
                   <p>Cash on Delivery</p>
 
               </table>
-
-
-
-              <!-- <div class="cart-buttons">
-                <form id="checkoutForm" action="{% url 'canteen:checkout' %}" method="post">
-                    {% csrf_token %}
-            
-                    <div class="payment-options row">
-                      <div class="col">
-                          <a href="#" class="payment-method" data-method="method1">
-                              <img src="{% static 'assets/img/afr.jpeg' %}" alt="Payment Method 1" class="img-fluid" style="border-radius: 5px;">
-                          </a>
-                      </div>
-                      <div class="col">
-                          <a href="#" class="payment-method" data-method="method2">
-                              <img src="{% static 'assets/img/orange.jpeg' %}" alt="Payment Method 2" class="img-fluid" style="border-radius: 5px;">
-                          </a>
-                      </div>
-                  </div>
-                
-
-                    <div id="phoneInputForm" style="display:none;">
-                      <input type="text"  id="phoneNumber" placeholder="Enter Phone Number">
-                    </div>
-
-                    <div id="confirm-ok" style="display:none;">
-                      <input id="confirmCheckout" type="submit" class="boxed-btn black" value="Check Out" disabled>
-                    </div>
-            
-                    
-                </form>
-            </div> -->
             
             <div class="cart-buttons">
               <form id="checkoutForm" action="{% url 'canteen:checkout' %}" method="post">
@@ -180,11 +148,19 @@
                           </a>
                       </div>
                   </div>
-          
+
                   <div id="phoneInputAndCheckout" style="display:none; padding-top: 10px;" class="form-group mb-3">
-                      <input type="text" id="phoneNumber" placeholder="Enter Phone Number">
-                      <input id="confirmCheckout" type="submit" class="boxed-btn black" value="Check Out">
+                    <input type="number" id="phoneNumber" placeholder="Enter Phone Number" oninput="checkPhoneNumber()">
+                    <div id="codeInput" style="display:none;">
+                        <input type="text" id="confirmationCode" placeholder="Enter 4-digit Code" pattern="\d{4}" maxlength="4">
+                    </div>
+                    <input id="confirmCheckout" type="submit" class="boxed-btn black" value="Check Out" disabled>
                   </div>
+          
+                  <!-- <div id="phoneInputAndCheckout" style="display:none; padding-top: 10px;" class="form-group mb-3">
+                      <input type="number" id="phoneNumber" placeholder="Enter Phone Number">
+                      <input id="confirmCheckout" type="submit" class="boxed-btn black" value="Check Out">
+                  </div> -->
               </form>
           </div>
           
@@ -196,51 +172,6 @@
 			</div>
 		</div>
 	</div>
-
-  <!-- <script>
-    document.getElementById('paymentMethod').addEventListener('change', function() {
-        var phoneInput = document.getElementById('phoneInput');
-        var checkoutButton = document.querySelector('#checkoutForm input[type="submit"]');
-
-        if(this.value) {
-            phoneInput.style.display = 'block';
-            checkoutButton.disabled = false;
-        } else {
-            phoneInput.style.display = 'none';
-            checkoutButton.disabled = true;
-        }
-    });
-</script> -->
-
-<!-- <script>
-  document.querySelectorAll('.payment-methods img').forEach(function(img) {
-      img.addEventListener('click', function() {
-          var selectedMethod = this.getAttribute('data-method');
-          document.getElementById('selectedPaymentMethod').value = selectedMethod;
-
-          var phoneInput = document.getElementById('phoneInput');
-          var checkoutButton = document.querySelector('#checkoutForm input[type="submit"]');
-
-          phoneInput.style.display = 'block';
-          checkoutButton.disabled = false;
-      });
-  });
-
-  document.querySelectorAll('.payment-methods img').forEach(function(img) {
-    img.addEventListener('click', function() {
-        // Remove 'selected' class from all images
-        document.querySelectorAll('.payment-methods img').forEach(function(i) {
-            i.classList.remove('selected');
-        });
-
-        // Add 'selected' class to clicked image
-        this.classList.add('selected');
-
-        // Rest of the event listener code...
-    });
-});
-
-</script> -->
 
 <script>
   document.querySelectorAll('.payment-method').forEach(function(method) {
@@ -263,9 +194,6 @@
   });
 </script>
 
-
-
-	<!-- end cart -->
 
           <!-- Edit Cart Item Modal Placeholder -->
           <div class="modal fade" id="editCartItemModal" tabindex="-1" role="dialog" aria-labelledby="editCartItemModalLabel" aria-hidden="true">
@@ -380,12 +308,12 @@
 
 <script>
 
-document.querySelectorAll('.payment-method').forEach(function(method) {
-    method.addEventListener('click', function(event) {
-        event.preventDefault();
-        document.getElementById('phoneInputAndCheckout').style.display = 'block';
-    });
-});
+  document.querySelectorAll('.payment-method').forEach(function(method) {
+      method.addEventListener('click', function(event) {
+          event.preventDefault();
+          document.getElementById('phoneInputAndCheckout').style.display = 'block';
+      });
+  });
 
   document.addEventListener('DOMContentLoaded', function() {
       var paymentTypeDropdown = document.getElementById('paymentType');
@@ -425,19 +353,44 @@ document.querySelectorAll('.payment-method').forEach(function(method) {
       // Trigger download of receipt
   }
 
-    document.getElementById('confirmPayment').addEventListener('click', function() {
-      // Close the modal
-      $('#paymentModal').modal('hide');
+    // document.getElementById('confirmPayment').addEventListener('click', function() {
+    //   // Close the modal
+    //   $('#paymentModal').modal('hide');
 
-      // Assuming order_id is available in your JavaScript context.
-      // Redirect to the Django view for receipt generation
-      // window.location.href = `/generate_receipt/${order_id}/`;
+    //   // Assuming order_id is available in your JavaScript context.
+    //   // Redirect to the Django view for receipt generation
+    //   // window.location.href = `/generate_receipt/${order_id}/`;
+    // });
+
+
+
+    document.querySelectorAll('.payment-method').forEach(function(method) {
+      method.addEventListener('click', function(event) {
+          event.preventDefault();
+          document.getElementById('phoneInputAndCheckout').style.display = 'block';
+      });
     });
 
+    function checkPhoneNumber() {
+        var phoneNumber = document.getElementById('phoneNumber').value;
+        var codeInput = document.getElementById('codeInput');
+        var confirmCheckout = document.getElementById('confirmCheckout');
+
+        if (phoneNumber.length > 0) {
+            codeInput.style.display = 'block';
+        } else {
+            codeInput.style.display = 'none';
+            confirmCheckout.disabled = true;
+        }
+    }
+
+    document.getElementById('confirmationCode').addEventListener('input', function() {
+        var code = this.value;
+        var confirmCheckout = document.getElementById('confirmCheckout');
+        confirmCheckout.disabled = !(code.length === 4);
+    });
+
+
 </script>
-
-  
-  
-
 
 {% endblock content %}

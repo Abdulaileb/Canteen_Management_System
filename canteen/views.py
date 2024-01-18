@@ -185,30 +185,55 @@ def edit_cart_item(request, cart_item_id):
     return render(request, 'edit_cart_item.html', {'form': form, 'cart_item': cart_item})
 
 @login_required
+# def view_cart(request):
+#     if request.user.is_authenticated:
+#         # Retrieve the user's cart items and annotate them with the total cost
+#         cart_items = CartItem.objects.filter(user=request.user).annotate(
+#             total_cost=F('quantity') * F('food_item__price')
+#         )
+
+#         # Calculate the total quantity and total cost
+#         total_quantity = cart_items.aggregate(Sum('quantity'))['quantity__sum'] or 0
+#         total_cost = cart_items.aggregate(total_cost=Sum('total_cost'))['total_cost'] or 0
+
+#         subtotal = cart_items.aggregate(total=Sum('total_cost'))['total'] or 0
+#         shipping_cost = 45  # This can be a variable based on your shipping logic
+#         total_cost = subtotal + shipping_cost
+
+
+#         context = {
+#             'cart_items': cart_items,
+#             'total_quantity': total_quantity,
+#             'total_cost': total_cost,
+
+#             'subtotal': subtotal,
+#             'shipping_cost': shipping_cost,
+#             'total_cost': total_cost,
+#         }
+
+#         return render(request, 'cart.html', context)
+#     else:
+#         messages.error(request, 'You need to be logged in to view your cart.')
+#         return redirect('canteen:home')
+
+
 def view_cart(request):
     if request.user.is_authenticated:
-        # Retrieve the user's cart items and annotate them with the total cost
-        cart_items = CartItem.objects.filter(user=request.user).annotate(
-            total_cost=F('quantity') * F('food_item__price')
-        )
+        cart_items = CartItem.objects.filter(user=request.user)
+        for item in cart_items:
+            item.total_cost = item.quantity * item.food_item.price
 
-        # Calculate the total quantity and total cost
         total_quantity = cart_items.aggregate(Sum('quantity'))['quantity__sum'] or 0
-        total_cost = cart_items.aggregate(total_cost=Sum('total_cost'))['total_cost'] or 0
-
-        subtotal = cart_items.aggregate(total=Sum('total_cost'))['total'] or 0
-        shipping_cost = 45  # This can be a variable based on your shipping logic
+        subtotal = sum(item.total_cost for item in cart_items)
+        shipping_cost = 0  # Variable based on your shipping logic
         total_cost = subtotal + shipping_cost
-
 
         context = {
             'cart_items': cart_items,
             'total_quantity': total_quantity,
             'total_cost': total_cost,
-
             'subtotal': subtotal,
             'shipping_cost': shipping_cost,
-            'total_cost': total_cost,
         }
 
         return render(request, 'cart.html', context)
