@@ -148,11 +148,19 @@
                           </a>
                       </div>
                   </div>
-          
+
                   <div id="phoneInputAndCheckout" style="display:none; padding-top: 10px;" class="form-group mb-3">
+                    <input type="number" id="phoneNumber" placeholder="Enter Phone Number" oninput="checkPhoneNumber()">
+                    <div id="codeInput" style="display:none;">
+                        <input type="text" id="confirmationCode" placeholder="Enter 4-digit Code" pattern="\d{4}" maxlength="4">
+                    </div>
+                    <input id="confirmCheckout" type="submit" class="boxed-btn black" value="Check Out" disabled>
+                  </div>
+          
+                  <!-- <div id="phoneInputAndCheckout" style="display:none; padding-top: 10px;" class="form-group mb-3">
                       <input type="number" id="phoneNumber" placeholder="Enter Phone Number">
                       <input id="confirmCheckout" type="submit" class="boxed-btn black" value="Check Out">
-                  </div>
+                  </div> -->
               </form>
           </div>
           
@@ -300,12 +308,12 @@
 
 <script>
 
-document.querySelectorAll('.payment-method').forEach(function(method) {
-    method.addEventListener('click', function(event) {
-        event.preventDefault();
-        document.getElementById('phoneInputAndCheckout').style.display = 'block';
-    });
-});
+  document.querySelectorAll('.payment-method').forEach(function(method) {
+      method.addEventListener('click', function(event) {
+          event.preventDefault();
+          document.getElementById('phoneInputAndCheckout').style.display = 'block';
+      });
+  });
 
   document.addEventListener('DOMContentLoaded', function() {
       var paymentTypeDropdown = document.getElementById('paymentType');
@@ -345,14 +353,43 @@ document.querySelectorAll('.payment-method').forEach(function(method) {
       // Trigger download of receipt
   }
 
-    document.getElementById('confirmPayment').addEventListener('click', function() {
-      // Close the modal
-      $('#paymentModal').modal('hide');
+    // document.getElementById('confirmPayment').addEventListener('click', function() {
+    //   // Close the modal
+    //   $('#paymentModal').modal('hide');
 
-      // Assuming order_id is available in your JavaScript context.
-      // Redirect to the Django view for receipt generation
-      // window.location.href = `/generate_receipt/${order_id}/`;
+    //   // Assuming order_id is available in your JavaScript context.
+    //   // Redirect to the Django view for receipt generation
+    //   // window.location.href = `/generate_receipt/${order_id}/`;
+    // });
+
+
+
+    document.querySelectorAll('.payment-method').forEach(function(method) {
+      method.addEventListener('click', function(event) {
+          event.preventDefault();
+          document.getElementById('phoneInputAndCheckout').style.display = 'block';
+      });
     });
+
+    function checkPhoneNumber() {
+        var phoneNumber = document.getElementById('phoneNumber').value;
+        var codeInput = document.getElementById('codeInput');
+        var confirmCheckout = document.getElementById('confirmCheckout');
+
+        if (phoneNumber.length > 0) {
+            codeInput.style.display = 'block';
+        } else {
+            codeInput.style.display = 'none';
+            confirmCheckout.disabled = true;
+        }
+    }
+
+    document.getElementById('confirmationCode').addEventListener('input', function() {
+        var code = this.value;
+        var confirmCheckout = document.getElementById('confirmCheckout');
+        confirmCheckout.disabled = !(code.length === 4);
+    });
+
 
 </script>
 
